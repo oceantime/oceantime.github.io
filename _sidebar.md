@@ -3,10 +3,11 @@
 
 * [HOME](./)
 
-* [Tutorials](./tutorials/index)
-  * [Tomcat](./tutorials/tomcat/index)
-  * [Cloud](./tutorials/cloud/index)
-  * [Java](./tutorials/java/index)
+* [Arts](./arts/index)
+  * [2019](./arts/2019/index)
+  * [2020](./arts/2020/index)
+  * [2021](./arts/2021/index)
+  * [2022](./arts/2022/index)
 
 * [About](./about/index)
 

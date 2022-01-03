@@ -4,4 +4,4 @@
 title: 目录
 ---
  
-[ARTS-week-01](./arts/2021/ARTS-week-01)  
+[ARTS-week-01](./arts/2022/ARTS-week-01)  

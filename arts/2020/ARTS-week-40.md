@@ -1,8 +1,9 @@
 ---
 title: ARTS-week-40
-date: 2020-06-14 06:49:20
+date: 2020-10-11 17:43:13
 tags:
 ---
+
 
 ## ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
 1.Algorithm： 每周至少做一个 leetcode 的算法题
@@ -12,212 +13,88 @@ tags:
 
 ### 1.Algorithm:
 
-Edit Distance https://leetcode.com/submissions/detail/353470296/
+计算器 https://leetcode-cn.com/submissions/detail/114925301/
 
 ### 2.Review:
 
-https://dev.to/lydiahallie/javascript-visualized-generators-and-iterators-e36
-JavaScript️可视化： 生成器和迭代器
+https://blog.insightdatascience.com/scheduling-spark-jobs-with-airflow-4c66f3144660
+使用 Airflow 调度 Spark 任务
 
 #### 点评：
 
-Lydia Hallie 讲解生成器使用的例子 。
+作者 Nicholas Leong 这篇文章提供了如何使用 Airflow 调度通过从 S3 下载 Reddit 数据触发 Spark 任务。
 
-总结
-普通函数遵循一种称为 run-to-completion 的模型。 generator 函数不遵循 run-to-completion 模型，可以在执行 generator 函数的过程中随机暂停它。
-实现了迭代器协议： Symbol.iterator。
-- 调用 generator 函数返回生成器对象，该对象是迭代器。
-- 可以在生成器函数中使用 yield 关键字来暂停执行。
+- 安装 Airflow 要使用pip安装
+- 创建 Airflow DAG 的脚本
+- 运行教程的 Airflow 检查项
+- 有趣的测试：打开和关闭 WiFi 为了测试 Airflow 在失败时会重试任务
+- 先决条件：本地安装 Spark
+
+结束语：
+作者给出了一个创建 DAG 的示例，该DAG包含三个任务：
+  （1）从 S3 下载 Reddit 数据
+  （2）Spark 中的唯一作者数以及
+  （3）计算平均投票数。任务（2）和（3）彼此独立，并且都取决于任务（1）的完成。
+实例创建的DAG比较简单。实际上，生产环境的 Airflow DAG 可能具有数十个具有复杂依赖性的节点，并且将按小时或每天运行。
 
 ### 3.Tip:
 
-
-1. Nginx 反向代理多个 vue 效果
+1.云服务器就只有 1G 内存, make 出现 OOM 编译进程被 killed, 解决办法：
 
 ```shell
-http://localhost:8080/进入最外层的 index.html
-http://localhost:8080/project1 进入项目一
-http://localhost:8080/project2 进入项目二
+// 使用 swap 需要开启一下，默认是关闭的。使用交换文件来做交换分区。
+// 先创建交换文件
+fallocate -l 4G /swapfile
+// or 
+dd if=/dev/zero of=/swapfile bs=1M count=4096
+// 修改权限
+chmod 600 /swapfile
+// 格式化文件
+mkswap /swapfile
+//激活
+swapon /swapfile
+// 有需要的也可以设开机自启动
+// 打开 /etc/fstab，加上
+vim /etc/fstab
+/swapfile    none    swap    defaults     0 0
+// 查看 swap 
+[root@iZj6cidck6s26tnpwx4ymoZ ~]# free
+              total        used        free      shared  buff/cache   available
+Mem:        1881952       82192      129584         240     1670176     1628592
+Swap:       4194300       43784     4150516
 ```
 
-2. vue.config.js 配置
+2.Linux 下设置 swappiness 参数来配置内存使用到多少才开始使用swap分区
+
+swappiness的值的大小对如何使用swap分区是有着很大的联系的。swappiness=0的时候表示最大限度使用物理内存，然后才是swap空间，swappiness＝100的时候表示积极的使用swap分区，并且把内存上的数据及时的搬运到swap空间里面。linux的基本默认设置为60，具体如下：
 
 ```shell
-
-// project1
-module.exports = {
-   publicPath: '/project1/' // 注意前后的 ‘/’
-}
-
-// project2
-module.exports = {
-  publicPath: '/project2/' // 注意前后的 ‘/’
-}
-
+cat /proc/sys/vm/swappiness
+#60
 ```
 
-3. .env 配置,使用到了 BASE_API 作为代理的前缀
+也就是说，你的内存在使用到100-60=40%的时候，就开始出现有交换分区的使用。大家知道，内存的速度会比磁盘快很多，这样子会加大系统IO，同时造的成大量页的换进换出，严重影响系统的性能，所以我们在操作系统层面，要尽可能使用内存，对该参数进行调整。临时调整的方法如下，我们调成10：
 
 ```shell
-
-// project1
-NODE_ENV=production
-VUE_APP_API_BASE_URL=/api/pro1 // 这里待会与 nginx 配置对应
-BASE_URL=/project1 // 注意更改子项目名，这个对应 vue.config.js publicPath
-
-// project2
-NODE_ENV=production
-VUE_APP_API_BASE_URL=/api/pro2 // 这里待会与 nginx 配置对应
-BASE_URL=/project2 // 注意更改子项目名，这个对应 vue.config.js publicPath
-
+sysctl vm.swappiness=10
+#vm.swappiness=10
+cat /proc/sys/vm/swappiness
+#10
 ```
 
-4. vue-router 文件配置 history 模式
+这只是临时调整的方法，重启后会回到默认设置的.要想永久调整的话，需要在/etc/sysctl.conf修改，加上：
 
 ```shell
-
-// project1
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL, // 注意更改子项目名，这个对应 vue.config.js publicPath
-  routes
-})
-
-// project2
-export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL, // 注意更改子项目名，这个对应 vue.config.js publicPath
-  routes
-})
-```
-
-5. Nginx 配置
-
-```shell
-.
-├─conf
-│  ├─... # 其他文件
-│  └─nginx.conf
-│
-├─html # 只看这里，其他暂时我没用到 
-│  ├─project1
-│  │  └─static
-│  │      ├─css
-│  │      ├─fonts
-│  │      └─js
-│  │          ├─g
-│  │          └─V
-│  ├─project2
-│  │   └─static
-│  │       ├─css
-│  │       ├─fonts
-│  │       └─js
-│  │           ├─g
-│  │           └─V
-│  ├─index.html
-│  └─50x.html
-└─... # 其他文件
-
-# ...
-# 反向代理
-http {
-    include mime.types;
-    default_type application/octet-stream;
-
-    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-    #                  '$status $body_bytes_sent "$http_referer" '
-    #                  '"$http_user_agent" "$http_x_forwarded_for"';
-
-    sendfile        on;
-    keepalive_timeout  65;
-
-    client_max_body_size 20M;
-    client_body_buffer_size 10M;
-    large_client_header_buffers 4 128k;
-    
-    # 这里可以做集群
-    upstream p1_server {
-        server localhost:8081;
-    }
-
-    # 这里可以做集群
-    upstream p2_server {
-        server localhost:8082;
-    }
-
-    server {
-        listen 8080;
-        server_name localhost;
-        charset utf-8;
-
-        proxy_connect_timeout 180;
-        proxy_send_timeout 180;
-        proxy_read_timeout 180;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarder-For $remote_addr;
-
-        root html; # 根项目路由文件夹
-        
-        # 根项目路由
-        # 如果有多可以配置多个 conf 文件，使用 include 关联进来
-        location / {
-            try_files $uri $uri/ /index.html; # 这里可以理解指定到 html 文件夹下的 index.html
-        }
-        
-        # project1
-        # vue 项目的 vue.config.js publicPath
-        # 也是 vue 项目中配置的 router 中的 base
-        location ^~ /project1 {
-            try_files $uri $uri/ /project1/index.html; # 这里可以理解指定到 html 文件夹下 project1 文件夹 的 index.html
-        }
-        
-        # project2
-        # 这里是项目二的配置
-        location ^~ /project2 { # 
-            try_files $uri $uri/ /project2/index.html; # 这里可以理解指定到 html 文件夹下 project2 文件夹 的 index.html
-        }
-        
-        # 这里是 project1 配置需要调用的接口
-        location /api/pro1 { # 这里就是在 vue 项目中 .env 的配置 BASE_API 
-            proxy_redirect off;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_pass http://p1_server; # 此处的 p1_server 对应的上面的配置 upstream p1_server {}，这里可以做集群
-        }
-        
-         # 这里是 project1 配置需要调用的接口
-        location /api/pro2 { # 这里就是在 vue 项目中 .env 的配置 BASE_API
-            proxy_redirect off;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_pass http://p2_server;  # 此处的 p2_server 对应的上面的配置 upstream p2_server {}，这里可以做集群
-        }
-
-        # ...
-    }
-
-    # ...
-}
-```
-
-6. 验证
-
-```shell
-分别访问
-http://localhost:8080
-http://localhost:8080/project1
-http://localhost:8080/project2
+sudo vim /etc/sysctl.conf
+// 加上
+# Controls the maximum number of shared memory segments, in pages
+kernel.shmall = 4294967296 #这一个可以不用设置
+vm.swappiness = 10
+// 生效
+sudo sysctl -p
 ```
 
 ### 4.Share:
 
-npm和bower的区别
-https://www.jianshu.com/p/e422c28e2471
-一行命令更新所有 npm 依赖包
-https://www.cnblogs.com/stevexu/p/10744765.html
-Gulp构建Angularjs应用
-https://segmentfault.com/a/1190000005015099
-前端打包构建工具Gulp、Rollup、Webpack、Webpack-stream
-https://my.oschina.net/tongjh/blog/837663
+https://www.cnblogs.com/zhangfengshi/p/12736921.html
+分布式定时任务调度系统技术解决方案(xxl-job、Elastic-job、Saturn)

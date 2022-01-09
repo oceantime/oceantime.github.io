@@ -1,8 +1,9 @@
 ---
 title: ARTS-week-31
-date: 2020-04-12 15:39:00
+date: 2020-08-09 20:24:36
 tags:
 ---
+
 
 ## ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
 1.Algorithm： 每周至少做一个 leetcode 的算法题
@@ -12,251 +13,90 @@ tags:
 
 ### 1.Algorithm:
 
-Find Minimum in Rotated Sorted Array https://leetcode.com/submissions/detail/323554474/
+Task Scheduler https://leetcode.com/submissions/detail/378377076/
 
 ### 2.Review:
 
-https://medium.com/@gvanrossum_83706/generating-a-peg-parser-520057d642a9
+https://www.oreilly.com/content/5-key-drivers-for-getting-more-value-from-your-data/
+5 个关键驱动因素从数据获取更多价值 
 
 #### 点评：
 
-Guido van Rossum 在本文中，制作了一个原始的元编译器并通过 @memoize 装饰器演示 packrat parsing 原理。
-
-1.上周中的例子：
-
-``` shell
-statement: assignment | expr | if_statement
-expr: expr '+' term | expr '-' term | term
-term: term '*' atom | term '/' atom | atom
-atom: NAME | NUMBER | '(' expr ')'
-assignment: target '=' expr
-target: NAME
-if_statement: 'if' expr ':' statement
-``` 
-
-2.元语法,元编译器是一种编译器，其输入是一套语法，而输出是一个解析器:
-
-``` shell
-grammar: rule+ ENDMARKER
-rule: NAME ':' alternative ('|' alternative)* NEWLINE
-alternative: item+
-item: NAME | STRING
-```
-
-
-3.有个简单地表示元语法的方法，主要是使用内置的数据类型：一条规则的右侧只是由一系列的条目组成的列表，且这些条目只能是字符串。（Hack：通过检查第一个字符是否为引号，我们可以区分出NAME和STRING）至于规则，我用了一个简单的 Rule 类，所以整个语法就是一些 Rule 对象。：
-
-``` python
-class Rule:
-    def __init__(self, name, alts):
-        self.name = name
-        self.alts = alts
-```
-
-调用它的是这个GrammarParser类（关于基类Parser ，请参阅我之前的帖子）：
-
-``` python
-class GrammarParser(Parser):
-    def grammar(self):
-        pos = self.mark()
-        if rule := self.rule():
-            rules = [rule]
-            while rule := self.rule():
-                rules.append(rule)
-            if self.expect(ENDMARKER):
-                return rules    # <------------- final result
-        self.reset(pos)
-        return None
-    def rule(self):
-        pos = self.mark()
-        if name := self.expect(NAME):
-            if self.expect(":"):
-                if alt := self.alternative():
-                    alts = [alt]
-                    apos = self.mark()
-                    while (self.expect("|")
-                           and (alt := self.alternative())):
-                        alts.append(alt)
-                        apos = self.mark()
-                    self.reset(apos)
-                    if self.expect(NEWLINE):
-                        return Rule(name.string, alts)
-        self.reset(pos)
-        return None
-    def alternative(self):
-        items = []
-        while item := self.item():
-            items.append(item)
-        return items
-    def item(self):
-        if name := self.expect(NAME):
-            return name.string
-        if string := self.expect(STRING):
-            return string.string
-        return None
-```
-
-4.用以上代码解析上周的语法的文件上，则 grammar() 方法会返回以下的由 Rule 对象组成的列表：
-
-``` python
-[
-  Rule('statement', [['assignment'], ['expr'], ['if_statement']]),
-  Rule('expr', [['term', "'+'", 'expr'],
-                ['term', "'-'", 'term'],
-                ['term']]),
-  Rule('term', [['atom', "'*'", 'term'],
-                ['atom', "'/'", 'atom'],
-                ['atom']]),
-  Rule('atom', [['NAME'], ['NUMBER'], ["'('", 'expr', "')'"]]),
-  Rule('assignment', [['target', "'='", 'expr']]),
-  Rule('target', [['NAME']]),
-  Rule('if_statement', [["'if'", 'expr', "':'", 'statement']]),
-]
-```
-
-5.把以上聚合起来，就形成一个基本的元编译器：
-
-``` python
-def generate_parser_class(rules):
-    print(f"class ToyParser(Parser):")
-    for rule in rules:
-        print()
-        print(f"    @memoize")
-        print(f"    def {rule.name}(self):")
-        print(f"        pos = self.mark()")
-        for alt in rule.alts:
-            items = []
-            print(f"        if (True")
-            for item in alt:
-                if item[0] in ('"', "'"):
-                    print(f"            and self.expect({item})")
-                else:
-                    var = item.lower()
-                    if var in items:
-                        var += str(len(items))
-                    items.append(var)
-                    if item.isupper():
-                        print("            " +
-                              f"and ({var} := self.expect({item}))")
-                    else:
-                        print(f"            " +
-                              f"and ({var} := self.{item}())")
-            print(f"        ):")
-            print(f"            " +
-              f"return Node({rule.name!r}, [{', '.join(items)}])")
-            print(f"        self.reset(pos)")
-        print(f"        return None")
-```
-
-6.注意@memoize 装饰器：我“偷运”（smuggle）它进来，以便转向另一个主题：使用记忆法（memoization）来加速生成的解析器。包装器会缓存每次调用解析方法后的结果——这就是为什么它会被称为“口袋老鼠解析”（packrat parsing）！这是实现该装饰器的 memoize() 函数：
-
-``` python
-def memoize(func):
-    def memoize_wrapper(self, *args):
-        pos = self.mark()
-        memo = self.memos.get(pos)
-        if memo is None:
-            memo = self.memos[pos] = {}
-        key = (func, args)
-        if key in memo:
-            res, endpos = memo[key]
-            self.reset(endpos)
-        else:
-            res = func(self, *args)
-            endpos = self.mark()
-            memo[key] = res, endpos
-        return res
-return memoize_wrapper
-```
+作者  Michael Li and Matt Maccaux 确定了五个关键驱动因素，可以帮助成熟的企业更快地实现获利。
 
 总结：
-1.以上缓存是一个字典，元素是存储在 Parser 实例上的那些字典。外部字典的 key 是输入的位置；我将 self.memos = {} 添加到 Parser.__init__() ，以初始化它。内部字典按需添加，它们的 key 由方法及其参数组成。（在当前的设计中没有参数，但我们应该记得 expect()，它恰好有一个参数，而且给它新增通用性，几乎不需要成本。）
-2.一个解析方法的结果被表示成一个元组，因为它正好有两个结果：一个显式的返回值（对于我们生成的解析器，它是一个 Node，表示所匹配的规则），以及我们从 self.mark() 中获得的一个新的输入位置。
-3.在调用解析方法后，我们会在内部的记忆字典中同时存储它的返回值（res）以及新的输入位置（endpos）。
-4.再次调用相同的解析方法时（在相同的位置，使用相同的参数），我们会从缓存中取出那两个结果，并用 self.reset() 来向前移动输入位置，最后返回那缓存中的返回值。
-5.缓存负数的结果也很重要——实际上大多数对解析方法的调用都是负数的结果。在此情况下，返回值为 None，而输入位置不会变。你可以加一个assert 断言来检查它。
+- 将数据整合到单个数据湖中，以避免数据泛滥
+随着组织逐渐发展为大数据，通常会在整个企业中弹出Hadoop和其他大数据技术的部署。最初的分散式方法可以加快采用速度，但最终会导致数据和技术孤岛。这些孤岛是有问题的，因为数据经常在部署之间重复，从而导致可能的合规性问题，但无疑会导致更高的总体维护成本。
+
+- 为用户提供适当级别的数据访问权限
+对于将数据整合到一个集中的湖中的组织，下一个挑战是提供对数据的正确访问级别。为了使数据科学家能够执行高级分析，他们需要做些事情：访问大量数据，使用外部数据源扩充现有数据的能力以及使用尖端工具和库对数据进行建模的能力。这通常与规避风险的IT管理员想要提供的内容完全相反，这会导致数据科学家的生产力下降。IT策略要求在安全性和稳定性之间取得平衡。成功的客户通常通过提供独立于生产系统的分析沙箱来回避此问题，为数据科学界。
+
+- 在治理与自由之间取得平衡
+如果没有治理和结构，数据湖将很快成为无法居住的数据沼泽，并且泻湖的表不受支持。关键是要在给用户自由使用某些工具和进行实验的能力之间找到适当的平衡，同时为操作环境提供一致的服务质量。
+
+- 使数据计划与业务目标保持一致
+太多组织在其大数据部署的早期阶段就迅速建立数据平台并做出技术选择，而没有考虑整个过程中的业务战略。事实证明，如果在不了解企业如何实际利用底层系统的情况下进行技术选择和业务流程，那么部署的平台很可能无法满足企业的需求，因此将被废弃。IT和业务部门必须协作并共同努力，在实施之前定义系统的要求。
+
+- 创建具有扩展能力的数据基础架构
+大多数良好的数据湖实施都遵循在商品，裸机基础架构上进行部署的久经考验的指导。很好，直到事实并非如此。一旦这些部署通过数十名分析用户到达数十台服务器和数百TB数据，配置沙箱便成为了一项全职工作，而事实并非如此。有两点可以帮助简化此过程：
+ - 容器化计算环境，以便单击按钮即可部署新的沙箱。
+ - 将数据存储与计算环境分离，并提供从容器化沙箱到数据的只读访问。
+Docker和Kubernetes为此提供了出色的工具。这为分析师提供了灵活性，并易于访问具有完整性的数据，同时允许计算与存储层的独立可伸缩性。结果是降低了总拥有成本并简化了总体维护。
+
 
 ### 3.Tip:
 
-query-string 解析 URL
+1. Apache Maven 项目提供的 Dependency 插件详解
 
-1. querystring.parse(str[, sep[, eq[, options]]]):
-str <string> 要解析的 URL 查询字符串。
-sep <string> 用于在查询字符串中分隔键值对的子字符串。默认值: '&'。
-eq <string> 用于在查询字符串中分隔键和值的子字符串。默认值: '='。
-options: <Object>
-decodeURIComponent <Function> 当解码查询字符串中的百分比编码字符时使用的函数。默认值: querystring.unescape()。
-maxKeys <number> 指定要解析的键的最大数量。指定 0 可移除键的计数限制。默认值: 1000。
-querystring.parse() 方法将 URL 查询字符串 str 解析为键值对的集合。
+```shell
+# 下载 nginx 安装包
+Dependency插件提供了大量的goals，常用的如下：
 
-``` javascript
-import qs from 'query-string';
- 
-location.search  // ?name=jim
-location.hash  // #token=123
-qs.parse('?name=jim')  // {name: 'jim'}
-qs.parse('#token=123')  // {token: '123'}
-
-//默认情况下，字符将会被解码为 UTF-8。 如果需要其他的编码，则需要指定其他的 encodeURIComponent 选项：
-qs.parse('name=jim&name=lily&age=22', null, null, { decodeURIComponent: gbkDecodeURIComponent })  // {name: ['jim', 'lily'], age: 22}
+dependency:analyze 分析此项目的依赖项，并确定哪些是：已使用并已声明；已使用和未声明；未使用和已声明。
+dependency:display-ancestors 显示父级项目的所有原始 pom，需要知道项目所有父 pom 的连续集成系统中可能很有用。
+dependency:list 列出此项目的依赖项的列表别名。
+dependency:resolve Maven 解析所有依赖项并显示版本。
+dependency:resolve-plugins 解析插件 Maven 来解析插件及其依赖关系。
+dependency:tree 显示此项目的依赖关系树。
+dependency:unpack 拆开包装复制但解包。
 ```
 
-2. qs.stringify(object, [options])
-obj <Object> 要序列化为 URL 查询字符串的对象。
-sep <string> 用于在查询字符串中分隔键值对的子字符串。默认值: '&'。
-eq <string> 用于在查询字符串中分隔键和值的子字符串。默认值: '='。
-options:
-encodeURIComponent <Function> 当将查询字符串中不安全的 URL 字符转换为百分比编码时使用的函数。默认值: querystring.escape()。
-querystring.stringify() 方法通过遍历对象的自身属性从给定的 obj 生成 URL 查询字符串。
-它会序列化传入的 obj 中以下类型的值：<string> | <number> | <boolean> | <string[]> | <number[]> | <boolean[]>。 任何其他的输入值都将会被强制转换为空字符串。
+2. 利用 dependency:analyze-only 分析依赖
+对 Maven 项目的依赖的分析默认属于 verify 阶段，即执行 mvn verify 默认将会执行 dependency:analyze。
+但是也可以将 dependency:analyze 与构建阶段绑定。
+pom.xml配置如下：
 
-
-``` javascript
-import qs from 'query-string';
- 
-qs.stringify({name: 'jim', age: 22});  // 'age=22&name=jim'
-qs.stringify({name: ['jim', 'lily'], age: 22});  // 'age=22&name=jim&name=lily'
-
-//默认情况下，字符将会被编码为 UTF-8。 如果需要其他的编码，则需要指定其他的 encodeURIComponent 选项：
-querystring.stringify({ w: '中文', foo: 'bar' }, null, null,
-                      { encodeURIComponent: gbkEncodeURIComponent });
+```shell
+<build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>analyze-only-in-package</id>
+            <phase>package</phase>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <!-- configure the plugin here -->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+</build>
 ```
 
-3. qs.parseUrl(string, [options])
+3. 利用dependency:tree解决依赖冲突
 
-``` javascript
-qs.parseUrl('http://www.baidu.com?name=jim');
-// {url: 'http://www.baidu.com', query: {name: 'jim'}}
-```
-
-用 a 标签解析 url
-
-``` javascript
-function parseUrl(url) {
-    let a = document.createElement('a');
-    a.href = url;
-    return {
-        host: a.hostname,
-        port: a.port,
-        query: a.search,
-        hash: a.hash.replace('#', ''),
-        params: (() => {
-            let searchArr = a.search.replace(/^\?/, '').split('&');
-            let params = {};
-            searchArr.forEach(item => {
-                let [key, value] = item.split('=');
-                params[key] = value;
-            });
-            return params;
-        })()
-    }
-}
+```shell
+mvn dependency:tree -Dverbose -Dincludes=log4j
 ```
 
 ### 4.Share:
 
-一致性Hash算法
-https://www.xuxueli.com/blog/?blog=./notebook/6-%E7%AE%97%E6%B3%95/%E4%B8%80%E8%87%B4%E6%80%A7Hash%E7%AE%97%E6%B3%95.md
-
-前端打包构建工具Gulp、Rollup、Webpack、Webpack-stream
-https://my.oschina.net/tongjh/blog/837663
+Presto实现原理和美团的使用实践
+https://tech.meituan.com/2014/06/16/presto.html

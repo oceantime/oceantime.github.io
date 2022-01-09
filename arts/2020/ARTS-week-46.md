@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-46
-date: 2020-07-26 18:10:37
+date: 2020-11-22 20:41:13
 tags:
 ---
 
@@ -13,72 +13,121 @@ tags:
 
 ### 1.Algorithm:
 
-Split Array Largest Sum https://leetcode.com/submissions/detail/371841241/
+215. 数组中的第K个最大元素 https://leetcode-cn.com/submissions/detail/125352531/
+剑指 Offer 40. 最小的k个数 https://leetcode-cn.com/submissions/detail/125355104/
+面试题 17.14. 最小K个数 https://leetcode-cn.com/submissions/detail/125355700/
+704. 二分查找 https://leetcode-cn.com/submissions/detail/125412090/
 
 ### 2.Review:
 
-https://www.oreilly.com/content/the-hadoop-tipping-point/
-Hadoop的引爆点
+https://towardsdatascience.com/why-90-percent-of-all-machine-learning-models-never-make-it-into-production-ce7e250d5a4a
+为什么90%的机器学习模型从未投入生产？
 
 #### 点评：
 
-作者 Courtney Webster 提出实时自动化是提高 Hadoop 性能的关键。
+作者：Rhea Moutafis
 
-过去估计作业所需资源非常困难，因为性能取决于很多变量，其中包括：核心数、节点数、负载变化（大小，强度）、干扰（对于共享集群）。解决方法是高估资源，并允许我们的资源管理器“交通警察”作业，直到可以使用所需的最大资源为止。虽然可以满足高峰需求，但我们的日常群集使用率平均仅为6-12％。
+当使用 Python 的 Pandas 认为尽管十分之九的科技高管认为，人工智能将成为下一次技术革命的中心，但它的采用和部署仍有增长空间。数据科学家不是罪魁祸首。
 
-Reiss＆Tumanov 他们研究了Google的集群，建议使用下一代调度程序，应该具备的特性：
-- 快速制定任务计划决策
-- 撤消以前的任务
-- 动态适应正在运行的作业中的资源请求
-- 预测（而不仅仅是分配）资源使用情况
+公司不是为机器学习而建立的：
+- 领导的支持不仅仅是为了金钱
+- 缺乏对数据的访问
+- IT、数据科学和工程之间的脱节
+
+机器学习模型有其自身的一系列挑战：
+- 扩大规模比你想象的要难
+- 劳动是重复的
+- 高管们并不总是买账
+- 缺乏跨语言和框架支持
+- 版本控制和复现能力仍然是一个挑战
+
+总结：
+如果一个数据科学家90%的努力没有结果，那不是一个好预兆。如上所示，这不是数据科学家的错，而是由于固有的和组织上的障碍。改变并非朝夕。对于刚开始使用机器学习模型的公司来说，从一个非常小和简单的项目开始是明智的。但由于机器学习提供了许多改善客户体验和企业效率的方法，因此很明显，那些快速、早期部署模型的公司将是赢家。
+
+```python
+＃通过引用仅返回x> 5的行（在其上写会更改原始df）
+df2  =  df。loc [ df [ 'x' ] >  5 ]
+＃通过引用仅返回x为0、1、2、3或4的行
+df3  =  df。X。isin（范围（4））
+＃通过只读引用仅返回x> 5的行（无法写入）
+df4  =  df [ df [ 'x' ] > 5 ]
+```
+
+结论：
+  作者在一台非常旧的 4 核 PC 上，一分钟内运行 2.5 亿行内容，觉得会在实际应用中有着举足轻重的地位。因此建议，下次处理本地或从单个 AWS 实例中处理数据集时，可以考虑使用这个框架，非常高效。
+
 
 ### 3.Tip:
 
-1. npm 依赖和缓存
-
+1. Linux 关闭 GPU 进程
 ```shell
-#清缓存
-npm cache verify
-npm cache clean --force
-
-#删除项目所有依赖
-npm uninstall *
-
-#删除全局依赖
-npm uninstall * -g
-
-#安装依赖
-npm install xxx 利用 npm 安装 xxx 依赖到当前命令行所在目录
-npm install xxx -g 利用 npm 安装全局依赖 xxx
-npm install xxx –save 安装并写入 package.json 的 dependencies 中
-npm install xxx –save-dev 安装并写入 package.json 的 devDependencies 中
+~$nvidia-smi
+#查看 Processes 结果
+kill -9 PID
 ```
 
-2. go mod 依赖
+2. The StackOverflowError in Java
 
 ```shell
-#初始化
-go mod init
-go mod init packagename
+-Xss10M
+```
 
-#下载依赖包
-go mod download
+3. hadoop 环境配置
 
-#拉取必须模块，移除不用的模块
-go mod tidy
+```shell
+# 环境变量配置
+export HADOOP_HOME=$hadoop_home_dir
+export PATH=$PATH:$HADOOP_HOME/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HADOOP_HOME/lib/native/
+export CLASSPATH=`$HADOOP_HOME/bin/hdfs classpath --glob`
+export ARROW_LIBHDFS_DIR=$PATH:$HADOOP_HOME/lib/native/
 
-#tag 对应的内容更新，需要删除 pkg 中的缓存内容
-cd $GOPATH/pkg/mod
-rm -rf *
+```
 
-#自动下载依赖
-go get
-go run
-go build
+4. hadoop 客户端命令
 
+```shell
+# 列出HDFS中目录的内容
+$ hdfs dfs -mkdir /user
+$ hdfs dfs -mkdir /user/hduser
+$ hdfs dfs -ls /
+
+# put与get数据
+$ hdfs dfs -put /home/hduser_/input.txt /user/hduser
+$ hdfs dfs -cat /user/hduser/input.txt
+https://china-testing.github.io/
+$ hdfs  dfs -get /user/hduser/input.txt /home/hduser_/test.txt
+
+# 更多帮助可以　hdfs dfs -usage <option> 或　hdfs dfs -help <option>
+```
+
+5. python 操作 hadoop
+
+```python
+# pyarrow
+import pyarrow as pa
+fs = pa.hdfs.connect(host, port, user=user, kerb_ticket=ticket_cache_path)
+with fs.open(path, 'rb') as f:
+
+fs = pa.hdfs.connect(host, port, user=user, kerb_ticket=ticket_cache_path,
+                    driver='libhdfs3')
+
+# hdfs
+from hdfs import InsecureClient
+client = InsecureClient('http://localhost:50070', user='hduser_')
+
+fs_folders_list = client.list("/")
+print(fs_folders_list)
+with client.read('/user/hduser/input.txt', encoding='utf-8') as reader:
+    for line in reader:
+        print(line)
 ```
 
 ### 4.Share:
 
-一文彻底搞懂go mod使用
-https://blog.csdn.net/qq_38151401/article/details/105780251
+https://blog.csdn.net/u010738528/article/details/105276504
+win10 单机配置 hadoop 3.1.1
+
+https://blog.csdn.net/qq_26295547/article/details/79721488
+hadoop学习笔记1-客户端搭建
+

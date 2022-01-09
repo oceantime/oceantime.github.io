@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-38
-date: 2020-05-31 21:29:18
+date: 2020-09-28 22:00:13
 tags:
 ---
 
@@ -13,259 +13,200 @@ tags:
 
 ### 1.Algorithm:
 
-Coin Change https://leetcode.com/submissions/detail/347140929/
+Trapping Rain Water https://leetcode.com/submissions/detail/401829300/
 
 ### 2.Review:
 
-https://dev.to/lydiahallie/javascript-visualized-scope-chain-13pd
-JavaScript️可视化：作用域链
+https://towardsdatascience.com/data-engineering-how-to-set-dependencies-between-data-pipelines-in-apache-airflow-using-sensors-fc34cfa55fba
+如何在 Apache Airflow 中设置数据管道之间的依赖关系
 
 #### 点评：
 
-Lydia Hallie 通过可视化例子讲解了作用域链的原理。
+作者 Nicholas Leong 提出作为数据工程师，能做的最好的事情就是建立有效的管道，以适应数据仓库本身的优点和缺点。
 
-1.不同的执行上下文会分配不同的内存空间。 默认的全局上下文（浏览器中是 window，Node 中是 global），函数 getPersonInfo 在被调用时也会创建一个 本地上下文。每个执行上下文都有一个 作用域（链）。作用域（链）里面存储着执行上下文需要访问的变量。
-2.作用域类型
-本地作用域:访问变量时，JS 引擎会首先检查本地作用域链。  
-全局作用域:JS 引擎会 顺着作用域链查找。作用域链一直找顶层 global object 位置。
-块级作用域:除了全局作用域和本地作用域，还有一个是 块级作用域，当在花括号 { } 中用 let 或者 const 关键字定义变量时，就产生了块级作用域。
+- 每个数据仓库都从数据源获取数据，并且可能是主数据库或该数据库的副本。我们认为运行ELT管道会更快，更省钱，因为它减轻了主数据库从服务器的负担。是目前在数据领域中非常普遍的做法。通常的议程是纯数据提取的原始表从午夜开始X个小时，导致这些表再转换X个小时以完成整个管道。
+- 如此设计管道的原因是因为已转换表的第一级产生并取决于原始表提取的完成。然后，第二级转换表依赖于这些第一级转换表。因此，重要的是我们设置这些任务之间的依赖关系。如果尚未提取/转换原始表之一，则我们不希望执行该表的转换。这将导致数据不正确，这正是数据工程师应负的责任。
 
-总结
-1.可以将“作用域链”视为对 可在当前上下文中访问的值 的引用链。
-2.作用域还可以重用变量名，只要不在同一个作用域中，变量名就可以重复。
+传感器
+- Apache Airflow 作为我们的主要任务流管理。这样，我们可以有效地监视我们的工作流程，能够跟踪失败的任务。传感器预先内置在 Airflow 中。监控 Airflow 任何任务的完成状态就这么简单。我们将使用传感器设置 DAGS 管道之间的依赖关系，以便在依赖关系完成之前不会运行。无需为此编写任何自定义运算符。
+- 执行增量可能很棘手，它取决于任务的执行时间，而不是运行时间。
+- 超时参数是必需的。当管道扩展时，将运行许多传感器以检查完工情况。如果未设置超时且我们的某些依存关系失败，则传感器将无限期运行，并导致 Airflow 停止。这是因为 Airflow 仅允许在实例上运行一定数量的最大任务，并且传感器被视为任务。如果以某种方式达到该数字，Airflow 将不再处理其他任务。
+
+结论：
+  传感器可用于所有 Airflow 任务。想在查询运行后发送电子邮件吗？使用传感器
 
 ### 3.Tip:
 
-clickhouse 集群搭建
+使用 docker 部署 airflow
 
-1.软件准备
-- 依赖：
-libtool-ltdl-2.4.2-22.e17_3.x86_64.rpm
-libicu-50.1.2-15.e17.x86_64.rpm
+1.localExcutor 适用于那种不需要做横向扩展的情况,一般就是单机部署,它的好处是相对更加轻量,对资源的消耗更低,也不需要依赖消息队列.
 
-- clickhouse：
-clickhouse-common-static-19.16.14.65-1.e17.x86_64.rpm (按顺序必选)
-clickhouse-server-common-19.16.14.65-1.e17.x86_64.rpm (按顺序必选)
-clickhouse-server-19.16.14.65-1.e17.x86_64.rpm (按顺序必选)
-clickhouse-client-19.16.14.65-1.e17.x86_64.rpm (按顺序必选)
-clickhouse-debuginfo-19.16.14.65-1.e17.x86_64.rpm (可选)
-clickhouse-test-19.16.14.65-1.e17.x86_64.rpm (可选)
+```xml
+version: '3.6'
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
 
-``` shell
-
-# rpm 安装
-rpm -ivh libtool-ltdl-2.4.2-22.e17_3.x86_64.rpm
-rpm -ivh libicu-50.1.2-15.e17.x86_64.rpm
-rpm -ivh clickhouse-common-static-19.16.14.65-1.e17.x86_64.rpm
-rpm -ivh clickhouse-server-common-19.16.14.65-1.e17.x86_64.rpm
-rpm -ivh clickhouse-server-19.16.14.65-1.e17.x86_64.rpm
-rpm -ivh clickhouse-client-19.16.14.65-1.e17.x86_64.rpm
-# rpm 卸载(顺序相反)
-rpm -e clickhouse-client-19.16.14.65-1.e17.x86_64
-rpm -e clickhouse-server-19.16.14.65-1.e17.x86_64
-rpm -e clickhouse-server-common-19.16.14.65-1.e17.x86_64
-rpm -e clickhouse-common-static-19.16.14.65-1.e17.x86_64
-
+  webserver:
+    image: puckel/docker-airflow:latest
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=Local
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      # Uncomment to include custom plugins
+      # - ./plugins:/usr/local/airflow/plugins
+    ports:
+      - 8080:8080
+    command: webserver
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
 ```
 
-2.配置
 
-启动脚本文件： /etc/init.d/clickhouse-server
-全局信息配置文件： /etc/clickhouse-server/config.xml
-集群信息配置文件： /etc/clickhouse-server/metrika.xml
-用户信息配置文件： /etc/clickhouse-server/users.xml
-客户端配置： /etc/clickhouse-client
-日志： /data/clickhouse/log
-数据： /data/clickhouse
+2.CeleryExcutor 可以借助消息队列实现横向扩展,适合有大量错综复杂任务流,且必须使用集群的的情况.
 
-``` shell
-[root@master ~]# sudo vim /etc/init.d/clickhouse-server
-CLUCKHOUSE_USER=clickhouse(需要创建对应的用户组并授权)
-CLICKHOUSE_DIR=/data/clickhouse
-#CLICKHOUSE_LOGDIR=/var/log/clickhouse-server 
-CLICKHOUSE_LOGDIR=${CLICKHOUSE_DIR}/log
+```xml
+version: '3.6'
+services:
+  redis: #如果有外部的redis则可以不创建
+    image: redis:latest
+  broker: #如果有外部的rabbitmq则可以不创建
+    image: rabbitmq:3.7-management
 
-[root@master ~]# sudo vim /etc/clickhouse-server/config.xml
-#生效如下两个配置，其他不变
-<interserver_http_host>ck_server_01</interserver_http_host> <!--填命令hostname -f返回的值-->
-<listen_host>0.0.0.0</listen_host> <!--监听IP-->
-<timezone>Asia/Shanghai</timezone> <!--设置时区-->
-<include_from>/etc/clickhouse-server/metrica.xml</include_from> <!--添加该参数-->
-<!--日志 修改路径-->
-<logger>
-	<level>error</level>
-	<log>/data/clickhouse/log/clickhouse-server.log</log>
-	<errorlog>/data/clickhouse/log/clickhouse-server-error.log</errorlog>
-	<size>500M</size>
-	<count>5</count>
-</logger>
-<path>/data/clickhouse/</path>
-<tmp_path>/data/clickhouse/tmp/</tmp_path>
-<user_files_path>/data/clickhouse/user_files/</user_files_path>
-<format_schema_path>/data/clickhouse/format_schemas/</format_schema_path>
+  postgres: #如果有外部的pg则可以不创建
+    image: postgres:latest
+    environment:
+        - POSTGRES_USER=airflow
+        - POSTGRES_PASSWORD=airflow
+        - POSTGRES_DB=airflow
 
-#创建用户组并授权目录
-[root@master ~]# useradd clickhouse
-[root@master ~]# passwd clickhouse
-Changing password for user clickhouse.
-New password: 
-BAD PASSWORD: it does not contain enough DIFFERENT characters
-BAD PASSWORD: is too simple
-Retype new password: 
-passwd: all authentication tokens updated successfully.
-[root@master ~]# groupadd clickhouse
-groupadd: group 'clickhouse' already exists
-[root@master ~]# chown -R clickhouse:clickhouse /data/clickhouse
+  airflow-webserver:
+    image: puckel/docker-airflow:latest
+    restart: always
+    depends_on:
+      - postgres
+      - broker
+      - redis
+    environment:
+      - LOAD_EX=n
+      - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+      - EXECUTOR=Celery
+      - AIRFLOW__CELERY__BROKER_URL=amqp://guest:guest@broker:5672/
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres:3306/airflow
+      # - POSTGRES_USER=airflow
+      # - POSTGRES_PASSWORD=airflow
+      # - POSTGRES_DB=airflow
+      # - REDIS_PASSWORD=redispass
+    volumes:
+      - dags:/usr/local/airflow/dags
+      # Uncomment to include custom plugins
+      # - ./plugins:/usr/local/airflow/plugins
+    ports:
+      - 8080:8080
+    networks:
+      - net-output
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    command: webserver
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
+  flower:
+    image: puckel/docker-airflow:latest
+    restart: always
+    depends_on:
+      - broker
+      - redis
+    environment:
+      - EXECUTOR=Celery
+      - AIRFLOW__CELERY__BROKER_URL=amqp://guest:guest@broker:5672/
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres:3306/airflow
+      # - REDIS_PASSWORD=redispass
+    networks:
+      - net-output
+    deploy:
+      replicas: 1
+      # restart_policy:
+      #   condition: on-failure
+    command: flower
 
-[root@master ~]# sudo vim /etc/clickhouse-server/metrika.xml
-#添加如下配置
-<yandex>
-<!--ck集群节点-->
-<clickhouse_remote_servers>
-    <test_ck_cluster>
-        <!--分片1-->
-        <shard>
-            <weight>1</weight>
-            <replica>
-                <internal_replication>false</internal_replication>
-                <host>10.72.120.100</host>
-                <port>9000</port>
-                <user>default</user>
-                <password>UHXQQmhb</password>
-               <compression>true</compression>
-            </replica>
-            <replica>
-                <internal_replication>false</internal_replication>
-                <host>10.72.120.101</host>
-                <port>9000</port>
-                <user>default</user>
-                <password>UHXQQmhb</password>
-                <compression>true</compression>
-            </replica>
-        </shard>
-        <!--分片2-->
-        <shard>
-            <weight>1</weight>
-            <replica>
-                <internal_replication>false</internal_replication>
-                <host>10.72.120.102</host>
-                <port>9000</port>
-                <user>default</user>
-                <password>UHXQQmhb</password>
-                <compression>true</compression>
-            </replica>
-            <replica>
-                <internal_replication>false</internal_replication>
-                <host>10.72.120.103</host>
-                <port>9000</port>
-                <user>default</user>
-                <password>UHXQQmhb</password>
-                <compression>true</compression>
-            </replica>
-        </shard>
-    </test_ck_cluster>
-</clickhouse_remote_servers>
+  scheduler:
+    image: puckel/docker-airflow:latest
+    restart: always
+    depends_on:
+      - airflow-webserver
+    volumes:
+      - dags:/usr/local/airflow/dags
+      # Uncomment to include custom plugins
+      # - ./plugins:/usr/local/airflow/plugins
+    environment:
+      - LOAD_EX=n
+      - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+      - EXECUTOR=Celery
+      - AIRFLOW__CELERY__BROKER_URL=amqp://guest:guest@broker:5672/
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres:3306/airflow
+      # - POSTGRES_USER=airflow
+      # - POSTGRES_PASSWORD=airflow
+      # - POSTGRES_DB=airflow
+      # - REDIS_PASSWORD=redispass
+    deploy:
+      replicas: 1
+      # restart_policy:
+      #   condition: on-failure
+    command: scheduler
 
-<!--zookeeper相关配置-->
-<zookeeper-servers>
-    <node index="1">
-        <host>10.72.120.101</host>
-        <port>2181</port>
-    </node>
-    <node index="2">
-        <host>10.72.120.102</host>
-        <port>2181</port>
-    </node>
-    <node index="3">
-        <host>10.72.120.103</host>
-        <port>2181</port>
-    </node>
-</zookeeper-servers>
+  worker:
+    image: puckel/docker-airflow:latest
+    restart: always
+    depends_on:
+      - scheduler
+    volumes:
+      - dags:/usr/local/airflow/dags
+      # Uncomment to include custom plugins
+      # - ./plugins:/usr/local/airflow/plugins
+    environment:
+      - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+      - EXECUTOR=Celery
+      - AIRFLOW__CELERY__BROKER_URL=amqp://guest:guest@broker:5672/
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres:3306/airflow
+      # - POSTGRES_USER=airflow
+      # - POSTGRES_PASSWORD=airflow
+      # - POSTGRES_DB=airflow
+      # - REDIS_PASSWORD=redispass
+    deploy:
+      replicas: 4
+      # restart_policy:
+      #   condition: on-failure
+    command: worker
 
-<macros>
-    <replica>hostname</replica> <!--当前节点主机名-->
-</macros>
-
-<networks>
-    <ip>::/0</ip>
-</networks>
-
-<!--压缩相关配置-->
-<clickhouse_compression>
-    <case>
-        <min_part_size>10000000000</min_part_size>
-        <min_part_size_ratio>0.01</min_part_size_ratio>
-        <method>lz4</method> <!--压缩算法lz4压缩比zstd快, 更占磁盘-->
-    </case>
-</clickhouse_compression>
-</yandex>
-
-
-[root@master ~]# sudo vim /etc/clickhouse-server/users.xml
-#可以更改默认用户default的密码
-<default>
-    <!-- PASSWORD=$(base64 < /dev/urandom | head -c8); echo  "$PASSWORD"; echo -n  "$PASSWORD" | sha256sum | tr -d '-'   -->
-    <!-- password UHXQQmhb -->
-    <password_sha256_hex>65b84b497ef843f7c9629251a64e307caecbf7327975af4d18f83261239e1460</password_sha256_hex>
-    <networks>
-    <ip>::/0</ip>
-    </networks>
-    <profile>default</profile>
-    <quota>default</quota>
-</default>
-```
-
-3.服务启动
-
-```shell
-#通过命令方式启动初始化配置目录，如果直接使用服务方式启动会有可能失败
-[root@master ~]# clickhouse-server --config-file=/etc/clickhouse-server/config.xml
-#正常启动后结束进程
-[root@master ~]# ps -ef | grep clickhouse | grep -v grep | awk '{print "kill -9" $2}' | sh
-#服务方式启动
-[root@master ~]# sudo service clickhouse-server start
-#非服务方式后台托管服务启动
-nohup clickhouse-server --config-file=/etc/clickhouse-server/config.xml > null 2 > & 1 &
-#其他命令
-[root@master ~]# sudo service clickhouse-server status
-[root@master ~]# sudo service clickhouse-server restart
-```
-
-4.测试
-
-```shell
-clickhouse-client --help
-#连接数据库
-clickhouse-client -u default --password UHXQQmhb
-select 1
-show databases
-show tables
-#查看分片信息
-select * from system.clusters;
-#查看分区信息
-select partition, name, active from system.parts where table = 'szt_data';
-#查询zookeeper状态
-select * from system.zookeeper where path='/clickhouse';
-#批量导入数据方式
-#1. 命令行客户端
-cat file.csv | clickhouse-client --database=test --query="INSERT INTO test FORMAT CSV"; 
-#2. http客户端
-GET 'http://localhost:8123/?query=SELECT 1'
-echo 'INSERT INTO t VALUES (1),(2),(3)' | POST 'http://localhost:8123/'
-#3. 第三方客户端库
-#
+  networks:
+    net-output:
+      external: true
+  volumes:
+    dags:
+      driver_opts:
+      type: "nfs"
+      o: "addr=10.40.0.199,nolock,soft,rw"
+      device: ":/docker/dags"
 ```
 
 ### 4.Share:
 
-深入理解ClickHouse之5-ClickHouse集群的replica实现方式
-http://liangfan.tech/2019/01/02/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3ClickHouse%E4%B9%8B5-ClickHouse%E9%9B%86%E7%BE%A4%E7%9A%84replica%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/
-Clickhouse集群应用、分片、复制(分片性能对比)
-https://www.jianshu.com/p/20639fdfdc99
-ClickHouse表引擎到底怎么选
-https://developer.aliyun.com/article/739801
-ClickHouse学习系列之三【配置文件说明】
-https://www.cnblogs.com/zhoujinyi/p/12627780.html
-clickhouse + chproxy 集群搭建
-https://www.jianshu.com/p/9498fedcfee7
+https://zhuanlan.zhihu.com/p/43383509
+airflow 实战总结

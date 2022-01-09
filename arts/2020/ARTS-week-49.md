@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-49
-date: 2020-08-16 10:43:44
+date: 2020-12-13 13:31:28
 tags:
 ---
 
@@ -13,144 +13,113 @@ tags:
 
 ### 1.Algorithm:
 
-Palindromic Substrings https://leetcode.com/submissions/detail/381501711/
+804. 唯一摩尔斯密码词 https://leetcode-cn.com/submissions/detail/130699876/
 
 ### 2.Review:
 
-https://www.oreilly.com/content/should-i-use-microservices/
-我应该使用微服务吗？
+https://www.oreilly.com/content/big-fast-easy-data-with-ksql/
+使用 KSQL 进行快速，便捷的大数据分析
 
 #### 点评：
 
-作者 Sam Newman 讨论了在组织中何时以及何时不应用微服务的注意事项。
+作者：Michael Noll 查看适用于 Apache Kafka 的新流式 SQL 引擎。可以实时检测异常和欺诈活动，监视基础架构和 IoT 设备，对用户活动进行基于会话的分析，执行实时 ETL 等。
 
-总结：
-- 微服务不足的地方
-定义稳定的服务边界的重要性方面，微服务架构对于全新产品或初创企业而言通常是一个糟糕的选择。领域模型的这种转变反过来将导致对服务边界进行更多更改，并且跨服务边界协调更改是一项昂贵的工作。总的来说，定义域模型需要足够多的尝试后再定义服务边界是比较合适的。
+主要优势：
+- 无需编写大量编程代码，开始进行流处理所需的只是一个简单的 SQL 语句
+- KSQL 是开源的（获得 Apache 2.0 许可），并建立在 Kafka 的 Streams API 之上
+- 支持各种强大的流处理操作，包括过滤，转换，聚合，联接，窗口和会话化
 
-我确实看到了对于初创公司首先采用微服务的一种诱惑。原因是：“如果我们真的成功的话，我们需要扩大规模！” 问题是，您不一定知道是否有人愿意使用您的新产品，即使您确实成功地需要一种高度可扩展的体系结构，最终交付给用户的东西也可能非常与您一开始就开始构建的东西不同。找到适合市场的过程意味着您最终可能会得到与开始时想像的产品截然不同的产品。
-
-通常，您最大的制约因素是人员，这使初创企业面临微服务的挑战。对于一个小型团队来说，微服务架构可能很难证明其合理性，因为需要做一些工作来处理微服务本身的部署和管理，有些人将其称为“微服务税”。这会使得五人团队中有一个人将时间花在这些问题上而不花在构建产品上。一旦您了解了体系结构中的约束条件和痛点所在，以后转移到微服务会容易得多，那么您就可以将精力集中在最明智的地方使用微服务。
-
-- 微服务好的地方
-我看到组织采用微服务的最大原因可能是，允许更多的开发人员在同一个系统上工作而不会互相干扰。正确安排您的体系结构和组织边界，并允许更多的人彼此独立工作，从而减少交付争用。
-
-通常，软件即服务（SaaS）软件也非常适合微服务体系结构。这些产品通常被期望以24×7全天候运行，这在推出变更方面带来了挑战。微服务架构的独立可释放性在这个领域是一个巨大的福音。此外，可以根据需要按比例放大或缩小微服务。这意味着，当您为系统的负载特性建立合理的基准时，您将获得更多控制权，以确保可以以最具成本效益的方式扩展系统。
-
-微服务的技术不可知性确保您可以充分利用云平台。公共云供应商为您的代码提供了广泛的服务和部署机制。您可以更轻松地将特定服务的需求与云服务相匹配，这将最好地帮助您实现它们。
-
-最重要的是，微服务架构可以为您提供不断扩展的系统灵活性。这种灵活性当然是有代价的，但是如果您想在将来可能要进行的更改方面保持开放的态度，那可能是值得付出的代价。
+KSQL 可以用于什么场景：
+- 实时监控和实时分析
+- 在线数据整合与充实
+- 安全和异常检测
 
 ### 3.Tip:
 
-1. idea 创建第一个 maven 项目报错：Cannot resolve plugin org.apache.maven.plugins:maven-clean-plugin:2.5
-
+1. Check os version in linux
 ```shell
-# 主要原因是本地maven的配置文件和仓库地址不一致。
-# 其中Local repository 的地址和 settings file中的地址保持一致
-maven配置中3个选项
-Maven home directory
-User settings file
-Local repository
+cat /etc/os-release
+lsb_release -a
+hostnamectl
+uname -r
 ```
 
-2. Celery的工具flower安装和使用：
+2. mysql 导入导出数据中文乱码解决方法
 
 ```shell
-# 安装flower
-pip install flower
-
-# 启动flower
-flower -A celery_tasks.task --port=5555
-
-# 进入http://localhost:5555即可查看
+mysqldump -u root -p --default-character-set=utf-8 dbname tablename > bak.sql
+mysqldump -u root -p --default-character-set=utf-8 dbname tablename < bak.sql
 ```
 
-3. nginx: [emerg] socket() [::]:80 failed (97: Address family not supported by protocol)
+3. yum 将安装包及依赖包下载到本地
 
 ```shell
-vim /etc/nginx/conf.d/default.conf
-# 将
-listen       80 default_server;
-listen       [::]:80 default_server;
+# Downloadonly
+yum install yum-plugin-downloadonly
+yum install --downloadonly --downloaddir=/root/packages vim
 
-# 改为：
-listen       80;
-#listen       [::]:80 default_server;
+# Yumdownloader
+yum install yum-utils
+yumdownloader --resolve --destdir=/root/package vim
+
+# reposync
+yum install reposync
+reposync -r vim -p /root/package
 ```
 
-4. Linux下RPM软件包的安装及卸载
-RPM 有五种操作模式，分别为：安装、卸载、升级、查询和验证。
+4. InetAddress.getLocalHost().getHostAddress() 获取的 ip 为 127.0.0.1
 
-#### RPM 安装操作
-命令：
-rpm -i 需要安装的包文件名
-
-举例如下：
 ```shell
-rpm -i example.rpm 安装 example.rpm 包；
-rpm -iv example.rpm 安装 example.rpm 包并在安装过程中显示正在安装的文件信息；
-rpm -ivh example.rpm 安装 example.rpm 包并在安装过程中显示正在安装的文件信息及安装进度；
+# 检查主机名
+hostname
+
+# 主机名设置
+vim /etc/sysconfig/network
+HOSTNAME=myhost # 修改 HOSTNAME 为设定的主机名
+
+# 修改 hosts
+vim /etc/hosts
+192.168.10.1 myhost # 本地 ip 对于新的主机名
+
+# 重启
+rebot
+
 ```
 
-#### RPM 查询操作
-命令：
-rpm -q …
+5. Java 获取 src 下包的文件路径
 
-附加查询命令：
-a 查询所有已经安装的包以下两个附加命令用于查询安装包的信息；
-i 显示安装包的信息；
-l 显示安装包中的所有文件被安装到哪些目录下；
-s 显示安装版中的所有文件状态及被安装到哪些目录下；以下两个附加命令用于指定需要查询的是安装包还是已安装后的文件；
-p 查询的是安装包的信息；
-f 查询的是已安装的某文件信息；
-
-举例如下：
 ```shell
-rpm -qa | grep tomcat4 查看 tomcat4 是否被安装；
-rpm -qip example.rpm 查看 example.rpm 安装包的信息；
-rpm -qif /bin/df 查看/bin/df 文件所在安装包的信息；
-rpm -qlf /bin/df 查看/bin/df 文件所在安装包中的各个文件分别被安装到哪个目录下；
+String path = getClass().getClassLoader().getResource("filename.text").getPath();
 ```
-
-#### RPM 卸载操作
-命令：
-rpm -e 需要卸载的安装包
-
-在卸载之前，通常需要使用rpm -q …命令查出需要卸载的安装包名称。
-举例如下：
-```shell
-rpm -e tomcat4 卸载 tomcat4 软件包
-```
-
-#### RPM 升级操作
-命令：
-rpm -U 需要升级的包
-
-举例如下：
-```shell
-rpm -Uvh example.rpm 升级 example.rpm 软件包
-```
-
-#### RPM 验证操作
-命令：
-rpm -V 需要验证的包
-
-举例如下：
-```shell
-rpm -Vf /etc/tomcat4/tomcat4.conf
-输出信息类似如下：
-S.5....T c /etc/tomcat4/tomcat4.conf
-```
-
-其中，S 表示文件大小修改过，T 表示文件日期修改过。限于篇幅，更多的验证信息请您参考rpm 帮助文件：man rpm
-
-#### RPM 的其他附加命令
---force 强制操作 如强制安装删除等；
---requires 显示该包的依赖关系；
---nodeps 忽略依赖关系并继续操作；
 
 ### 4.Share:
 
-https://blog.csdn.net/xixiaoyaoww/article/details/106536594
-7款优秀Vim插件帮你打造完美IDE
+https://www.datalearner.com/blog/1051585624649623
+Dask调度器简介
+
+https://www.cnblogs.com/crazycode2/p/11154786.html
+CentOS 7离线安装MySQL 5.7
+
+https://blog.51cto.com/frankch/1876716
+Linux中查看和设置MySQL数据库字符集
+
+https://blog.csdn.net/eric_wii/article/details/86300450
+Linux下卸载MySQL8.0版本
+
+https://blog.csdn.net/cjfeii/article/details/48494089
+MySql 启动报错:The server quit without updating PID file 如何解决
+
+https://zhuanlan.zhihu.com/p/137574234?utm_source=wechat_session
+带你走进神一样的Elasticsearch索引机制
+
+https://blog.csdn.net/hanniel/article/details/94294155
+Pipenv使用入门
+
+https://blog.csdn.net/xzm5708796/article/details/89357434
+ansible离线安装操作手册（含所有安装包内容）
+
+https://www.cnblogs.com/kevingrace/archive/2004/01/13/5569648.html
+Ansible-playbook 运维笔记
+
+https://www.cnblogs.com/eoalfj/p/12332808.html
+Java 命令行 编译、执行、打包

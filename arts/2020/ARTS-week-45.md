@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-45
-date: 2020-07-19 20:27:42
+date: 2020-11-15 16:51:13
 tags:
 ---
 
@@ -13,448 +13,214 @@ tags:
 
 ### 1.Algorithm:
 
-Frog Jump https://leetcode.com/submissions/detail/368707533/
+1122. 数组的相对排序 https://leetcode-cn.com/submissions/detail/123602434/
 
 ### 2.Review:
 
-https://www.oreilly.com/content/best-practices-for-data-lakes/
-数据湖的最佳实践
+https://towardsdatascience.com/trying-out-dask-dataframes-in-python-for-fast-data-analysis-in-parallel-aa960c18a915
+如何在 Python 中使用 Dask Dataframes 加速并行数据分析 
 
 #### 点评：
 
-作者Alice LaPlante 和 Ben Sharma 讲了如何构建、维护和挖掘Hadoop数据湖的价值。。
+作者：Luciano Strika 
+当使用 Python 的 Pandas 打开了一个几百万行的数据集，尝试获取一些指标，可能要等一整分钟才能获得一系列简单的平均值，而当如果达到数十亿时，无法进行分析。Dask 是一个开源项目，可为解决这个问题。 Dask 提供有关 NumPy 数组，Pandas 数据帧和常规​​列表的抽象，从而允许您使用多核处理并行运行它们。
 
-有价值的数据湖具备以下几点：
-1. 业务收益优先级列表：解决关键业务痛点或创造新的盈利点。
-2. 架构规划：这是一项长期投资，所以需要仔细把握技术的导向。有必要验证一下概念，从而得到一些经验，在此过程中不断调整和学习。规划中特别重要一点就是拥有很好的数据管理策略，包括数据治理和元数据，以及如何做好这几点。
-3. 安全策略：数据隐私和安全及多租户。
-4. I / O和内存模型：作为技术平台和体系结构的一部分，必须考虑数据湖的扩展功能。
-5. 数据库技能评估：专家应该具备构建数据平台实践经验，有丰富的数据管理和数据治理经验，这样他们就可以预先明确策略和项目流程。还需要邀请日后会使用这一数据湖的数据科学家们，并将其作为利益相关者参与到早期的建筑过程中去，听取他们的需求，了解他们更愿意怎样与数据湖交互。
-6. 运维计划：从服务水平协议，需要从几乎零停机时间、可重复读取、处理、改变数据的角度，制定适当的服务水平协议，需要有相关经验的人运维。
-7. 运营计划：如何考虑如何做广告宣传、拓展用户。
-8. 灾备计划：保证其关键性能高可用。
-9. 五年愿景：数据湖会成为下一代企业级数据技术的关键基础平台，企业需要提前计划如何将数据湖纳入长期策略。。
+Dask 官方文档中介绍的特性：
+- 处理大型数据集，即使这些数据集不适合存储在内存中
+- 通过使用多个内核来加速长计算
+- 使用标准的 Pandas 操作（例如 groupby，join 和时间序列计算）在大型数据集上进行分布式计算
+
+使用 Dask Dataframes 时确实非常快的一些场景：
+- 算术运算（乘或加到系列中）
+- 常见的汇总（平均值，最小值，最大值，总和等）
+- 调用 apply（只要它沿着索引-即不在 "y" 不是索引的 groupby（'y'）之后）
+- 调用 value_counts（），drop_duplicates（）或 corr（）
+- 使用 loc，isin 和按行选择进行过滤
+
+```python
+＃通过引用仅返回x> 5的行（在其上写会更改原始df）
+df2  =  df。loc [ df [ 'x' ] >  5 ]
+＃通过引用仅返回x为0、1、2、3或4的行
+df3  =  df。X。isin（范围（4））
+＃通过只读引用仅返回x> 5的行（无法写入）
+df4  =  df [ df [ 'x' ] > 5 ]
+```
+
+结论：
+  作者在一台非常旧的 4 核 PC 上，一分钟内运行 2.5 亿行内容，觉得会在实际应用中有着举足轻重的地位。因此建议，下次处理本地或从单个 AWS 实例中处理数据集时，可以考虑使用这个框架，非常高效。
 
 
 ### 3.Tip:
 
-Java11 HttpClient 
-
-特性：
-
-- 从 java9 的 jdk.incubator.httpclient 模块迁移到 java.net.http 模块，包名由 jdk.incubator.http 改为 java.net.http
-- 原来的诸如 HttpResponse.BodyHandler.asString() 方法变更为 HttpResponse.BodyHandlers.ofString() ，变化一为 BodyHandler 改为 BodyHandlers，变化二为 asXXX() 之类的方法改为 ofXXX()，由 as 改为 of
-
-1. 设置超时时间
-
-```java
-
-public void testTimeout() throws IOException, InterruptedException {
-    //1.set connect timeout
-    HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofMillis(5000))
-            .followRedirects(HttpClient.Redirect.NORMAL)
-            .build();
-
-    //2.set read timeout
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://www.google.com"))
-            .timeout(Duration.ofMillis(5009))
-            .build();
-
-    HttpResponse<String> response =
-            client.send(request, HttpResponse.BodyHandlers.ofString());
-
-    log.info(response.body());
-}
-
-HttpConnectTimeoutException
-
-Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
-    at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:68)
-    at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1248)
-    at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:877)
-Caused by: java.net.ConnectException: HTTP connect timed out
-    at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:69)
-    ... 2 more
-
-HttpTimeoutException
-
-java.net.http.HttpTimeoutException: request timed out
+1. pipenv 虚拟环境
+```python
+1、安装
+   -> pip3 install pipenv    (pip3安装的会指向Python3)
+2、新建一个项目文件：letgo
+3、进入文件夹：cd letgo
+4、指定虚拟环境使用哪个版本的python
+   -> pipenv --three 会使用当前系统的Python3创建环境
+5、换成国内镜像，被墙网速慢
+   -> 编辑文件letgo/Pipfile
+   -> 将 url = "https://pypi.org/simple" 替换成国内镜像 
+      url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+6、激活虚拟环境
+   -> pipenv shell (进入虚拟环境)
+      (新建的虚拟环境存放在/root/.local/share/virtualenvs/下，想要删除这个环境，直接删除这个文件夹)
+7、pipenv install django==1.11 安装固定版本模块，并加入到 Pipfile 
+8、当项目放到阿里云上时，直接运行：pipenv install 就能自动生成一份和本地环境，一模一样的环境
+9、常用命令：
+   pipenv graph                  查看目前安装的库及其依赖
  
-    at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:559)
-    at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:119)
-    at com.example.HttpClientTest.testTimeout(HttpClientTest.java:40)
+   pipenv uninstall --all        卸载全部包并从Pipfile中移除
+   pipenv uninstall django==1.11 卸载指定包并从Pipfile中移除
+   
+   pipenv update requests        # 更新指定个包
+   pipenv update                 # 更新所有的包
+  
+   pipenv shell  # 进入环境
+   exit  # 退出环境
+   pipenv --rm   # 删除虚拟环境
 ```
 
-2. 设置 authenticator
+2. Linux 系统安装、卸载 Anaconda 要点
 
-- authenticator 可以用来设置 HTTP authentication，比如 Basic authentication
-- 虽然 Basic authentication 也可以自己设置 header，不过通过 authenticator 省得自己去构造 header
+```shell
+1.在 Anaconda 官网 https://repo.anaconda.com/archive/ 内下载需要的版本；
 
-```java
-public void testBasicAuth() throws IOException, InterruptedException {
-    HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofMillis(5000))
-            .authenticator(new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication("username","password".toCharArray());
-                }
-            })
-            .build();
+2.bash 下载好的文件
 
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:8080/demo/login"))
-            .timeout(Duration.ofMillis(5009))
-            .build();
+3.配置和验证安装是否成功：
+# 将anaconda的bin目录加入PATH，根据版本不同，也可能是~/anaconda3/bin
+$ echo 'export PATH="~/anaconda3/bin:$PATH"' >> ~/.bashrc
+# 更新bashrc以立即生效
+$ source ~/.bashrc
+$ conda --version
 
-    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+4.其他拓展：
+列出安装的包：
+$ conda list
+更新包：
+$ conda update conda
 
-    log.info(response.statusCode());
-    log.info(response.body());
-}
-
+5.卸载 Anaconda
+$ rm-rf ~/anaconda
+$ vim ~/.bashrc
+注释
+# export PATH=~/anaconda3/bin:$PATH
+$ source ~/.bashrc
 ```
 
-3. 设置 header
+3.Conda 安装本地 package：
 
-- 通过 request 可以自定义设置 header
+```shell
+# --use-local 后面最好写绝对路径，或者进入到 Anaconda 的 pkgs 目录下再执行上述语句。
+$ conda install --use-local your-pkg-name
+```
 
-```java
-public void testCookies() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofMillis(5000))
-                .build();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/demo/cookie"))
-                .header("Cookie","JSESSIONID=ghco9xdnaco31gmafukxchph-eb636; userId=demo")
-                .timeout(Duration.ofMillis(5009))
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+4.解决 conda 的 "Solving environment: failed" 问题
+
+```shell
+$ conda config --set channel_priority flexible
+```
+
+5.Conda Python 版本转换：
+```shell
+安装其他版本的 python，通过定义 python=x 自选版本，名字可自定义，这里叫 python37
+$ conda create -n python37 python=3.7
+
+查看当前的 python 编辑器，带*号的当前使用版本，后面是当前版本使用的环境变量
+$ conda info -e
+# conda environments:
+#
+base                  *  /home/python/anaconda3
+python37                 /home/python/anaconda3/envs/python37
+
+版本切换
+$ conda activate python37     #激活版本，conda activate + 编辑器名字
+$ python -V                   #前面会带有版本注释    
+Python 3.7.16 :: Anaconda, Inc.
+$ conda deactivate python37    #退出当前版本
+
+开机既指定版本为当前使用版本，可直接在环境变量文件中激活
+$ vim ~/.bashrc    #添加所需激活的版本
+conda activate python37
+$ source ~/.bashrc
+
+删除 python 版本：conda remove -n 编辑器名字 --all
+$ conda remove -n python37 --all
+```
+
+6.ipython 是增强的 Python Shell，自动补全、自动缩进、支持 shell，增加了很多函数。
+```python
+$ ipython
+Python 3.6.5 |Anaconda, Inc.| (default, Apr 29 2018, 16:14:56)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.
  
-        log.info(response.statusCode());
-        log.info(response.body());
-
-```
-
-4. GET
-
-```java
-public void testSyncGet() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://www.google.com"))
-                .build();
+In [1]: print("Hello World!")
+Hello World!
  
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
- 
-        log.info(response.body());
-}
-
-public void testAsyncGet() throws ExecutionException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://www.google.com"))
-                .build();
- 
-        CompletableFuture<String> result = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::body);
-        log.info(result.get());
-}
+In [2]: quit
 ```
 
-5. POST 表单
+7.jupyter 是基于 web 的交互式笔记本，其中可以非常方便的使用 python，后台使用的是 ipython。
 
-- header 指定内容是表单类型，然后通过 BodyPublishers.ofString 传递表单数据，需要自己构建表单参数
-
-```java
-public void testPostForm() throws IOException, InterruptedException {
-    HttpClient client = HttpClient.newBuilder().build();
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://www.w3school.com.cn/demo/demo_form.asp"))
-            .header("Content-Type","application/x-www-form-urlencoded")
-            .POST(HttpRequest.BodyPublishers.ofString("name1=value1&name2=value2"))
-            .build();
-
-    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    log.info(response.statusCode());
+```python
+#生成jupyter notebook启动参数文件并修改参数
+$ jupyter notebook --generate-config
+#添加jupyter登录密码，执行如下指令输入密码，并在用户如下目录生成json的密码文件
+$ jupyter notebook password              
+$ cat .jupyter/jupyter_notebook_config.json 
+{
+  "NotebookApp": {
+  "password": "sha1:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
+#文件jupyter_notebook_config.py添加如下参数，后保存
+$ vim .jupyter/jupyter_notebook_config.py
+c.NotebookApp.ip = '*'  #外部IP地址客户端可以访问
+c.NotebookApp.notebook_dir = '/jupyter_nb_demo'  #本地notebook访问的目录
+c.NotebookApp.open_browser = False   #jupyter notebook启用时不再本地默认打开浏览器
+c.NotebookApp.port = 9999            #默认访问的端口是9999
+#直接启动notebook后台服务，并输出运行日志，之后就可以远程访问这个服务了
+$ jupyter notebook >.jupyter/jupyter_notebook.log 2>&1 &
+[1] 10395
+#后面可以使用如下指令查看运行日志
+$ tail -f .jupyter/jupyter_notebook.log
+
+#指定本机ip与自定义运行端口 
+$ jupyter notebook --ip=0.0.0.0 --port=8888
 ```
+8.Jupyter Notebook 中添加 conda 虚拟环境
 
-6. POST JSON
-
-- body 自动把 json 化为 string，header 指定 json 格式
-
-```java
-public void testPostJsonGetJson() throws ExecutionException, InterruptedException, JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    StockDto dto = new StockDto();
-    dto.setName("demo");
-    dto.setSymbol("demo");
-    dto.setType(StockDto.StockType.SH);
-    String requestBody = objectMapper
-            .writerWithDefaultPrettyPrinter()
-            .writeValueAsString(dto);
-
-    HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:8080/demo/json"))
-            .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-            .build();
-
-    CompletableFuture<StockDto> result = HttpClient.newHttpClient()
-            .sendAsync(request, HttpResponse.BodyHandlers.ofString())
-            .thenApply(HttpResponse::body)
-            .thenApply(body -> {
-                try {
-                    return objectMapper.readValue(body,StockDto.class);
-                } catch (IOException e) {
-                    return new StockDto();
-                }
-            });
-    log.info(result.get());
-}
-```
-
-7. 文件上传
-
-官方的HttpClient并没有提供类似WebClient那种现成的BodyInserters.fromMultipartData方法，因此这里需要自己转换
-这里使用org.apache.httpcomponents(httpclient及httpmime)的MultipartEntityBuilder构建multipartEntity，最后通过HttpRequest.BodyPublishers.ofInputStream来传递内容
-这里header要指定Content-Type值为multipart/form-data以及boundary的值，否则服务端可能无法解析
-
-```java
-public void testUploadFile() throws IOException, InterruptedException, URISyntaxException {
-    HttpClient client = HttpClient.newHttpClient();
-    Path path = Path.of(getClass().getClassLoader().getResource("demo.txt").toURI());
-    File file = path.toFile();
-
-    String multipartFormDataBoundary = "Java11HttpClientFormBoundary";
-    org.apache.http.HttpEntity multipartEntity = MultipartEntityBuilder.create()
-            .addPart("file", new FileBody(file, ContentType.DEFAULT_BINARY))
-            .setBoundary(multipartFormDataBoundary) //要设置，否则阻塞
-            .build();
-
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:8080/demo/upload"))
-            .header("Content-Type", "multipart/form-data; boundary=" + multipartFormDataBoundary)
-            .POST(HttpRequest.BodyPublishers.ofInputStream(() -> {
-                try {
-                    return multipartEntity.getContent();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            }))
-            .build();
-
-    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-    log.info(response.body());
-}
-```
-
-8. 文件下载
-
-- 使用 HttpResponse.BodyHandlers.ofFile 来接收文件
-
-```java
-public void testAsyncDownload() throws ExecutionException, InterruptedException {
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:8080/demo/download"))
-            .build();
-
-    CompletableFuture<Path> result = client.sendAsync(request, HttpResponse.BodyHandlers.ofFile(Paths.get("/tmp/demo.txt")))
-            .thenApply(HttpResponse::body);
-    log.info(result.get());
-}
-```
-
-9. 并发请求
-
-- sendAsync 方法返回的是 CompletableFuture，可以方便地进行转换、组合等操作
-- 这里使用 CompletableFuture.allOf 组合在一起，最后调用 join 等待所有 future 完成
-
-```java
-public void testConcurrentRequests(){
-    HttpClient client = HttpClient.newHttpClient();
-    List<String> urls = List.of("http://www.baidu.com","http://www.alibaba.com/","http://www.tencent.com");
-    List<HttpRequest> requests = urls.stream()
-            .map(url -> HttpRequest.newBuilder(URI.create(url)))
-            .map(reqBuilder -> reqBuilder.build())
-            .collect(Collectors.toList());
-
-    List<CompletableFuture<HttpResponse<String>>> futures = requests.stream()
-            .map(request -> client.sendAsync(request, HttpResponse.BodyHandlers.ofString()))
-            .collect(Collectors.toList());
-    futures.stream()
-            .forEach(e -> e.whenComplete((resp,err) -> {
-                if(err != null){
-                    err.printStackTrace();
-                }else{
-                    log.info(resp.body());
-                    log.info(resp.statusCode());
-                }
-            }));
-    CompletableFuture.allOf(futures
-            .toArray(CompletableFuture<?>[]::new))
-            .join();
-}
-```
-
-
-10. 错误处理
-
-- HttpClient 异步请求返回的是 CompletableFuture<HttpResponse<T>>，其自带 exceptionally 方法可以用来做 fallback 处理
-- 另外值得注意的是 HttpClient 不像 WebClient 那样，它没有对 4xx 或 5xx 的状态码抛出异常，需要自己根据情况来处理，手动检测状态码抛出异常或者返回其他内容
-
-```java
- public void testHandleException() throws ExecutionException, InterruptedException {
-    HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofMillis(5000))
-            .build();
-    HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://twitter.com"))
-            .build();
-
-    CompletableFuture<String> result = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-            .thenApply(HttpResponse::body)
-            .exceptionally(err -> {
-                err.printStackTrace();
-                return "fallback";
-            });
-    log.info(result.get());
-}
-```
-
-11. HTTP2
-
-- 执行之后可以看到返回的 response 的 version 为 HTTP_2
-
-```java
-public void testHttp2() throws URISyntaxException {
-    HttpClient.newBuilder()
-            .followRedirects(HttpClient.Redirect.NEVER)
-            .version(HttpClient.Version.HTTP_2)
-            .build()
-            .sendAsync(HttpRequest.newBuilder()
-                            .uri(new URI("https://http2.akamai.com/demo"))
-                            .GET()
-                            .build(),
-                    HttpResponse.BodyHandlers.ofString())
-            .whenComplete((resp,t) -> {
-                if(t != null){
-                    t.printStackTrace();
-                }else{
-                    log.info(resp.version());
-                    log.info(resp.statusCode());
-                }
-            }).join();
-}
-```
-
-12. WebSocket
-
-- HttpClient 支持 HTTP2，也包含了 WebSocket，通过 newWebSocketBuilder 去构造 WebSocket
-- 传入 listener 进行接收消息，要发消息的话，使用 WebSocket 来发送，关闭使用 sendClose 方法
-
-```java
-public void testWebSocket() throws InterruptedException {
-    HttpClient client = HttpClient.newHttpClient();
-    WebSocket webSocket = client.newWebSocketBuilder()
-            .buildAsync(URI.create("ws://localhost:8080/echo"), new WebSocket.Listener() {
-
-                @Override
-                public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
-                    // request one more
-                    webSocket.request(1);
-
-                    // Print the message when it's available
-                    return CompletableFuture.completedFuture(data)
-                            .thenAccept(System.out::println);
-                }
-            }).join();
-    webSocket.sendText("hello ", false);
-    webSocket.sendText("world ",true);
-
-    TimeUnit.SECONDS.sleep(10);
-    webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "ok").join();
-}
-```
-
-11. reactive streams
-
-- BodySubscriber 接口继承了 Flow.Subscriber<List<ByteBuffer>> 接口
-- Subscription 来自 Flow 类，该类是 java9 引入的，里头包含了支持 Reactive Streams 的实现
-
-```java
-public static class ByteArraySubscriber<T> implements BodySubscriber<T> {
-    private final Function<byte[], T> finisher;
-    private final CompletableFuture<T> result = new MinimalFuture<>();
-    private final List<ByteBuffer> received = new ArrayList<>();
-
-    private volatile Flow.Subscription subscription;
-
-    public ByteArraySubscriber(Function<byte[],T> finisher) {
-        this.finisher = finisher;
-    }
-
-    @Override
-    public void onSubscribe(Flow.Subscription subscription) {
-        if (this.subscription != null) {
-            subscription.cancel();
-            return;
-        }
-        this.subscription = subscription;
-        // We can handle whatever you've got
-        subscription.request(Long.MAX_VALUE);
-    }
-
-    @Override
-    public void onNext(List<ByteBuffer> items) {
-        // incoming buffers are allocated by http client internally,
-        // and won't be used anywhere except this place.
-        // So it's free simply to store them for further processing.
-        assert Utils.hasRemaining(items);
-        received.addAll(items);
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-        received.clear();
-        result.completeExceptionally(throwable);
-    }
-
-    static private byte[] join(List<ByteBuffer> bytes) {
-        int size = Utils.remaining(bytes, Integer.MAX_VALUE);
-        byte[] res = new byte[size];
-        int from = 0;
-        for (ByteBuffer b : bytes) {
-            int l = b.remaining();
-            b.get(res, from, l);
-            from += l;
-        }
-        return res;
-    }
-
-    @Override
-    public void onComplete() {
-        try {
-            result.complete(finisher.apply(join(received)));
-            received.clear();
-        } catch (IllegalArgumentException e) {
-            result.completeExceptionally(e);
-        }
-    }
-
-    @Override
-    public CompletionStage<T> getBody() {
-        return result;
-    }
-}
+```python
+#安装 ipykernel
+conda activate 环境名称
+conda install ipykernel
+#写入 Jupyter 的 kernel
+python -m ipykernel install --user --name 环境名称 --display-name "Python (环境名称)"
+#切换 kernel  Kernel->Change kernel->选择环境
+jupyter notebook
+#删除 kernel 环境
+jupyter kernelspec remove 环境名称
 ```
 
 ### 4.Share:
 
-JVM - 参数配置影响线程数
-https://blackist.org/2019/09/29/java-jvm-thread-params/
+http://www.dataguru.cn/article-15038-1.html
+比Spark快100倍的GPU加速SQL引擎！BlazingSQL开源了
+
+https://blog.csdn.net/houzhe_adore/article/details/51315036?spm=a2c6h.12873639.0.0.5e7f5f45kFQGxy
+Logstash吞吐量性能优化
+
+https://www.jianshu.com/p/763aa1102a98
+Hadoop 2.7.3之后到最新的Hadoop3.2.0的主要新特性
+
+https://blog.csdn.net/weixin_41133061/article/details/89647202
+Python虚拟环境和包管理工具Pipenv的使用详解
+
+https://blog.csdn.net/yuejisuo1948/article/details/81043823
+anaconda python 版本对应关系
+
+https://zhuanlan.zhihu.com/p/67959768
+利器|JupyterLab 数据分析必备IDE完全指南

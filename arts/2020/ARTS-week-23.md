@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-23
-date: 2020-02-16 11:17:27
+date: 2020-06-14 06:49:20
 tags:
 ---
 
@@ -12,73 +12,212 @@ tags:
 
 ### 1.Algorithm:
 
-Plus One https://leetcode.com/submissions/detail/303765795/
+Edit Distance https://leetcode.com/submissions/detail/353470296/
 
 ### 2.Review:
 
-https://github.com/elastic/beats/issues/1037
+https://dev.to/lydiahallie/javascript-visualized-generators-and-iterators-e36
+JavaScript️可视化： 生成器和迭代器
 
 #### 点评：
 
-这个问题讨论的是日志采集的一个业务典型场景，比如一个订单生成会产生多个流程步骤，步骤不确定多少个节点这种情况一般业务会生成订单的单独日志文件，但如果 ELK 采集时会切分日志，如果日志采集链路经过 Kafka 队列会有一定几率会出现日志错位的情况，针对这种情况就产生了 Filebeat 采集时如何输入文件行号的问题。 
+Lydia Hallie 讲解生成器使用的例子 。
 
-针对这个问题，官方也给出了解答:
-此刻，我认为这里没有任何解决方案。 Logstash，Beats，Kibana 都是随着时间推移的事件的思路，这基本上是订购事物的方式。行号更像是文本编辑器的一种功能。在某种程度上，Kibana 可以向您显示文件中的事件。它不会为您提供逐页列表，您可以实际点击页码，但使用时间框架，理论上可以查看整个文件。
-
-另一个回答：
-首先让我给出 Filebeat 还没有行号字段的主要原因。当 Filebeat 恢复读取文件时（如重启后），它会 fseek 从最后记录的偏移量恢复。如果必须报告行号，则需要将此状态存储在其注册表中，或者重新读取该文件并将新行计数到偏移量。
-如果要提供允许您对 Elasticsearch 支持的日志进行分页的服务，则可以使用滚动 API 和文件查询。您必须进行排序的结果通过 @timestamp，然后通过 offset 。您的服务将使用滚动查询来获取结果的第一页。
-然后获取您使用 scroll_id 第一个查询返回的所有后续页面。
-这将为您提供给定文件名的所有日志数据，甚至可以在旋转中跟踪它。如果行号是关键的，你可以通过计算从第一个事件开始的事件来合成地产生它们 offset == 0，但我避免这样做，因为它非常容易出错，特别是如果你添加任何过滤或多行分组。
-
-总结：
-最终个人理解，目前只依赖 Filebeat 采集无法解决此问题，只能通过业务日志输出行号，再采集过程中单独解析字段，最终通过 Kibana 增加此字段通过过滤和排序达到获取完整业务日志的需求。
+总结
+普通函数遵循一种称为 run-to-completion 的模型。 generator 函数不遵循 run-to-completion 模型，可以在执行 generator 函数的过程中随机暂停它。
+实现了迭代器协议： Symbol.iterator。
+- 调用 generator 函数返回生成器对象，该对象是迭代器。
+- 可以在生成器函数中使用 yield 关键字来暂停执行。
 
 ### 3.Tip:
-spring boot 搭建 https 服务器
 
-1. 自签名证书:
-将生成的jks文件放置在 classpath 下，在 spring boot 的配置文件中增加如下内容
-``` shell
-# 建立 CA 密钥
-openssl genrsa -des3 -out ca.key 1024 # 创建密钥
-chmod 400 ca.key # 修改权限为仅 root 能访问并不需要执行
-openssl rsa -nout -text -in ca.key # 查看创建的证书
 
-# 利用 CA 密钥自签署 CA 证书
-openssl req -new -x509 -days 3650 -key ca.key -out -ca.crt
-chmod 400 ca.car # 修改权限为仅 root 能访问并不需要执行
+1. Nginx 反向代理多个 vue 效果
 
-# CA 服务端 java 证书
-# crt 转 p12
-openssl pkcs12 -export -in ca.crt -inkey ca.key -out ca.p12 -name "xxx"
-# p12 转 jks
-keytool -importkeystore -srckeystore ca.p12 -destkeystore ca.jks -deststoretype pkcs12
-# jsk 转 p12
-keytool -importkeystore -srckeystore ca.jks -srcstoretype JKS -deststoretype pkcs12 -destkeystore ca.p12
-
-# CA 客户端证书
-openssl x509 -noout -text -in ca.crt # 查看创建的证书
-cat ca.key ca.crt > cert.pem
-openssl rsa -in cert.pem -out key.pem
+```shell
+http://localhost:8080/进入最外层的 index.html
+http://localhost:8080/project1 进入项目一
+http://localhost:8080/project2 进入项目二
 ```
 
-2. spring boot 服务端配置:
-将生成的 jks 文件放置在 classpath 下，在 spring boot 的配置文件中增加如下内容
-``` java
-server.port: 443
-server.ssl.key-store: classpath:ca.jks
-server.ssl.key-store-password: password
-server.ssl.keyAlias: xxx
+2. vue.config.js 配置
+
+```shell
+
+// project1
+module.exports = {
+   publicPath: '/project1/' // 注意前后的 ‘/’
+}
+
+// project2
+module.exports = {
+  publicPath: '/project2/' // 注意前后的 ‘/’
+}
+
 ```
 
-3. 客户端使用 curl 命令模拟调用:
-``` shell
-# 将 cert.pem 和 key.pem 放在目录下
-curl -k --cert client.pem --key key.pem https://www.xxx.com/
+3. .env 配置,使用到了 BASE_API 作为代理的前缀
+
+```shell
+
+// project1
+NODE_ENV=production
+VUE_APP_API_BASE_URL=/api/pro1 // 这里待会与 nginx 配置对应
+BASE_URL=/project1 // 注意更改子项目名，这个对应 vue.config.js publicPath
+
+// project2
+NODE_ENV=production
+VUE_APP_API_BASE_URL=/api/pro2 // 这里待会与 nginx 配置对应
+BASE_URL=/project2 // 注意更改子项目名，这个对应 vue.config.js publicPath
+
+```
+
+4. vue-router 文件配置 history 模式
+
+```shell
+
+// project1
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL, // 注意更改子项目名，这个对应 vue.config.js publicPath
+  routes
+})
+
+// project2
+export default new Router({
+  mode: 'history',
+  base: process.env.BASE_URL, // 注意更改子项目名，这个对应 vue.config.js publicPath
+  routes
+})
+```
+
+5. Nginx 配置
+
+```shell
+.
+├─conf
+│  ├─... # 其他文件
+│  └─nginx.conf
+│
+├─html # 只看这里，其他暂时我没用到 
+│  ├─project1
+│  │  └─static
+│  │      ├─css
+│  │      ├─fonts
+│  │      └─js
+│  │          ├─g
+│  │          └─V
+│  ├─project2
+│  │   └─static
+│  │       ├─css
+│  │       ├─fonts
+│  │       └─js
+│  │           ├─g
+│  │           └─V
+│  ├─index.html
+│  └─50x.html
+└─... # 其他文件
+
+# ...
+# 反向代理
+http {
+    include mime.types;
+    default_type application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    client_max_body_size 20M;
+    client_body_buffer_size 10M;
+    large_client_header_buffers 4 128k;
+    
+    # 这里可以做集群
+    upstream p1_server {
+        server localhost:8081;
+    }
+
+    # 这里可以做集群
+    upstream p2_server {
+        server localhost:8082;
+    }
+
+    server {
+        listen 8080;
+        server_name localhost;
+        charset utf-8;
+
+        proxy_connect_timeout 180;
+        proxy_send_timeout 180;
+        proxy_read_timeout 180;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarder-For $remote_addr;
+
+        root html; # 根项目路由文件夹
+        
+        # 根项目路由
+        # 如果有多可以配置多个 conf 文件，使用 include 关联进来
+        location / {
+            try_files $uri $uri/ /index.html; # 这里可以理解指定到 html 文件夹下的 index.html
+        }
+        
+        # project1
+        # vue 项目的 vue.config.js publicPath
+        # 也是 vue 项目中配置的 router 中的 base
+        location ^~ /project1 {
+            try_files $uri $uri/ /project1/index.html; # 这里可以理解指定到 html 文件夹下 project1 文件夹 的 index.html
+        }
+        
+        # project2
+        # 这里是项目二的配置
+        location ^~ /project2 { # 
+            try_files $uri $uri/ /project2/index.html; # 这里可以理解指定到 html 文件夹下 project2 文件夹 的 index.html
+        }
+        
+        # 这里是 project1 配置需要调用的接口
+        location /api/pro1 { # 这里就是在 vue 项目中 .env 的配置 BASE_API 
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass http://p1_server; # 此处的 p1_server 对应的上面的配置 upstream p1_server {}，这里可以做集群
+        }
+        
+         # 这里是 project1 配置需要调用的接口
+        location /api/pro2 { # 这里就是在 vue 项目中 .env 的配置 BASE_API
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass http://p2_server;  # 此处的 p2_server 对应的上面的配置 upstream p2_server {}，这里可以做集群
+        }
+
+        # ...
+    }
+
+    # ...
+}
+```
+
+6. 验证
+
+```shell
+分别访问
+http://localhost:8080
+http://localhost:8080/project1
+http://localhost:8080/project2
 ```
 
 ### 4.Share:
 
-OneAPM 工作两年总结
-https://yufan.me/two-years-in-oneapm/
+npm和bower的区别
+https://www.jianshu.com/p/e422c28e2471
+一行命令更新所有 npm 依赖包
+https://www.cnblogs.com/stevexu/p/10744765.html
+Gulp构建Angularjs应用
+https://segmentfault.com/a/1190000005015099
+前端打包构建工具Gulp、Rollup、Webpack、Webpack-stream
+https://my.oschina.net/tongjh/blog/837663

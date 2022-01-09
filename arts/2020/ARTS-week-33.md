@@ -1,8 +1,9 @@
 ---
 title: ARTS-week-33
-date: 2020-04-24 21:30:50
+date: 2020-08-22 17:16:44
 tags:
 ---
+
 
 ## ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
 1.Algorithm： 每周至少做一个 leetcode 的算法题
@@ -12,127 +13,157 @@ tags:
 
 ### 1.Algorithm:
 
-Valid Perfect Square https://leetcode.com/submissions/detail/329455512/
+Minimum Window Substring https://leetcode.com/submissions/detail/384577085/
 
 ### 2.Review:
 
-http://www.brandonsmith.ninja/blog/three-types-of-data
+https://www.oreilly.com/content/the-state-of-data-analytics-and-visualization-adoption/
+数据分析和可视化采用的状态
 
 #### 点评：
 
-作者在软件中建立三种不同类型的数据：常量、状态和缓存。所谓“数据”，是指“代码中的变量”，但同样的原则也适用于磁盘上的文件、数据库中的表或其他任何东西。
-这三个类别是不相交的：即，如果一个数据属于其中一个类别，也不应将其视为其他类别之一。不同的语言通过类型系统或其他方式表达这种约束的能力会有所不同，因此最好将其视为一种约定或一种思维方式（尽管如果您能够实际执行它，那当然会更好）。
+2017年春季，Zoomdata委托O'Reilly Media创建并执行一项评估数据和分析行业状况的调查。重点是了解现代大数据和流数据技术的渗透，用户如何使用数据分析以及组织对人员配备最感兴趣的技能。来自不同行业以及政府和学术界的近900人对此调查做出了回应。以下是调查提供的一些见解的预览。
 
-常量#
-常数是在程序运行过程中不变的信息。它也可以采用配置文件或命令行参数的形式。常数可以在开发过程中更改，但不能在运行时更改。
+1.当然，关系数据库仍然是在线事务处理（OLTP）系统的核心。但是，最有趣的发现之一是，当被问及组织的主要数据来源时，不到三分之一的受访者列出了关系数据库，而大约三分之二的人选择了非关系来源。
+2.这些现代数据源经过优化，可以处理大数据的“三个V”：非常大的数据量；高速流数据；以及各种各样的非结构化和半结构化数据，例如文本和日志文件。
+3.分析数据库（19％）和Hadoop（14％）是两个最受欢迎的非关系源。
 
-状态#
-状态是在程序运行态中自然变化的信息。这通常由可变值组成。它还可以由不可变的数据结构组成，其明确目的是允许您拥有不可变的状态（在这些结构中，新的状态是从前一个状态派生的，并与一些新信息结合在一起）。即使是Haskell等语言中基于monad的I/O也属于这一类。
-
-缓存#
-缓存是直接从常量和/或状态派生的信息。缓存值类似于常量，但实际上可能会使用与状态相同的语言功能，因为在顶层，它可以也将更改（否则将是常量！）。
-
-总结：
-常数既不可替换也不可变
-状态是任意可替换和可变的
-缓存值在特定情况下是可替换的，但不可更改
+参考资料：http://go.zoomdata.com/l/190352/2017-09-22/515vpz
+具有生产和开发中的大数据项目的组织的比例
+不同级别的数据新鲜度对组织有多么重要
+最受欢迎的流数据平台
+组织要配备的主要技术技能
+组织是通过独立的BI应用程序使用分析还是作为嵌入其他业务应用程序和流程的分析组件使用
 
 ### 3.Tip:
 
-1.字符串和各个进制数字互转
+Velocity 模板引擎介绍
 
-``` javascript
-function convertStringToNumber(string, x){
-	if(arguments.length < 2) {
-		x = 10;
-	}
+Velocity 是一个基于 java 的模板引擎（template engine）。它允许任何人仅仅简单的使用模板语言（template language）来引用由 java 代码定义的对象。当 Velocity 应用于web开发时，界面设计人员可以和 java 程序开发人员同步开发一个遵循 MVC 架构的 web 站点，也就是说，页面设计人员可以只关注页面的显示效果，而由 java 程序开发人员关注业务逻辑编码。
 
-	var chars = string.split('');
-	var number = 0;
+1. Velocity 基本语法
 
-	var i = 0;
-	while(i < chars.length && chars[i] != '.') {
-		number = number * x;
-		number += chars[i].codePointAt(0) - '0'.codePointAt(0);
-		i++;
-	}
-	if(chars[i] == '.') {
-		i++;
-	}
-	var fraction = 0;
-	while(i < chars.length) {
-		fraction = fraction / x;
-		fraction += chars[i].codePointAt(0) - '0'.codePointAt(0);
-		i++;
-	}
-	fraction = fraction / x;
-	return number + fraction;
-}
-convertStringToNumber("10.01");
+```java
+"#"用来标识 Velocity 的关键字，包括 #set、#if 、#else、#end、#foreach、#end、#include、#parse、#macro 等；
+"$"用来标识 Velocity 的变量；如：$i、$msg、$TagUtil.options(...) 等。
+"{}"用来明确标识 Velocity 变量；比如在页面中，页面中有一个 $someonename，此时，Velocity 将把 someonename 作为变量名，若我们程序是想在 someone 这个变量的后面紧接着显示 name 字符，则上面的标签应该改成 ${someone}name。
+"!"用来强制把不存在的变量显示为空白。如：当找不到 username 的时候，$username 返回字符串 "$username"，而 $!username 返回空字符串""
+```
 
-function convertNumberToString(number, x) {
-	var integer = Math.floor(number);
-	var fraction = number - integer;
-	var string = '';
-	while(integer > 0) {
-		string = String(integer % x) + string;
-		integer = Math.floor(integer / x); 
-	}
-	console.log(fraction);
-	var string1 = '';
-	while(fraction > 0) {
-		string1 = String(fraction % x) + string1;
-		fraction = Math.floor(fraction / x); 
-	}
-	return string + "." + string1;
-}
-convertNumberToString(100, 10)
+2. Velocity 语法使用
+
+#### 变量定义
+```java
+#set($name ="velocity")
+```
+等号后面的字符串 Velocity 引擎将重新解析，例如出现以$开始的字符串时，将做变量的替换。
+
+#### 变量赋值
+```java
+#set($hello ="hello $name")
+```
+上面的这个等式将会给$hello赋值为"velocity"
+
+#### 循环
+```java
+#foreach($element in $list) 
+    <span>$!element</span><br>
+#end
+```
+Velocity引擎会将list中的值循环赋给element变量
+
+#### 条件语句
+```java
+#if(condition)
+...
+#elseif(condition)
+…
+#else
+…
+#end
+```
+
+#### 关系操作符
+```java
+#if($foo && $bar)
+...
+#end
+```
+Velocity 引擎提供了 AND、OR 和 NOT 操作符，分别对应 &&、|| 和 !
+
+#### 关系操作符
+```java
 
 ```
 
-2.各个进制数字之间互转
+#### 宏
+```java
+Velocity 中的宏可以理解为函数定义
+#macro(macroName arg1 arg2 ...)
+...
+#end
 
-``` javascript
-/**
-* number  数字
-* oriented  原进制
-* target  目标进制
-* orilist  原数进制字符表
-* targetlist  目标进制字符表
-*/
-function convertNumberToNumber(number, oriented, target, orilist, targetlist) {
-	var jslist = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-		tnum = [], m, negative = ((number += '').trim()[0] == '-'), decnum = 0;
-	orilist || (orilist = jslist);
-	targetlist || (targetlist = jslist);
-	if (negative) number = number.slice(1);
-	for (var i = number.length; i--;)
-		decnum += orilist.indexOf(number[i]) * Math.pow(oriented, number.length - i - 1);
-	for (; decnum != 0; tnum.unshift(targetlist[m])) {
-		m = decnum % target;
-		decnum = Math.floor(decnum / target);
-	}
-	decnum && tnum.unshift(targetlist[decnum]);
+调用这个宏的语法是
+#macroName(arg1 arg2 ...)
 
-	var aNew;
-	var re = /([0-9]+\.[0-9]{2})[0-9]*/;
-	aNew = number.replace(re,"$1");
-	alert(Math.round(number*100)/100);
+这里的参数之间使用空格隔开，下面是定义和使用 Velocity 宏的例子：
+#macro(sayHello $name)
+    hello $name
+#end
 
-	return (negative ? '-' : '') + tnum.join('');
-}
+#sayHello("velocity")
+输出的结果为 hello velocity
+```
 
-convertNumberToNumber(22.123456,10,10)            //"10011010010"
-convertNumberToNumber(15,10,16)            //"f"
-convertNumberToNumber('ABC',16,10)        //"9846"
- 
-convertNumberToNumber(3245670,10,10,null,'零一二三四五六七八九')        //"三二四五六七零"
-convertNumberToNumber('①②③',10,2,'〇①②③④⑤⑥⑦⑧⑨')                    //"1111011"
+#### #parse 和 #include
+```java
+#parse 和 #include 指令的功能都是在外部引用文件，而两者的区别是，#parse 会将引用的内容当成类似于源码文件，会将内容在引入的地方进行解析，#include 是将引入文件当成资源文件，会将引入内容原封不动地以文本输出。分别看以下例子：
 
+foo.vm 文件：
+
+#set($name = "velocity")
+parse.vm：
+
+#parse("foo.vm")
+输出结果为：velocity
+
+include.vm：
+
+#include("foo.vm")
+输出结果为：#set($name = "velocity")
+```
+
+#### 注释
+```java
+单行注释
+
+##单行注释
+多行注释
+
+#*
+    多行注释
+*#
+```
+
+#### 单双引号
+```java
+单引号不解析引用内容，双引号解析引用内容
+
+#set ($var="hello")
+
+'$var'  ## 结果为：$var
+"$var"  ## 结果为：hello
+```
+
+#### 属性
+```java
+通过'.'操作符使用变量内容
+
+$Identifier.Identifier
+$user.name
 ```
 
 ### 4.Share:
 
-运算符优先级： 
-https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
-
+http://blog.itpub.net/31559354/viewspace-2712458/
+ClickHouse留存分析工具十亿数据秒级查询方案

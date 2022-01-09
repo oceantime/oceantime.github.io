@@ -1,8 +1,9 @@
 ---
 title: ARTS-week-32
-date: 2020-04-19 14:29:35
+date: 2020-08-16 10:43:44
 tags:
 ---
+
 
 ## ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
 1.Algorithm： 每周至少做一个 leetcode 的算法题
@@ -12,104 +13,144 @@ tags:
 
 ### 1.Algorithm:
 
-Search a 2D Matrix https://leetcode.com/submissions/detail/327030583/
+Palindromic Substrings https://leetcode.com/submissions/detail/381501711/
 
 ### 2.Review:
 
-https://python-history.blogspot.com/2018/05/the-origins-of-pgen.html
+https://www.oreilly.com/content/should-i-use-microservices/
+我应该使用微服务吗？
 
 #### 点评：
 
-Guido van Rossum 在本文中，介绍了 pgen 的起源。
+作者 Sam Newman 讨论了在组织中何时以及何时不应用微服务的注意事项。
 
-Pgen 有两个版本一个是最初的，用 C 语言写的，还有一个则是用 Python 重写的，在 lib2to3/pgen2 下面，创建 pgen 的原因：
-1.词法解析作者尝试过 Lex 但在尝试扫描超 255 个字节的标记符时 Lex 版本会发生段错误，而语法分析生成器基本上只有 Yacc 但是出于某些原因，作者并不喜欢它。
-2.网页所称的的左分解（将 A -> X | X Y Z 替换成 A -> X B; B -> Y Z | <empty>），作者会重写成 A -> X [Y Z]，通过“正则表达式 -> NFA -> DFA”的转换过程，解析引擎（该网页中前面的 syntacticAnalysis 函数）依然可以工作在由这些规则所派生的解析表上。
-3.解析引擎生成的解析树节点可能有很多子节点，例如，对于上面的规则 A -> X [Y Z]，节点 A 可能有 1 个子节点（X）或者 3 个（X Y Z）。代码生成器中就需要有一个简单的检查，来确定它遇到的是哪一种可能的情况。（这已经被证明是一把双刃剑，后来作者添加了一个由单独的生成器所驱动的“解析树 -> AST”步骤，以简化字节码生成器。）
-4.由于作者本身熟悉 LL(1) 解析器，并已认真地编写过一些递归下降的 LL(1) 解析器——作者很喜欢它，而且还熟悉 LL(1) 解析器的生成技术（同样是因为龙书），所以有了一个改进念头想要试验下：使用正则表达式（某种程度的）而不是标准的 BNF 格式。龙书还教会了作者如何将正则表达式转换成 DFA，所以作者把所有这些东西一结合，pgen 就诞生了。
+总结：
+- 微服务不足的地方
+定义稳定的服务边界的重要性方面，微服务架构对于全新产品或初创企业而言通常是一个糟糕的选择。领域模型的这种转变反过来将导致对服务边界进行更多更改，并且跨服务边界协调更改是一项昂贵的工作。总的来说，定义域模型需要足够多的尝试后再定义服务边界是比较合适的。
 
-Pgen2 创建的原因：作者在 Google 一项设计定制语言的任务（目标是作关于系统配置的安全性判定）。作者决定设计一些稍微像 Python 的东西，用 Python 来实现，并且决定要重用 pgen，但是后端要基于 Python，使用 tokenize.py 作为词法分析器。所以作者用 Python 重写了 pgen 里的那些算法，然后继续构建了剩余的部分。
+我确实看到了对于初创公司首先采用微服务的一种诱惑。原因是：“如果我们真的成功的话，我们需要扩大规模！” 问题是，您不一定知道是否有人愿意使用您的新产品，即使您确实成功地需要一种高度可扩展的体系结构，最终交付给用户的东西也可能非常与您一开始就开始构建的东西不同。找到适合市场的过程意味着您最终可能会得到与开始时想像的产品截然不同的产品。
 
-结束语：如果让作者重做一遍，作者可能会选择一个更强大的解析引擎，可能是 LALR(1) 的某个版本（例如 Yacc/Bison）。LALR(1) 的某些地方要比 LL(1) 更给力，也更加有用，例如，关键字参数。
+通常，您最大的制约因素是人员，这使初创企业面临微服务的挑战。对于一个小型团队来说，微服务架构可能很难证明其合理性，因为需要做一些工作来处理微服务本身的部署和管理，有些人将其称为“微服务税”。这会使得五人团队中有一个人将时间花在这些问题上而不花在构建产品上。一旦您了解了体系结构中的约束条件和痛点所在，以后转移到微服务会容易得多，那么您就可以将精力集中在最明智的地方使用微服务。
 
-备注：
-1.龙书，原文是 Dragon book，指代《Compilers: Principles, Techniques, and Tools》，这是一本讲编译原理的书，属于编译原理界的殿堂级存在。
-2.Lex 是“LEXical compiler”的简称，用来生成词法分析器；Yacc 是“Yet another compiler compiler”的简称，用来生成语法分析器。
-3.段错误，原文是 segfault，全称是segmentation fault，指的是因为越界访问内存空间而导致的报错。
+- 微服务好的地方
+我看到组织采用微服务的最大原因可能是，允许更多的开发人员在同一个系统上工作而不会互相干扰。正确安排您的体系结构和组织边界，并允许更多的人彼此独立工作，从而减少交付争用。
+
+通常，软件即服务（SaaS）软件也非常适合微服务体系结构。这些产品通常被期望以24×7全天候运行，这在推出变更方面带来了挑战。微服务架构的独立可释放性在这个领域是一个巨大的福音。此外，可以根据需要按比例放大或缩小微服务。这意味着，当您为系统的负载特性建立合理的基准时，您将获得更多控制权，以确保可以以最具成本效益的方式扩展系统。
+
+微服务的技术不可知性确保您可以充分利用云平台。公共云供应商为您的代码提供了广泛的服务和部署机制。您可以更轻松地将特定服务的需求与云服务相匹配，这将最好地帮助您实现它们。
+
+最重要的是，微服务架构可以为您提供不断扩展的系统灵活性。这种灵活性当然是有代价的，但是如果您想在将来可能要进行的更改方面保持开放的态度，那可能是值得付出的代价。
 
 ### 3.Tip:
 
+1. idea 创建第一个 maven 项目报错：Cannot resolve plugin org.apache.maven.plugins:maven-clean-plugin:2.5
 
-
-1. 编写带括号的四则运算产生式
-
-
-``` java
-// 例子：2*(1+2)||2  测试地址 https://pegjs.org/online
-start
-  = LogicalExpression
-
-DecimalNumber "DecimalNumber"
-  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
-  
-PrimaryExpression
-  = DecimalNumber
-  / "(" AdditiveExpression:AdditiveExpression ")" { return AdditiveExpression; }
-
-MultiplicativeExpression
-  = left:PrimaryExpression "*" right:MultiplicativeExpression { return left * right; }
-  / left:PrimaryExpression "/" right:MultiplicativeExpression { return left / right; }
-  / PrimaryExpression
-
-AdditiveExpression
-  = left:MultiplicativeExpression "+" right:AdditiveExpression { return left + right; }
-  / left:MultiplicativeExpression "-" right:AdditiveExpression { return left - right; }
-  / MultiplicativeExpression
-
-LogicalExpression
-  = left:AdditiveExpression "||" right:LogicalExpression { return left || right; }
-  / left:AdditiveExpression "&&" right:LogicalExpression { return left && right; }
-  / AdditiveExpression
+```shell
+# 主要原因是本地maven的配置文件和仓库地址不一致。
+# 其中Local repository 的地址和 settings file中的地址保持一致
+maven配置中3个选项
+Maven home directory
+User settings file
+Local repository
 ```
 
-2. 乔姆斯基 (chomsky) 文法分类
+2. Celery的工具flower安装和使用：
 
-非形式语言
-    中文，英文
-形式语言（乔姆斯基谱系）
-    0型 无限制文法
-    1型 上下文相关文法
-    2型 上下文无关文法
-    3型 正则文法
+```shell
+# 安装flower
+pip install flower
 
-0型文法其中,至少含有一个非终结符，并且，表示终结符和非终结符的并集。
-1型文法：又称为上下文有关文法，对任一产生式α→β，都有|β|≥|α|， 仅仅 S→ε除外
-（1）：式子左边可以有多个字符，但必须有一个非终结符
-（2）：式子右边可以有多个字符，可以是终结符，也可以是非终结符，但必须是有限个字符
-（3）：左边长度必须小于右边（例外）
-2型文法：又称为上下文无关文法，对任一产生式α→β，都有α∈VN ， β∈(VN∪VT)*
-（1）：式子左边只能有一个字符，而且必须是非终结符
-（2）：式子右边可以有多个字符，可以是终结符，也可以是非终结符，8但必须是有限个字符
-3型文法：又称为正规文法（正规文法又包括左线性文法和右线性文法）
-（1）：式子左边只能有一个字符，而且必须是非终结符
-（2）：式子右边最多有二个字符，而且如果有二个字符必须是一个终结符和一个非终结符
-如果只有一个字符，那么必须是终结符
-（3）：式子右边的格式一定要一致，也就是说如果有一个是（终结符+非终结符）那么所有的式子都必须是（终结符+非终结符）
-  如果有一个是（非终结符+终结符），那么所有的式子都必须是（非终结符+终结符）
-正规文法——左线性文法：
-（1）：必须是三型文法
-（2）：式子右边的产生是（非终结符+终结符）的格式
-正规文法——右线型文法：
-（1）：必须是三型文法
-（2）：式子右边的产生式是（终结符+非终结符）的格式
+# 启动flower
+flower -A celery_tasks.task --port=5555
 
-3. 计算机语言分类(待更正)
-1型文法 JavaScript Python 
-2型文法 C、Pascal、Java、C#、C++、PHP、0C、 Swift、Go、Scala、R
-3型文法 正则表达式 SQL
+# 进入http://localhost:5555即可查看
+```
+
+3. nginx: [emerg] socket() [::]:80 failed (97: Address family not supported by protocol)
+
+```shell
+vim /etc/nginx/conf.d/default.conf
+# 将
+listen       80 default_server;
+listen       [::]:80 default_server;
+
+# 改为：
+listen       80;
+#listen       [::]:80 default_server;
+```
+
+4. Linux下RPM软件包的安装及卸载
+RPM 有五种操作模式，分别为：安装、卸载、升级、查询和验证。
+
+#### RPM 安装操作
+命令：
+rpm -i 需要安装的包文件名
+
+举例如下：
+```shell
+rpm -i example.rpm 安装 example.rpm 包；
+rpm -iv example.rpm 安装 example.rpm 包并在安装过程中显示正在安装的文件信息；
+rpm -ivh example.rpm 安装 example.rpm 包并在安装过程中显示正在安装的文件信息及安装进度；
+```
+
+#### RPM 查询操作
+命令：
+rpm -q …
+
+附加查询命令：
+a 查询所有已经安装的包以下两个附加命令用于查询安装包的信息；
+i 显示安装包的信息；
+l 显示安装包中的所有文件被安装到哪些目录下；
+s 显示安装版中的所有文件状态及被安装到哪些目录下；以下两个附加命令用于指定需要查询的是安装包还是已安装后的文件；
+p 查询的是安装包的信息；
+f 查询的是已安装的某文件信息；
+
+举例如下：
+```shell
+rpm -qa | grep tomcat4 查看 tomcat4 是否被安装；
+rpm -qip example.rpm 查看 example.rpm 安装包的信息；
+rpm -qif /bin/df 查看/bin/df 文件所在安装包的信息；
+rpm -qlf /bin/df 查看/bin/df 文件所在安装包中的各个文件分别被安装到哪个目录下；
+```
+
+#### RPM 卸载操作
+命令：
+rpm -e 需要卸载的安装包
+
+在卸载之前，通常需要使用rpm -q …命令查出需要卸载的安装包名称。
+举例如下：
+```shell
+rpm -e tomcat4 卸载 tomcat4 软件包
+```
+
+#### RPM 升级操作
+命令：
+rpm -U 需要升级的包
+
+举例如下：
+```shell
+rpm -Uvh example.rpm 升级 example.rpm 软件包
+```
+
+#### RPM 验证操作
+命令：
+rpm -V 需要验证的包
+
+举例如下：
+```shell
+rpm -Vf /etc/tomcat4/tomcat4.conf
+输出信息类似如下：
+S.5....T c /etc/tomcat4/tomcat4.conf
+```
+
+其中，S 表示文件大小修改过，T 表示文件日期修改过。限于篇幅，更多的验证信息请您参考rpm 帮助文件：man rpm
+
+#### RPM 的其他附加命令
+--force 强制操作 如强制安装删除等；
+--requires 显示该包的依赖关系；
+--nodeps 忽略依赖关系并继续操作；
 
 ### 4.Share:
 
-less开发常用知识点归纳
-https://www.jianshu.com/p/d81496ed0e29
-
+https://blog.csdn.net/xixiaoyaoww/article/details/106536594
+7款优秀Vim插件帮你打造完美IDE

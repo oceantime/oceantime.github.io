@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-13
-date: 2019-11-24 14:44:01
+date: 2020-04-05 20:34:14
 tags:
 ---
 
@@ -12,421 +12,185 @@ tags:
 
 ### 1.Algorithm:
 
-Implement Trie (Prefix Tree) https://leetcode.com/submissions/detail/281301737/
-Friend Circles https://leetcode.com/submissions/detail/281312089/
-N-Queens https://leetcode.com/submissions/detail/281314457/
+Walking Robot Simulation https://leetcode.com/submissions/detail/320155566/
 
 ### 2.Review:
 
-https://nikcheerla.github.io/deeplearningschool/2018/01/01/AlphaZero-Explained/
+https://medium.com/@gvanrossum_83706/building-a-peg-parser-d4869b5958fb
 
 #### 点评：
-文章讨论了 AlphaZero 关于棋类相关算法设计，并通过代码实践讲解如何用深度学习算法解决搜索
-围棋的复杂状态树问题。
 
-主要两点:
-1.使用DFS搜索蒙特卡罗树（Monte-Carlo Tree）及估值函数评估分支进行剪枝。
-2.深度学习算法中启发函数学习和神经网络架构。
+Guido van Rossum 在本文中，通过展示一个简单的手写解析器，我为如何理解解析器的工作原理奠定了基础。
+
+1.最常见的 PEG 解析方式是使用可以无限回溯的递归下降解析器。上周中的例子：
+
+``` shell
+statement: assignment | expr | if_statement
+expr: expr '+' term | expr '-' term | term
+term: term '*' atom | term '/' atom | atom
+atom: NAME | NUMBER | '(' expr ')'
+assignment: target '=' expr
+target: NAME
+if_statement: 'if' expr ':' statement
+``` 
+
+这种超级抽象的递归下降解析器将为每个符号定义一个函数，该函数会尝试调用与备选项相对应的函数。
+例如，对于statement，有如下函数：
+
+``` shell
+def statement():
+    if assignment():
+        return True
+   if expr():
+        return True
+    if if_statement():
+        return True
+    return False
+```
+
+ tokenizer，用于生成标记 token。以下简称为“标记器”）
+
+2.PEG 解析器（像其它现代解析器，如 ANTLR）通常会把标记与解析过程统一。但是作者选择保留单独的标记器。
+如何实现无限回溯呢？所以我的设计是按需标记，所用的列表是惰性列表。基础 API 非常简单。Tokenizer 对象封装了一个数组，存放标记及其位置信息。四个基本方法作为 Tokenizer 类的核心代码：
+
+``` python
+class Tokenizer:
+    def __init__(self, tokengen):
+        """Call with tokenize.generate_tokens(...)."""
+        self.tokengen = tokengen
+        self.tokens = []
+        self.pos = 0
+    def mark(self): # 返回数组的当前索引
+        return self.pos
+    def reset(self, pos): # 设置数组的索引（参数必须从 mark() 方法中得到）
+        self.pos = pos
+    def get_token(self): # 返回下一个标记，并推进数组的索引（如果到了数组末尾，则从源码中读取另一个标记）
+        token = self.peek_token()
+        self.pos += 1
+        return token
+    def peek_token(self): # 它返回下一个标记且不推进索引
+        if self.pos == len(self.tokens):
+            self.tokens.append(next(self.tokengen))
+        return self.tokens[self.pos]
+```
+
+构建解析器创建一个 AST，让每个解析方法在成功时返回 Node 对象，在失败时返回 None 。
+
+``` python
+class Node:
+    def __init__(self, type, children):
+        self.type = type # type 表示了该 AST 节点是什么类型（例如是个“add”节点或者“if”节点）
+        self.children = children # children 表示了一些节点和标记（TokenInfo 类的实例）
+```
+
+Parser 类的基础结构
+
+``` python
+class Parser:
+    def __init__(self, tokenizer):
+        self.tokenizer = tokenizer
+    def mark(self): # 为了支持回溯，封装了标记器的 mark() 和 reset() 方法（不改变 API）
+        return self.tokenizer.mark()
+    def reset(self, pos):
+        self.tokenizer.reset(pos)
+    def expect(self, arg): # expect() 方法在成功时会返回一个 TokenInfo 对象，在失败时返回 None
+        token = self.tokenizer.peek_token()
+        if token.type == arg or token.string == arg:
+            return self.tokenizer.get_token()
+        return None
+```
 
 总结：
-文章结合代码示例和DFS搜索蒙特卡罗树原理使用随机探索来评估状态，实践性比较强值得尝试。
+1.语法规则相当于解析器方法，当一条语法规则引用另一条语法规则时，它的解析方法会调用另一条规则的解析方法
+2.当多个条目构成备选项时，解析方法会一个接一个地调用相应的方法
+3.当一条语法规则引用一个标记时，其解析方法会调用 expect()
+4.当一个解析方法在给定的输入位置成功地识别了它的语法规则时，它返回相应的 AST 节点；当识别失败时，它返回 None
+5.一个解析方法在消费（consum）一个或多个标记（直接或间接地，通过调用另一个成功的解析方法）后放弃解析时，必须显式地重置标记器的位置。这适用于放弃一个备选项而尝试下一个，也适用于完全地放弃解析
 
 ### 3.Tip:
 
-安装gunicorn 后执行命令提示 command not found
+logstash-clickhouse 插件安装
 
 ``` shell
-# pip3.4 install gunicorn
-Requirement already satisfied (use --upgrade to upgrade): gunicorn in /usr/local/python3.4/lib/python3.4/site-packages
+1.在线安装
+bin/logstash-plugin install logstash-output-clickhouse
 
-# gunicorn
--bash: gunicorn: command not found
-``` 
+2.本地编译插件安装
+$ yum install ruby
+$ git clone https://github.com/mikechris/logstash-output-clickhouse.git
+$ cd logstash-output-clickhouse
+$ gem build logstash-output-clickhouse.gemspec
+$ LOGSTASH_HOME/bin/plugin install logstash-output-clickhouse-0.1.0.gem
 
-解决方法：
-1.找到安装路径
-
-``` shell
-(venv3.6) dave@daverig (develop)✗ % pip show gunicorn
-Name: gunicorn
-Version: 19.7.1
-Summary: WSGI HTTP Server for UNIX
-Home-page: http://gunicorn.org
-Author: Benoit Chesneau
-Author-email: benoitc@e-engura.com
-License: MIT
-Location: /home/dave/.pyenv/versions/3.6.2/envs/venv3.6/lib/python3.6/site-packages
+3.logstash output 配置
+output {
+    #stdout { codec => json }
+    #stdout { codec => json_lines }
+    clickhouse {
+        http_hosts => ["http://127.0.0.1:8123/"]
+        table => "default.table"
+        request_tolerance => 1
+        #flush_size => 1000
+        #pool_max => 1000
+        mutations => {
+            id => id
+            reg_time => reg_time
+        }
+    }
+}
 ```
 
-2.添加环境变量
+java 中Gson 转换long到科学计数法的解决方法
 
-``` shell
-export PATH=$PATH:$HOME/.pyenv/versions/3.6.2/envs/venv3.6/bin
-source ~/.profile
-```
+``` java
+1. Gson工具类
+public class GsonUtils {
+  /**
+   * 解决gson解析long自动转为科学计数的问题
+   */
+  public static Gson getMapGson() {
+    Gson gson = new GsonBuilder().registerTypeAdapter(Map.class, new JsonDeserializer<Map>() {
+      public Map deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+              throws JsonParseException {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        JsonObject jsonObject = json.getAsJsonObject();
+        Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+        for (Map.Entry<String, JsonElement> entry : entrySet) {
+            resultMap.put(entry.getKey(), entry.getValue());
+        }
+        return resultMap;
+      }
+    }).setLongSerializationPolicy(LongSerializationPolicy.STRING).create();
+    return gson;
+  }
+}
 
-3.验证
 
-``` shell
-(venv3.6) dave@daverig (develop)✗ % gunicorn --version
-gunicorn (version 19.7.1)
+2.调用 Gson
+/**
+ * 把json字符串解析成为map
+ *
+ * @param json
+ * @return HashMap<String, Object>
+ */
+public static HashMap<String, Object> parseJsonToMap(String json) {
+    Gson gson = GsonUtils.getMapGson();
+    Type type = new TypeToken<HashMap<String, Object>>() {}.getType();
+    HashMap<String, Object> map = null;
+    try {
+        map = gson.fromJson(json, type);
+    } catch (Exception e) {
+        LKLogUtil.e(e.getMessage(), e);
+    }
+    return map;
+}
+
 ```
 
 ### 4.Share:
 
-##### 字典树
+安装 Ruby
+http://www.ruby-lang.org/zh_cn/documentation/installation/#yum
 
-字典树:又称单词查找树，Trie树，是一种树形结构，是一种哈希树的变种。典型应用是用于统计，排序和保存大量的字符串（但不仅限于字符串），所以经常被搜索引擎系统用于文本词频统计。
-
-优点：利用字符串的公共前缀来减少查询时间，最大限度地减少无谓的字符串比较，查询效率比哈希树高。
-
-基本性质：
-根节点不包含字符，除根节点外每一个节点都只包含一个字符； 从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串； 
-每个节点的所有子节点包含的字符都不相同。
-
-基本操作有：
-查找、插入和删除,当然删除操作比较少见。
-
-代码模板（待进一步整理）：
-
-``` java
-class Trie {
-
-    private TrieNode root;
-    
-    /** Initialize your data structure here. */
-    public Trie() {
-        root = new TrieNode();
-    }
-    
-    /** Inserts a word into the trie. */
-    public void insert(String word) {
-        
-        HashMap<Character, TrieNode> children = root.children;
- 
-        for(int i=0; i<word.length(); i++) {
-            
-            char c = word.charAt(i);
-            TrieNode t;
-            
-            if(children.containsKey(c)) {
-                    t = children.get(c);
-            } else {
-                t = new TrieNode(c);
-                children.put(c, t);
-            }
- 
-            children = t.children;
- 
-            //set leaf node
-            if(i==word.length()-1) {
-                t.isLeaf = true;
-            }       
-        }
-    }
-    
-    /** Returns if the word is in the trie. */
-    public boolean search(String word) {
-        
-        TrieNode t = searchNode(word);
-        if(t != null && t.isLeaf) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    /** Returns if there is any word in the trie that starts with the given prefix. */
-    public boolean startsWith(String prefix) {
-        
-       if(searchNode(prefix) == null) {
-           return false;
-       } else {
-           return true;
-       }
-    }
-    
-    public TrieNode searchNode(String str) {
-        
-        Map<Character, TrieNode> children = root.children; 
-        TrieNode t = null;
-        for(int i=0; i<str.length(); i++) {
-            char c = str.charAt(i);
-            if(children.containsKey(c)) {
-                t = children.get(c);
-                children = t.children;
-            } else {
-                return null;
-            }
-        }
-        return t;
-    }
-}
-
-class TrieNode {
-    
-    char c;
-    HashMap<Character, TrieNode> children = new HashMap<Character, TrieNode>();
-    boolean isLeaf;
- 
-    public TrieNode() {}
- 
-    public TrieNode(char c){
-        this.c = c;
-    }
-}
-``` 
-
-##### 并查集
-在一些有N个元素的集合应用问题中，我们通常是在开始时让每个元素构成一个单元素的集合，然后按一定顺序将属于同一组的元素所在的集合合并，其间要反复查找一个元素在哪个集合中。
-
-基本性质：
-看似并不复杂，但数据量极大，若用正常的数据结构来描述的话，往往在空间上过大，计算机无法承受；即使在空间上勉强通过，运行的时间复杂度也极高，根本就不可能在比赛规定的运行时间（1～3秒）内计算出试题需要的结果，只能用并查集来描述。
-
-基本操作有：
-初始化
-把每个点所在集合初始化为其自身。
-通常来说，这个步骤在每次使用该数据结构时只需要执行一次，无论何种实现方式，时间复杂度均为O(N)。
-查找
-查找元素所在的集合，即根节点。
-合并
-将两个元素所在的集合合并为一个集合。
-通常来说，合并之前，应先判断两个元素是否属于同一集合，这可用上面的“查找”操作实现。
-
-代码模板：
-
-``` java
-class UnionFind { 
-	private int count = 0; 
-	private int[] parent; 
-	public UnionFind(int n) { 
-		count = n; 
-		parent = new int[n]; 
-		for (int i = 0; i < n; i++) { 
-			parent[i] = i;
-		}
-	} 
-	public int find(int p) { 
-		while (p != parent[p]) { 
-			parent[p] = parent[parent[p]]; 
-			p = parent[p]; 
-		}
-		return p; 
-	}
-	public void union(int p, int q) { 
-		int rootP = find(p); 
-		int rootQ = find(q); 
-		if (rootP == rootQ) return; 
-		parent[rootP] = rootQ; 
-		count--;
-	}
-}
-``` 
-
-##### 初级搜索算法：
-
-1.BF（朴素）匹配算法
-BF（朴素）是简单的模式匹配算法，就是通过主串str匹配是否存在子串sub
-
-代码模板（待进一步整理）：
-
-``` java
- /*
-    BF算法
-    i回退，j回退
-    主串m个数据，子串n个数据，时间复杂度m*n
- */
-public class TestDemo {
-    public static int BF(char[]str,char[]sub){
-        int i=0,j=0;
-        while (j<sub.length && i<str.length){
-            if (str[i]==sub[j]){
-                i++;j++;
-            }else {
-                i=i-j+1;
-                j=0;
-            }
-        }
-        if (j==sub.length){
-            return i-j;
-        }else {
-            return -1;
-        }
-    }
-    public static void main(String[] args) {
-        String str = "abcababcabc";
-        String sub = "abcabc";
-        char[] ch1 = str.toCharArray();
-        char[] ch2 = sub.toCharArray();
-        int index = BF(ch1,ch2);
-        System.out.println("请输出主串str："+str);
-        System.out.println("请输出子串sub："+sub);
-        System.out.println("若找到，请输出对应的主串下标："+index);
-    }
-}
-```
-
-2.优化方式：不重复（fibonacci)、剪枝（生成括号问题）
-
-
-3.优化搜索方向:
-DFS：depth first search 深度优先搜索
-代码模板：递归写法
-
-``` java
-//DFS递归实现
-public void DFSWithRecursion(TreeNode root) {
-    if (root == null)
-        return;
- 
- 	//处理遍历到的TreeNode节点
- 	process(node);
-        
-    if (root.left != null)
-        DFSWithRecursion(root.left);
-    if (root.right != null)
-        DFSWithRecursion(root.right);
-}
-```
-
-代码模板：非递归写法（Stack）
-
-``` java
-public void DFSWithStack(TreeNode root) {
-     if (root == null)
-         return;
-     Stack<TreeNode> stack = new Stack<>();
-     stack.push(root);
- 
-     while (!stack.isEmpty()) {
-         TreeNode treeNode = stack.pop();
- 
-         //处理遍历到的TreeNode节点
-         process(node);
-
-         if (treeNode.right != null)
-             stack.push(treeNode.right);
- 
-         if (treeNode.left != null)
-             stack.push(treeNode.left);
-     }
-}
-```
-
-BFS：breadth first search 广度优先搜索
-代码模板：Queue实现BFS
-
-``` java
-public void BFSWithQueue(TreeNode root) {
-    Queue<TreeNode> queue = new LinkedList<>();
-    if (root != null)
-        queue.add(root);
-    while (!queue.isEmpty()) {
-        TreeNode treeNode = queue.poll();
- 
- 		//处理遍历到的TreeNode节点
- 		process(node);
-
-        if (treeNode.left != null)
-            queue.add(treeNode.left);
-        if (treeNode.right != null)
-            queue.add(treeNode.right);
-    }
-
-    // other processing work
-}
-```
-
-##### 高级搜索算法
-
-双向BFS搜索：
-双向BFS搜索适用于知道起点和终点的场景下使用，从起点和终点两个方向开始进行搜索，
-可以非常大的提高单个BFS的搜索效率。
-
-代码模板（待进一步整理）
-
-``` java
-void BFS(){
-
-    List<State> startSta = new ArrayList<>(N*N);
-    List<State> endSta = new ArrayList<>(N*N);
-    //起终状态入队
-    startSta.add(new State(0, 0));
-    endSta.add(new State(N-1, N-1));
-    
-    boolean[][] startVisited = new boolean[N][N];
-    boolean[][] endVisited = new boolean[N][N];
-    //标志起终状态
-    startVisited[0][0] = true;
-    endVisited[N-1][N-1] = true;
-
-    int len = 1;
-
-    while (!startSta.isEmpty() && !endSta.isEmpty()) {
-
-        List<State> newStaSet = new ArrayList<>();
-        for (State curSta : startSta) {
-            int i = curSta.i, j = curSta.j;
-            for (int[] pos : direc) {
-	            
-	            //找到解
-	            if (endVisited[newSta.i][newSta.j]) {
-                    return len + 1;
-                }
-
-	            //状态已经存在
-	            if (visited[newSta.i][newSta.j]) {
-                    continue;
-                }
-
-				newStaSet.add(newSta);
-                visited[newSta.i][newSta.j] = true;
-                startVisited[newSta.i][newSta.j] = true;
-            }
-        }
-        startSta = newStaSet;
-        len++;
-    }
-}
-```
-
-启发式搜索（优先级搜索或ASTAR算法） :
-启发式搜索(Heuristically Search)又称为有信息搜索(Informed Search)，它是利用问题拥有的启发信息来引导搜索，达到减少搜索范围、降低问题复杂度的目的，这种利用启发信息的搜索过程称为启发式搜索。
-
-启发中的估价是用估价函数表示的，如：f(n) = g(n) + h(n)
-其中f(n) 是节点n的估价函数，g(n)是在状态空间中从初始节点到n节点的实际代价，h(n)是从n到目标节点最佳路径的估计代价。在这里主要是h(n)体现了搜索的启发信息，因为g(n)是已知的。如果说详细点，g(n)代表了搜索的广度的优先趋势。但是当h(n) >> g(n)时，可以省略g(n)，而提高效率。
-
-代码模板（待进一步整理）
-
-``` java
-1、将源点加入open表
-2、
-while(OPEN!=NULL)
-{
-    从OPEN表中取f(n)最小的节点n;
-    if(n节点==目标节点)
-        break;
-    for(当前节点n的每个子节点X)
-    {
-        计算f(X);
-        if(XinOPEN)
-            if(新的f(X)<OPEN中的f(X))
-            {
-                把n设置为X的父亲;
-                更新OPEN表中的f(n); //不要求记录路径的话可以直接加入open表，旧的X结点是不可能比新的先出队
-            }
-        if(XinCLOSE)
-            continue;
-        if(Xnotinboth)
-        {
-            把n设置为X的父亲;
-            求f(X);
-            并将X插入OPEN表中; 
-        }
-    }//endfor
-    将n节点插入CLOSE表中;
-    按照f(n)将OPEN表中的节点排序;//实际上是比较OPEN表内节点f的大小，从最小路径的节点向下进行。
-}//endwhile(OPEN!=NULL)
-
-3、保存路径，从目标点出发，按照父节点指针遍历，直到找到起点。
-```
+位运算实现加、减、乘、除运算
+https://www.jianshu.com/p/7bba031b11e7

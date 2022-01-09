@@ -1,8 +1,9 @@
 ---
 title: ARTS-week-26
-date: 2020-03-07 20:34:39
+date: 2020-07-05 11:41:44
 tags:
 ---
+
 
 ## ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
 1.Algorithm： 每周至少做一个 leetcode 的算法题
@@ -12,98 +13,133 @@ tags:
 
 ### 1.Algorithm:
 
-Sliding Window Maximum https://leetcode.com/submissions/detail/310508503/
+Maximal Square https://leetcode.com/submissions/detail/362290763/
 
 ### 2.Review:
 
-https://www.infoq.com/articles/java-profiling-with-open-source/
+https://posts.specterops.io/ready-to-hunt-first-show-me-your-data-a642c6b170d6
+准备好狩猎了吗？先给我看下你的数据
 
 #### 点评：
 
-本文作者推荐了工作中经常碰到很多疑难问题的处理，在解决问题的同时，使用到的一些开源工具起到了相当大的作用。
 
-Jmap 
-特性1: jps 命令查找java进程
-特性2: jmap -histo:live 现实 heap 中活动对象清单
-特性3: 显示最近4分钟内增长对象实例数量最快的排鸣
-特性4: 显示英语启动后增长对象实例数量的最多排名
-存在问题：JVM可能会在生成内存统计图期间停止，因此请确保应用程序可以在生成内存统计图所需的时间内暂停。
+作者 Roberto Rodriguez 提及通过威胁搜寻提升安全态势感知水平。但如果没有适当的数据质量，狩猎团队很难专注于任务，提高生产力并有效地进行搜寻。
 
-VisualVM
-特性5: 应用启动后VM内存趋势图
-特性6: 应用修复内存泄漏
-特性7: 对象方法执行耗时表
-特性8: 对象占用内存排名
-存在问题：比较耗费性能执行30多秒的方法启用VisualVM会变为30多分治，会影响应用，不能持久化和出发告警
+什么是数据质量：关于数据质量的最常用定义是 《Juran’s Quality Handbook》 的作者约瑟夫·朱兰（Joseph M. Juran），他在998页中引用了“如果数据适合其在运营，决策和计划中的预期用途，则它们是高质量的。 ” 换句话说，如果狩猎活动所需的数据不满足狩猎团队定义的特定要求，那么该数据就不会被视为质量数据，因为它会影响其预期目的。
 
-BTrace https://github.com/btraceio/btrace
-Figure 9: 通过脚本中启用方法分析需要的地方
+数据质量目标（狩猎角度）：
+1. 减少猎人花费在修复和验证数据问题上的时间，从而提高了狩猎活动中的生产率。
+2. 改善数据源之间的一致性，以更有效地处理数据，从而允许依赖于多种资源的更复杂的分析提供额外的上下文。
+3. 增强自动化流程。
 
-应用监控业务场景
-1.应用程序堆、非堆、永久生成和JVM拥有的不同内存池（新一代、永久生成、生存空间等）的内存使用情况
-2.当前在应用程序中处于活动状态的线程数，以及正在使用的线程类型的详细信息（单独计数）
-3.JVMs的CPU负载
-4.系统负载系统的平均/总CPU使用率
-5.对于应用程序中的某些类和方法，我想查看调用计数、平均自执行时间和平均墙时钟时间。
-6.SQL调用的调用计数和执行时间
-7.磁盘和网络操作的调用计数和执行时间
-存在问题：原始日志难以解析的输出格式。需要更好的方法来处理BTrace输出和数据，最好是在一致的图形用户界面中。还需要比较来自不同时间点的数据的能力，以及在超过阈值时发送警报的能力。
+为什么必须关心数据质量：
+- 来自不同数据源的数据字段名称不同（标准命名约定） 
+- 数据源丢失的数据，而不是被解析/分离正确的CommandLine值不存在于几个端点和它们与空白或空值代替
+- “消息”字段包含堆叠所需的额外信息，但不可用。
+- 时间戳仅反映摄取时间，而不反映实际创建时间，并且数据仅在特定时间段内可用。
+- 端点数据仅可从高价值目标获得，并且仅一周。
 
-EurekaJ 作者本人开发的工具
-特性10: 通过界面勾选对应统计指标
-特性11: 可视化显示系统负载
-特性12: 显示实时多个指标图
-特性13: 内存溢出趋势图分析
-特性14: 在趋势图基础上进行下钻分析
-特性15: 不同应用程序的内存使用情况。这种类型的图表分组使比较来自应用程序不同部分的数据，甚至跨应用程序和服务器的数据变得容易。
-特性16: 一个数据访问对象性能分析演示 Example of a simple Data Access Object class that we might want to profile
-特性18: EurekaJ 部署架构
-
-EurekaJ 提供了两个主要应用：
-1.一个基于 Java 的管理器程序，可以接收传入的统计数据并一致地以可视化视图展现出来一个解析BTrace 输出的代理程序，将其转化为JSON 格式并输入到EurekaJ 管理程序的REST 接口。
-2.EurekaJ 接受两种类型的输入数据格式。EurekaJ 代理期望 BTrace 脚本的输出被格式化为逗号分隔的文件（这点在 BTrace 中可很容易做到），而 EurekaJ 管理程序期望它的输入符合它的JSON REST 接口格式。这意味着你能通过代理程序或直接经由REST 接口来传递度量数据。
+数据质量维度：
+用于简化数据质量可测量特征的表示。根据数据的预期用途，在那里定义了几个有用的数据质量维度。参考“ DoD核心数据质量要求集”中的一些数据质量维度。这些数据质量（DQ）维度中的一些可以帮助对用于狩猎目的的数据中的差距进行分类。
 
 总结：
-作者介绍了一些开源工具的优点，这些工具既可以在需要对运行中的JVM进行深入分析时使用，也可以在需要使用 profiler  工具对开发/测试/生产应用程序部署进行更广泛和连续的监视时使用。
+数据质量创建度量标准需要如下步骤：
+1.识别拥有的数据源
+2.确定所需的数据源
+3.映射所需要的内容
+4.定义数据质量（DQ）维度
+5.为数据质量维度定义评分系统
+6.评估数据的质量
 
 ### 3.Tip:
 
-Javascript 函数传参
 
-#### 1. 函数不传参:立即执行函数[2]定义的函数为一个闭包函数，在函数体内的变量 a 指向[1]处声明的变量所以当立即执行函数[2]执行完毕后，a的值为2。函数中的 a 变量是 global 的 a。
-``` javascript
-var a=1;//[1]
-(function(){
-    a++;
-})();//[2]
-console.log(a);//2
+使用 X-Frame-Options 防止被iframe 造成跨域iframe 提交挂掉
+
+```shell
+Refused to display 'http://www.***.com/login/doLogin.html' in a frame because it set 'X-Frame-Options' to 'SAMEORIGIN'. 
 ```
 
-#### 2. 函数传参:立即执行函数[2]不形成任何闭包，在函数体内的变量 a 为函数生成的形参变量，和[1]处声明的变量没有关系，只是名字相同而已。函数中的a屏蔽了全局变量a，是局部变量，对局部变量a的改变不会影响到global的a。
-``` shell
-var a=1;//[1]
-(function(a){    
-    a++;
-    console.log(a);//输出2
-})(a);//[2]
-console.log(a);//1
+触发原因：页面的返回头被设置 X-Frame-Options SAMEORIGIN ，只能被同源的iframe 引用。跨域名的iframe 没法显示了。
+
+解决办法：
+
+1. 把 服务器上的 X-Frame-Options header 去掉
+
+```java
+
+protected override void OnResultExecuted(ResultExecutedContext filterContext) {
+	filterContext.Httpcontext.Response.Headers.Remove("X-Frame-Options");
+	filterContext.Httpcontext.Response.Headers.Add("X-Frame-Options", "ALLOWALL");
+	base.OnResultExecuted(filterContext);
+}
+
 ```
 
-#### 3. 如果修改如下代码，那么输出就为2，有闭包函数形成。
-``` shell
-var a=1;//[1]
-(function(b){    
-    a++;
-    console.log(a);//输出2
-})(a);//[2]
-console.log(a);//2
+2. 添加 如下代码到 不想被iframe 的页面header 里去。
+
+```html
+<style id="antiClickjack">body{display:none !important;}</style>
+<script>
+if (self === top) {
+var antiClickjack = document.getElementById("antiClickjack");
+antiClickjack.parentNode.removeChild(antiClickjack);
+} else {
+top.location = self.location;
+}
+</script>
+```
+
+url 参数和 map 互转
+
+```java
+ /**
+ * url 参数转 map
+ * @param param aa=11&bb=22&cc=33
+ * @return
+ */
+public static Map<String, Object> getUrlParams(String param) {
+	Map<String, Object> map = new HashMap<String, Object>(0);
+	if (StringUtils.isBlank(param)) {
+		return map;
+	}
+	String[] params = param.split("&");
+	for (int i = 0; i < params.length; i++) {
+		String[] p = params[i].split("=");
+		if (p.length == 2) {
+			map.put(p[0], p[1]);
+		}
+	}
+	return map;
+}
+
+/**
+ * map 转 url 参数
+ * @param map
+ * @return
+ */
+public static String getUrlParamsByMap(Map<String, Object> map) {
+	if (map == null) {
+		return "";
+	}
+	StringBuffer sb = new StringBuffer();
+	for (Map.Entry<String, Object> entry : map.entrySet()) {
+		sb.append(entry.getKey() + "=" + entry.getValue());
+		sb.append("&");
+	}
+	String s = sb.toString();
+	if (s.endsWith("&")) {
+		s = org.apache.commons.lang.StringUtils.substringBeforeLast(s, "&");
+	}
+	return s;
+}
 ```
 
 ### 4.Share:
 
-性能分析之 profiling 及火焰图
-https://www.cnblogs.com/baiwfg2/p/8623476.html
-BTrace实战
-https://www.jianshu.com/p/3467bb69f8d6
-JVM 异常诊断神器 Greys 实战 - 玩转 JVM
-https://www.jianshu.com/p/4bcce45e743d
+markdown、html 转义特殊字符代码大全
+https://www.cnblogs.com/yifeiyu/p/11402743.html
+字典 (dict) 的增删改查及其他方法
+https://www.cnblogs.com/yifeiyu/p/11297054.html
+像使用cmder一样，使用 WindowsTerminal
+https://my.oschina.net/krysl/blog/3160464

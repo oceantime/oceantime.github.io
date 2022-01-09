@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-43
-date: 2020-07-05 11:41:44
+date: 2020-11-08 17:43:13
 tags:
 ---
 
@@ -13,133 +13,122 @@ tags:
 
 ### 1.Algorithm:
 
-Maximal Square https://leetcode.com/submissions/detail/362290763/
+计算器 https://leetcode-cn.com/submissions/detail/114925301/
 
 ### 2.Review:
 
-https://posts.specterops.io/ready-to-hunt-first-show-me-your-data-a642c6b170d6
-准备好狩猎了吗？先给我看下你的数据
+http://kb.objectrocket.com/elasticsearch/get-the-mapping-of-an-elasticsearch-index-in-python-880
+python 方式获取 elasticsearch 索引映射表
 
 #### 点评：
 
+本文演示如何使用 Python 客户端进行 Elasticsearch，以 mapping 使用 indices.get_alias() 客户端库的方法以嵌套 Python 字典的形式返回索引的映射表, 具有很强的操作性。
 
-作者 Roberto Rodriguez 提及通过威胁搜寻提升安全态势感知水平。但如果没有适当的数据质量，狩猎团队很难专注于任务，提高生产力并有效地进行搜寻。
+环境准备：
+- 安装 Python 3 和 PIP3
+- 安装 Elasticsearch Python 客户端
 
-什么是数据质量：关于数据质量的最常用定义是 《Juran’s Quality Handbook》 的作者约瑟夫·朱兰（Joseph M. Juran），他在998页中引用了“如果数据适合其在运营，决策和计划中的预期用途，则它们是高质量的。 ” 换句话说，如果狩猎活动所需的数据不满足狩猎团队定义的特定要求，那么该数据就不会被视为质量数据，因为它会影响其预期目的。
-
-数据质量目标（狩猎角度）：
-1. 减少猎人花费在修复和验证数据问题上的时间，从而提高了狩猎活动中的生产率。
-2. 改善数据源之间的一致性，以更有效地处理数据，从而允许依赖于多种资源的更复杂的分析提供额外的上下文。
-3. 增强自动化流程。
-
-为什么必须关心数据质量：
-- 来自不同数据源的数据字段名称不同（标准命名约定） 
-- 数据源丢失的数据，而不是被解析/分离正确的CommandLine值不存在于几个端点和它们与空白或空值代替
-- “消息”字段包含堆叠所需的额外信息，但不可用。
-- 时间戳仅反映摄取时间，而不反映实际创建时间，并且数据仅在特定时间段内可用。
-- 端点数据仅可从高价值目标获得，并且仅一周。
-
-数据质量维度：
-用于简化数据质量可测量特征的表示。根据数据的预期用途，在那里定义了几个有用的数据质量维度。参考“ DoD核心数据质量要求集”中的一些数据质量维度。这些数据质量（DQ）维度中的一些可以帮助对用于狩猎目的的数据中的差距进行分类。
-
-总结：
-数据质量创建度量标准需要如下步骤：
-1.识别拥有的数据源
-2.确定所需的数据源
-3.映射所需要的内容
-4.定义数据质量（DQ）维度
-5.为数据质量维度定义评分系统
-6.评估数据的质量
+操作步骤：
+- 导入用于Elasticsearch的Python包
+- 使用Python连接到Elasticsearch集群
+- 使用Python获取所有Elasticsearch集群的索引
+- 使用Python获取每个Elasticsearch索引的映射
+- 获取Elasticsearch索引的映射模板
 
 ### 3.Tip:
 
+1.Python 字典操作
 
-使用 X-Frame-Options 防止被iframe 造成跨域iframe 提交挂掉
+```python
+#字典合并
+dict1 = {'a':1,'b':2,'c':3}
+dict2 = {'d':8,'e':7,'g':6}
+dict7 = {}
+for k,v in dict1.items():
+    dict7[k] = v
+for k,v in dict2.items():
+    dict7[k] = v
+
+#判断字典中是否存在某个key
+d = {'name':{},'age':{},'sex':{}}
+#打印返回值，其中d.keys()是列出字典所有的key
+print name in d.keys()
+#结果返回True
+```
+
+2.在es里面index aliases就像是软连接一样，它可以映射一个或多个索引，提供了非常灵活的特性，使用它我们可以做到：
+（1）在一个运行中的es集群中无缝的切换一个索引到另一个索引上
+（2）分组多个索引，比如按月创建的索引，我们可以通过别名构造出一个最近3个月的索引
+（3）查询一个索引里面的部分数据构成一个类似数据库的视图（views）
 
 ```shell
-Refused to display 'http://www.***.com/login/doLogin.html' in a frame because it set 'X-Frame-Options' to 'SAMEORIGIN'. 
+es里面操作索引别名的有两个api命令：
+_alias 执行单个别名操作
+_aliases 原子的执行多个别名操作
+
+
+PUT /my_index_v1   //构建索引
+PUT /my_index_v1/_alias/my_index   //给索引添加别名
+GET /*/_alias/my_index  //查某个别名映射的所有index
+GET /my_index_v1/_alias/* //查询某个index拥有的别名
+{
+    "my_index_v1" : {
+        "aliases" : {
+            "my_index" : { }
+        }
+    }
+}
+
+PUT /my_index_v2   //构建索引
+POST /_aliases
+{
+    "actions": [
+        { "remove": { "index": "my_index_v1", "alias": "my_index" }},
+        { "add":    { "index": "my_index_v2", "alias": "my_index" }}
+    ]
+}
 ```
 
-触发原因：页面的返回头被设置 X-Frame-Options SAMEORIGIN ，只能被同源的iframe 引用。跨域名的iframe 没法显示了。
+3.访问 ssl 认证的 elasticsearch 
 
-解决办法：
+```python
+import ssl
+from elasticsearch import Elasticsearch
+from elasticsearch.connection import create_ssl_context
 
-1. 把 服务器上的 X-Frame-Options header 去掉
 
-```java
+def main():
+    # no cafile!
+    ssl_context = create_ssl_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
 
-protected override void OnResultExecuted(ResultExecutedContext filterContext) {
-	filterContext.Httpcontext.Response.Headers.Remove("X-Frame-Options");
-	filterContext.Httpcontext.Response.Headers.Add("X-Frame-Options", "ALLOWALL");
-	base.OnResultExecuted(filterContext);
-}
+    es = Elasticsearch(hosts=[{'host': 'localhost', 'port': 39200}],
+                       scheme="https",
+                       # to ensure that it does not use the default value `True`
+                       verify_certs=False,
+                       ssl_context=ssl_context,
+                       http_auth=("rally", "rally-password"))
+    es.info()
 
-```
 
-2. 添加 如下代码到 不想被iframe 的页面header 里去。
-
-```html
-<style id="antiClickjack">body{display:none !important;}</style>
-<script>
-if (self === top) {
-var antiClickjack = document.getElementById("antiClickjack");
-antiClickjack.parentNode.removeChild(antiClickjack);
-} else {
-top.location = self.location;
-}
-</script>
-```
-
-url 参数和 map 互转
-
-```java
- /**
- * url 参数转 map
- * @param param aa=11&bb=22&cc=33
- * @return
- */
-public static Map<String, Object> getUrlParams(String param) {
-	Map<String, Object> map = new HashMap<String, Object>(0);
-	if (StringUtils.isBlank(param)) {
-		return map;
-	}
-	String[] params = param.split("&");
-	for (int i = 0; i < params.length; i++) {
-		String[] p = params[i].split("=");
-		if (p.length == 2) {
-			map.put(p[0], p[1]);
-		}
-	}
-	return map;
-}
-
-/**
- * map 转 url 参数
- * @param map
- * @return
- */
-public static String getUrlParamsByMap(Map<String, Object> map) {
-	if (map == null) {
-		return "";
-	}
-	StringBuffer sb = new StringBuffer();
-	for (Map.Entry<String, Object> entry : map.entrySet()) {
-		sb.append(entry.getKey() + "=" + entry.getValue());
-		sb.append("&");
-	}
-	String s = sb.toString();
-	if (s.endsWith("&")) {
-		s = org.apache.commons.lang.StringUtils.substringBeforeLast(s, "&");
-	}
-	return s;
-}
+if __name__ == '__main__':
+    main()
 ```
 
 ### 4.Share:
 
-markdown、html 转义特殊字符代码大全
-https://www.cnblogs.com/yifeiyu/p/11402743.html
-字典 (dict) 的增删改查及其他方法
-https://www.cnblogs.com/yifeiyu/p/11297054.html
-像使用cmder一样，使用 WindowsTerminal
-https://my.oschina.net/krysl/blog/3160464
+https://www.cnblogs.com/mengxiaoleng/p/11837703.html
+java使用顺序数组实现二叉树
+
+https://www.cnblogs.com/xing901022/p/4867614.html
+[Logstash-input-redis] 使用详解
+
+https://blog.csdn.net/vkingnew/article/details/106772513
+Clickhouse TTL
+
+https://blog.csdn.net/weixin_39990025/article/details/99754989
+使用elasticsearch_dsl完成对ElasticSearch的复杂搜索
+
+https://blog.csdn.net/zzl394935072/article/details/88920361
+ElasticSearch DSL 详解

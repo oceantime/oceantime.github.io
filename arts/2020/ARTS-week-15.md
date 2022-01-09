@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-15
-date: 2019-12-07 16:31:42
+date: 2020-04-19 14:29:35
 tags:
 ---
 
@@ -12,349 +12,104 @@ tags:
 
 ### 1.Algorithm:
 
-Longest Increasing Subsequence https://leetcode.com/submissions/detail/284532036/
-First Unique Character in a String https://leetcode.com/submissions/detail/284538324/
-Wildcard Matching https://leetcode.com/submissions/detail/284544581/
+Search a 2D Matrix https://leetcode.com/submissions/detail/327030583/
 
 ### 2.Review:
 
-https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/
+https://python-history.blogspot.com/2018/05/the-origins-of-pgen.html
 
 #### 点评：
-文章中作者分析了 string 可变的含义及主流语言中 string 的可变特性。
-不可变的好处就是线程安全的，可变在多线程环境中可能会出现问题。
 
-主要有以下几个知识点:
-1.Java, C#, JavaScript, Python 和 Go 是不可变的，如果改动 string 内存其实是创建了一个新的 string。
-2.Ruby 和 PHP是可变的。
-3.C 和 C++ 是可变的，如果不可便加 const 即可。
-4.Swift 是可变的，如果不可便加 let 即可。
+Guido van Rossum 在本文中，介绍了 pgen 的起源。
+
+Pgen 有两个版本一个是最初的，用 C 语言写的，还有一个则是用 Python 重写的，在 lib2to3/pgen2 下面，创建 pgen 的原因：
+1.词法解析作者尝试过 Lex 但在尝试扫描超 255 个字节的标记符时 Lex 版本会发生段错误，而语法分析生成器基本上只有 Yacc 但是出于某些原因，作者并不喜欢它。
+2.网页所称的的左分解（将 A -> X | X Y Z 替换成 A -> X B; B -> Y Z | <empty>），作者会重写成 A -> X [Y Z]，通过“正则表达式 -> NFA -> DFA”的转换过程，解析引擎（该网页中前面的 syntacticAnalysis 函数）依然可以工作在由这些规则所派生的解析表上。
+3.解析引擎生成的解析树节点可能有很多子节点，例如，对于上面的规则 A -> X [Y Z]，节点 A 可能有 1 个子节点（X）或者 3 个（X Y Z）。代码生成器中就需要有一个简单的检查，来确定它遇到的是哪一种可能的情况。（这已经被证明是一把双刃剑，后来作者添加了一个由单独的生成器所驱动的“解析树 -> AST”步骤，以简化字节码生成器。）
+4.由于作者本身熟悉 LL(1) 解析器，并已认真地编写过一些递归下降的 LL(1) 解析器——作者很喜欢它，而且还熟悉 LL(1) 解析器的生成技术（同样是因为龙书），所以有了一个改进念头想要试验下：使用正则表达式（某种程度的）而不是标准的 BNF 格式。龙书还教会了作者如何将正则表达式转换成 DFA，所以作者把所有这些东西一结合，pgen 就诞生了。
+
+Pgen2 创建的原因：作者在 Google 一项设计定制语言的任务（目标是作关于系统配置的安全性判定）。作者决定设计一些稍微像 Python 的东西，用 Python 来实现，并且决定要重用 pgen，但是后端要基于 Python，使用 tokenize.py 作为词法分析器。所以作者用 Python 重写了 pgen 里的那些算法，然后继续构建了剩余的部分。
+
+结束语：如果让作者重做一遍，作者可能会选择一个更强大的解析引擎，可能是 LALR(1) 的某个版本（例如 Yacc/Bison）。LALR(1) 的某些地方要比 LL(1) 更给力，也更加有用，例如，关键字参数。
+
+备注：
+1.龙书，原文是 Dragon book，指代《Compilers: Principles, Techniques, and Tools》，这是一本讲编译原理的书，属于编译原理界的殿堂级存在。
+2.Lex 是“LEXical compiler”的简称，用来生成词法分析器；Yacc 是“Yet another compiler compiler”的简称，用来生成语法分析器。
+3.段错误，原文是 segfault，全称是segmentation fault，指的是因为越界访问内存空间而导致的报错。
 
 ### 3.Tip:
 
-Windows中查找命令的路径 (类似Linux中的which命令)
 
-``` shell
-where is a direct equivalent:
-C:\Users\Lowell>where cmd
-C:\Windows\System32\cmd.exe
-Note that in PowerShell where itself is an alias for Where-Object, thus you need to usewhere.exe in PowerShell.
 
-In cmd you can also use for:
+1. 编写带括号的四则运算产生式
 
-C:\Users\Lowell>for %x in (powershell.exe) do @echo %~$PATH:x
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
-In PowerShell you have Get-Command and its alias gcm which does the same if you pass an argument (but also works for aliases, cmdlets and functions in PowerShell):
 
-PS C:\Users\Lowell> Get-Command where
+``` java
+// 例子：2*(1+2)||2  测试地址 https://pegjs.org/online
+start
+  = LogicalExpression
 
-CommandType     Name          Definition
------------     ----          ----------
-Alias           where         Where-Object
-Application     where.exe     C:\Windows\system32\where.exe
-The first returned command is the one that would be executed.
+DecimalNumber "DecimalNumber"
+  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
+  
+PrimaryExpression
+  = DecimalNumber
+  / "(" AdditiveExpression:AdditiveExpression ")" { return AdditiveExpression; }
+
+MultiplicativeExpression
+  = left:PrimaryExpression "*" right:MultiplicativeExpression { return left * right; }
+  / left:PrimaryExpression "/" right:MultiplicativeExpression { return left / right; }
+  / PrimaryExpression
+
+AdditiveExpression
+  = left:MultiplicativeExpression "+" right:AdditiveExpression { return left + right; }
+  / left:MultiplicativeExpression "-" right:AdditiveExpression { return left - right; }
+  / MultiplicativeExpression
+
+LogicalExpression
+  = left:AdditiveExpression "||" right:LogicalExpression { return left || right; }
+  / left:AdditiveExpression "&&" right:LogicalExpression { return left && right; }
+  / AdditiveExpression
 ```
+
+2. 乔姆斯基 (chomsky) 文法分类
+
+非形式语言
+    中文，英文
+形式语言（乔姆斯基谱系）
+    0型 无限制文法
+    1型 上下文相关文法
+    2型 上下文无关文法
+    3型 正则文法
+
+0型文法其中,至少含有一个非终结符，并且，表示终结符和非终结符的并集。
+1型文法：又称为上下文有关文法，对任一产生式α→β，都有|β|≥|α|， 仅仅 S→ε除外
+（1）：式子左边可以有多个字符，但必须有一个非终结符
+（2）：式子右边可以有多个字符，可以是终结符，也可以是非终结符，但必须是有限个字符
+（3）：左边长度必须小于右边（例外）
+2型文法：又称为上下文无关文法，对任一产生式α→β，都有α∈VN ， β∈(VN∪VT)*
+（1）：式子左边只能有一个字符，而且必须是非终结符
+（2）：式子右边可以有多个字符，可以是终结符，也可以是非终结符，8但必须是有限个字符
+3型文法：又称为正规文法（正规文法又包括左线性文法和右线性文法）
+（1）：式子左边只能有一个字符，而且必须是非终结符
+（2）：式子右边最多有二个字符，而且如果有二个字符必须是一个终结符和一个非终结符
+如果只有一个字符，那么必须是终结符
+（3）：式子右边的格式一定要一致，也就是说如果有一个是（终结符+非终结符）那么所有的式子都必须是（终结符+非终结符）
+  如果有一个是（非终结符+终结符），那么所有的式子都必须是（非终结符+终结符）
+正规文法——左线性文法：
+（1）：必须是三型文法
+（2）：式子右边的产生是（非终结符+终结符）的格式
+正规文法——右线型文法：
+（1）：必须是三型文法
+（2）：式子右边的产生式是（终结符+非终结符）的格式
+
+3. 计算机语言分类(待更正)
+1型文法 JavaScript Python 
+2型文法 C、Pascal、Java、C#、C++、PHP、0C、 Swift、Go、Scala、R
+3型文法 正则表达式 SQL
 
 ### 4.Share:
 
-##### 动态规划、状态转移方程
-递归模板
+less开发常用知识点归纳
+https://www.jianshu.com/p/d81496ed0e29
 
-``` Java
-public void recur(int level, int param) {
-
-	// terminator
-	if(level > MAX_LEVEL) {
-		// process result
-		return;
-	}
-
-	// process current logic
-	process(level, param);
-
-	// drill down
-	recur(level:level + 1, newParam)；
-
-	// restore current status
-}
-```
-
-分治模板
-
-``` Java
-public void divide_conquer(problem, param1, param2, ...) {
-	// recursion terminator
-	if(problem == null) {
-		return
-	}
-
-	// prepare data
-	data = prepare_data(problem);
-	subproblems = split_problem(problem, data);
-
-	// conquer subproblems
-	subresult1 = self.divide_conquer(subproblem[0], p1, ...);
-	subresult2 = self.divide_conquer(subproblem[1], p1, ...);
-	subresult3 = self.divide_conquer(subproblem[2], p1, ...);
-	...
-
-	// process and generate the final result
-	result = process_result(subresult1, subresult2, subresult3, ...);
-
-	// revert the current level states
-}
-```
-
-动态规划顺推模板
-
-``` Java
-dp = [][] // 二维情况
-
-for(int j = 0; j < n; j++) d[n][j]=a[n][j];// 边界处理
-
-for(int i = n - 1; i >= 0; i--) {
-    for(int j = 1; j < i; j++) // 枚举范围视情况而定
-        d[i][j] = a[i][j] + max(d[i + 1][j], d[i + 1][j + 1]);// 状态转移
-}
-```
-
-关键步骤：
-1.定义状态数组：现实的问题定义为一个数组保存状态，数组可能是一维、二维或多维
-2.状态转移方程：最小或累加减或小的循环  从之前的k个状态中找到最值
-
-关键点：
-1.最优子结构 opt[n] = best_of(opt[n-1], opt[n-2], ...)
-2.储存中间状态： opt[i]
-3.递推公式（状态转移方程或DP方程）
-Fib: opt[i] = opt[n-1] + opt[n-2]
-
-##### 典型场景递推公式
-
-爬楼梯
-``` Java
-dp[i] // 状态数组 i步数
-dp[i] = dp[i - 1] + dp[i - 2]
-```
-
-不同路径
-``` Java
-dp[i][j] // 状态数组 i表示x坐标   j表示y坐标
-dp[i, j] = dp[i - 1][j] + dp[i][j - 1]
-```
-
-不同路径2
-``` Java
-dp[i][j] // 状态数组 i表示x坐标   j表示y坐标
-if (arr[i][j] == 1) {
-	dp[i][j] = 0; // 遇到障碍就是0
-} else {
-	dp[i][j] = dp[i - 1][j] + dp[i][j - 1]; // dpdpdp
-}
-```
-
-打家劫舍
-``` Java
-// 方法一
-dp[i] // 偷第i个房屋
-dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
-
-// 方法二
-dp[i][0] // 第i天 0 没偷 nums[i]
-dp[i][1] // 第i天 1 偷了 nums[i]
-dp[i][0] = max(dp[i - 1][0], dp[i - 1][1]);
-dp[i][1] = dp[i - 1][0] + nums[i]
-```
-
-最小路径和
-``` Java
-dp[i][j] // 1-i 和 1-j 最小的路径
-dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + arr[i][j]
-```
-
-股票买卖
-``` Java
-dp[i][k][0 or 1] // i 天数 k 最多交易次数 [0,1]是否持有股票
-dp[i][k][s] = max(buy, sell, rest)
-
-dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
-// max (选 rest, 选 sell)
-// 今天我没持有股票, 有两种可能
-// -昨天就没持有, 今天选rest, 所以今天还是没有持有;
-// -昨天持有股票, 但今天sell, 所以今天没有持有股票;
-dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] + prices[i])
-// max (选 rest, 选 buy)
-// -昨天持有股票, 今天选rest, 所以今天还持有股票
-// -昨天本没持有, 但今天buy, 所以今天就持有股票了
-```
-
-##### 高级DP
-复杂度来源
-1.状态拥有更多维度（二维、三维、或者更多、甚至需要压缩）
-2.状态方程更加复杂
-本质：内功、逻辑思维、数学
-
-爬楼梯改进
-1.步数1、2、3
-2.x1, x2, ..., xm 步
-3.不能走相同步
-
-编辑距离-典型的字符串比较
-如果word1[i]与word2[j]相同，显然dp[i][j]=dp[i-1][j-1]
-如果word1[i]与word2[j]不同，那么dp[i][j]可以通过
-1.在dp[i-1][j-1]的基础上做replace操作达到目的
-2.在dp[i-1][j]的基础上做insert操作达到目的
-3.在dp[i][j-1]的基础上做delete操作达到目的
-取三者最小情况即可
-
-##### 字符串算法
-
-字符串不同语言定义可变性
-java python go JavaScript string immutable不可变
-ruby php c c++ string mutable可变
-
-字符串基础问题
-1.字符串遍历
-2.字符串比较  x==y 比较指针  x.equals(y) 比较内容
-3.First unique 不重复查找
-4.Atoi 整数转换
-
-字符串操作问题
-1.Longest common prefix 最长公共前缀
-2.Reverse string 字符串翻转
-3.Anagram 异位词问题
-4.Palindrome 回文串问题
-
-##### 高级字符串算法
-最长子串、子序列问题
-1.最长子序列
-``` Java
-dp[i][j] // i word1.substr(0,i) j word2.substr(0,j)
-if word1[i-1]==word2[j-1]
-	dp[i][j] = dp[i-1][j-1] + 1
-else
-	dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-```
-2.最长子串
-``` Java
-dp[i][j] // i word1.substr(0,i) j word2.substr(0,j)
-if word1[i-1]==word2[j-1]
-	dp[i][j]=dp[i-1] + 1
-else
-	dp[i][j] = 0
-```
-
-3.编辑距离
-``` Java
-dp[i][j] // i word1.substr(0,i) j word2.substr(0,j)
-if word1[i] == word1[j]
-	dp[i,j] = dp[i-1][j-1]
-else
-	dp[i,j] = MIN(dp[i-1][j-1] + 1, dp[i-1][j] + 1, dp[i][j-1] + 1)
-```
-4.最长回文子串
-a.枚举从中心扩散 奇偶数长度
-b.dp
-``` Java
-dp[i][j] // i 起点 j 终点  dp[i][j] = true 是回文串 false 不是回文串
-if s[i] == s[j] //只要s[i] == s[j] 就可以继续扩散
-	dp[i,j] = dp[i+1][j-1]
-```
-c.Manacher算法
-
-5.通配符匹配问题
-``` Java
-dp[i][j] // i word1.substr(0,i) j word2.substr(0,j) = true 可以匹配 false 不能匹配
-
-// 如果 word1 的第 i 个字符和 word2 的第 j 个字符相同，或者 word2 的第 j 个字符为 “.”
-dp[i][j] = dp[i - 1][j - 1]
-// 如果 word2 的第 j 个字符为 *
-// --如果 word2 的第 j 个字符匹配空串 
-		dp[i][j] = dp[i][j - 1]
-// --如果 word2 的第 j 个字符匹配 word1 的第 i 个字符
-		dp[i][j] = dp[i - 1][j]
-```
-
-6.不同子序列出现个数
-``` Java	
-dp[i][j] // T前i字符串可以由s前j字符串组成最多匹配的个数
-// 如果 S[j]==T[i]
-	dp[i][j] = dp[i-1][j-1] + dp[i][j-1]
-// 如果 S[j]!=T[i]
-	dp[i][j] = dp[i][j - 1]
-```
-
-##### 字符串匹配算法
-暴力法(brute force)
-``` Java
-public static int forceSearch(String txt, String pat) {
-	int M = txt.length();
-	int N = pat.length();
-	for (int i = 0; i <= M - N; i++) {
-		int j;
-		for (j = 0; j < N; j++) {
-			if(txt.charAt(i + j)!= pat.charAt(j))
-				break;
-		}
-		if (j == N) {
-			return i;
-		}
-	}
-	return -1;
-}
-```
-
-Rabin-Karp算法
-1.假设子串的长度为M(pat),目标字符串的长度为N(txt)
-2.计算子串的hash值hash_pat
-3.计算目标字符串txt中每个长度为M的子串的hash值(共需要计算N-M+1次)
-4.比较hash值：如果hash值不同，字符串必然不匹配；如果hash值相同，还需要使用朴素算法再次判断
-``` Java
-public final static int D = 256; //256个字符 每位的权重是256相应的次方
-public final static int Q = 9997;//素数取模
-
-static int RabinKarpSearch(String txt, String pat) {
-	int M = pat.length();
-	int N = txt.length();
-	int i, j;
-	int patHash = 0, txtHash = 0;
-
-	for (int i = 0; i < M; i++) {
-		patHash = (D * patHash + pat.charAt(i)) % Q;
-		txtHash = (D * txtHash + txt.charAt(i)) % Q;
-	}
-
-	int highestPow = 1; // pow(256, M-1) 最高位权重
-	for (int i = 0; i < M -1; i++) {
-		highestPow = (highestPow * D) % Q;
-	}
-	for (int i = 0; i <= N - M; i++) { //枚举起点
-		if (patHash == txtHash) {
-			for(int j = 0; j < M; j++) {
-				if (txt.charAt(i + j) != pat.charAt(j)) {
-					break;
-				}
-			}
-			if (j == M) {
-				return i;
-			}
-		}
-		if (i < N - M) {//如果不相等去除最高位权重，在加滑动窗口后新增最低位的权重 O(1)时间复杂度
-			txtHash = (D * (txtHash - txt.charAt(i) * highestPow + txt.charAt(i + M))) % Q;
-			if (txtHash < 0) {
-				txtHash += Q;
-			}
-		}
-	}
-}
-```
-
-KMP算法-最大前后缀匹配
-KMP算法是一种改进的字符串匹配算法，由D.E.Knuth，J.H.Morris和V.R.Pratt提出的，因此人们称它为克努特—莫里斯—普拉特操作（简称KMP算法）。KMP算法的核心是利用匹配失败后的信息，尽量减少模式串与主串的匹配次数以达到快速匹配的目的。具体实现就是通过一个next()函数实现，函数本身包含了模式串的局部匹配信息。KMP算法的时间复杂度O(m+n)。
-
-Boyer-Moore算法
-KMP在匹配过程中从左至右与主串字符做比较，Boyer-Moore算法是从模式串的尾字符开始从右至左做比较。下面讨论的一些递推式都与BM算法的这个特性有关。
-
-Sunday算法
-Sunday算法由Daniel M.Sunday在1990年提出，它的思想跟BM算法很相似。只不过Sunday算法是从前往后匹配，在匹配失败时关注的是主串中参加匹配的最末位字符的下一位字符。
-1.如果该字符没有在模式串中出现则直接跳过，即移动位数 = 模式串长度 + 1；
-2.否则，其移动位数 = 模式串长度 - 该字符最右出现的位置(以0开始) = 模式串中该字符最右出现的位置到尾部的距离 + 1。

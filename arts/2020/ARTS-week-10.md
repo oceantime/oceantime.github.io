@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-10
-date: 2019-11-03 11:51:33
+date: 2020-03-14 20:59:26
 tags:
 ---
 
@@ -12,121 +12,146 @@ tags:
 
 ### 1.Algorithm:
 
-Word Ladder https://leetcode.com/submissions/detail/275568561/
-Lemonade Change https://leetcode.com/submissions/detail/275570784/
-Search in Rotated Sorted Array https://leetcode.com/submissions/detail/275583573/
+Binary Tree Preorder Traversal https://leetcode.com/submissions/detail/312666779/
 
 ### 2.Review:
 
-https://tomassetti.me/parsing-in-java/
+https://www.binarytides.com/linux-scp-command
 
 #### 点评：
-文章系统介绍了目前主流的java解析工具及相关工具示例代码。
-基本概念介绍：token、ast、grammar、lrr
-分析生成器：给出了各种主流工具的基本实现样例代码
 
+Scp(Secure Copy) 是一个在各个主机之间进行复制或者文件传输的一个命令行工具。它使用一种同ssh一样的安全机制。事实上，它在后台使用ssh连接来进行文件的传输。scp既指一种定义安全复制应该如何工作的协议，也指一种可以被安装的作为OpenSSH工具套的一部分的软件或是指令。本文作者在这篇简单的教程中，例出 12 种 scp 指令的场景以及如何使用它进行安全的文件传输。
+
+1. 详细输出
+2. 多文件传输
+3. 复制整个文件夹（递归）
+4. 在两个远程主机之间复制文件
+5. 用压缩来加快传输
+6. 限制带宽的使用
+7. 在远程主机上连接一个不同的端口
+8. 保存文件属性
+9. 静默模式
+10. 特殊标识文件
+11. 使用不同的ssh_config文件
+12. 使用不同的加密
+
+总结：
+尽管 SCP 在安全地传输文件方面是非常有效的，它缺乏一个文件同步工具必要的功能。它所能做的就是复制粘贴上述所有文件从一个位置到另一个位置。一个更强大的工具的 Rsync 它不仅具有 SCP 的所有功能，而且增加了更多的功能用来在2个主机智能同步文件。例如，它可以检查并上传只有修改过的文件，忽略现有的文件等等。
 
 ### 3.Tip:
 
-##### 深度优先搜索、广度优先搜索的实现和特性
-搜索和遍历
-遍历搜索：在树（图/状态集）中找到特定的节点
-每个节点都要访问一次
-每个节点仅仅要访问一次（不做过多无用的访问，否则效率很低）
-对节点的访问顺序不限
--深度优先：depth first search
--广度优先：breadth first search
-优先级优先（启发式搜索）：估价函数 搜索效率属于深度学习  应用在各种推荐算法和高级搜索算法
+git命令下载代码中断恢复
+``` shell
+# 运行git下载命令：
+~/source/$ git clone --recursive https://github.com/manic-3dprint/EzArduinoGamePad.git
 
-DFS深度优先搜索方法：递归法、非递归法
+# 下载异常提示：
+error: RPC failed; curl 56 GnuTLS recv error (-9): A TLS packet with unexpected length was received.
+fatal: The remote end hung up unexpectedly
+fatal: early EOF
+fatal: index-pack failed
+fatal: clone of 'https://github.com/manic-3dprint/EzArduinoGamePad.git' into submodule path 'third_party/protobuf' failed
 
-深度优先和广度优先遍历的区别
-1.BFS  	遍历完本层一次性加入后再遍历下一层
-		BFS 队列就是一个数组
-2.DFS  	有个level标志多少层
-		类似水波的效果
+# 进入 EzArduinoGamePad 刚刚下载的目录
+~/source/$ cd EzArduinoGamePad
+~/source/EzArduinoGamePad$ git submodule update --init --recursive
 
-##### 贪心的实现、特性及实战题目解析
+```
 
-贪心算法Greedy
-每一步选择中都采取在当前状态下最好或最优（即最有利）的选择，从而希望导致结果时全局最好或最优的算法
-与动态规划的不同在于对每个子问题的解决方案都做出选择，不能回退。
+Anaconda在已有python3.6的情况下安装python2.7
+``` shell
+# 新建 python27 环境 (Anaconda -> Enviroments -> base(root) -> Open Terminal) 中执行
+conda create -n python27 python=2.7
 
-特点：
-可以解决一些最优化问题：最小生成树、求哈夫曼编码等。
-对于工程和生活中的问题，一般不能得到答案。
-一旦一个问题可以通过贪心算法解决，一般就是最好的解决办法。
-高效性及答案接近最优结果，可以作辅助算法或者解决要求结果不特别精确的问题。
+# 查看已安装环境
+conda info -e
 
-适用场景
-问题能够分解成子问题解决，子问题的最优解能递推到最终问题的最优解。子问题最优解称为最优子结构
+# 会看到安装的环境列表
+#  (base) C:\Users\name>conda info -e
+#  WARNING: The conda.compat module is deprecated and will be removed in a future release.
+#  # conda environments:
+#  #
+#  base                  *  C:\Users\name\Anaconda3
+#  python27              *  C:\Users\name\Anaconda3\envs\python27
+# 
+# (base) C:\Users\name>
 
-贪心：当下局部最优判断
-回溯：能够回退
-动态规划：最优判断 + 回退
+# 切换到python27环境下
+conda activate python27
 
-##### 二分查找的实现、特性及实战题目解析
-前提
-1.目标函数单调性（单调递增或者递减）
-2.存在上下界（bounded）
-3.能够通过索引访问（index accessible）
+# 切回到base环境
+deactivate
 
-五毒神掌：
+```
 
-四步做题：
-审题
-所有解法思考 时间复杂度 空间复杂度 最后选出最优解
-1.暴力：还原 O(n) 或 O(logN) ->   升序 -> 二分  O(logN)  （课后作业写、总结）
-2.正解：二分查找
-a.单调
-b.边界
-c.index
-写代码
-测试样例
+日志采集 FileBeat -> Redis -> Logstash 配置
 
-##### 二分查找的实现、特性及实战题目解析
-``` java
-public class Search {
-    //O(logN)
-    /*  题目： 使用二分查找，寻找一个半有序数组[4, 5, 6, 7, 0, 1, 2]中间无序的地方
-        处理思路：
-        找到mid位置，判断该数是否与目标值相同，如果相同return
-        不同就与当前范围的第一个数比较，如果不小于，则说明该数前面的数字是有序的，再判断target是否在该范围内，不在就转到后面
-        如果小于，则说明前面的数中，包含折断位置，那么该数后面的数一定是有序的，即判断是否在后面的范围内，不在则往前找。
-     */
-    public static int search(int[] nums,int left,int right) {
+``` shell
+# FileBeat -> Redis
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /usr/local/openresty/nginx/logs/access.log
+  fields:
+    log_source: messages
+  fields_under_root: true
 
-        while(left <= right) {
+output.redis:
+  hosts: ["192.168.0.1:6379"]
+  key: nginx_log
+  password: password
+  db: 0
 
-            // 1.获取数组中间位置为当前位置
-            int target = left + ((right - left) >> 1);
 
-            //2.判断是否满足半有序数组中间无序的地方,即当前位置的值比前一个位置的值小,不满足则继续
-            if(nums[target] < nums[target - 1]) {
-                return target;
-            } else if(nums[target] < nums[right] && (target + 1) == right){
-                return target + 1;
-            }
-
-            //3.比较当前位置的值和数组第一个位置的值，如果大于则前面是有序的，替换左边位置为当前位置
-            if(nums[target] >= nums[left]) {
-                left = target;
-            }else {//如果小于则后面是有序的，替换右边位置为当前位置
-                right = target;
-            }
-        }
-        return -1;
-    }
-
-    public static void main(String[] args) {
-        //测试样例
-//        int[] nums = {4, 5, 6, 7, 0, 1, 2};//样例数组
-//        int[] nums = {8, 9, 10, 0, 1, 2, 3, 4, 5, 6, 7};//中间数组第一次取值小于左边第一个位置的值
-        int[] nums = {2, 3, 4, -10, -9, -7, -2, -1, 0, 1};//带负数测试
-        System.out.println(search(nums,0,nums.length-1));
-    }
+# Redis -> Logstash
+input {
+  redis {
+    batch_count => 1 #EVAL命令返回的事件数目
+    data_type => "list" #logstash redis插件工作方式
+    key => "logstash-test-list" #监听的键值
+    host => "127.0.0.1" #redis地址
+    port => 6379 #redis端口号
+    codec => "plain" #编码插件json
+    password => "123qwe" #如果有安全认证，此项为密码
+    db => 0 #redis数据库的编号
+    threads => 1 #启用线程数量
+  }
 }
-``` 
+output {
+  stdout{
+  }
+}
+
+## db
+Redis里面有数据库的概念，一般是16个，默认登录后是0，可以通过命令选择。如果应用系统选择使用了不同的数据库，那么可以通过配置这个参数从指定的数据库中读取信息。
+
+## key
+Redis中的数据都是通过键值来索引的，不管是字符串还是列表，所以这个key相当于数据库中的表。
+如果是list或者channel模式，key都是指定的键值；而如果是pattern_channel，那么key可以通过glob通配的方式来指定。
+
+## password
+有的Redis为了安全，是需要进行验证的。只有设置了password，才能正确的读取信息。相反，如果redis没有设置密码，而logstash中配置了密码，也会报错！
+
+## batch_count
+这个属性设置了服务器端返回的事件数目，比如设置了5条，那么每次请求最多会直接获取5条日志返回。
+
+## data_type logstash工作的类型
+logstash中的redis插件，指定了三种方式来读取redis队列中的信息。
+list=>BLPOP
+channel=>SUBSCRIBE
+pattern_channel=>PSUBSCRIBE
+其中list，相当于队列；
+channel相当于发布订阅的某个特定的频道；
+pattern_channel相当于发布订阅某组频道；
+channel与pattern_channel区别就在于一个是监听特定的键值，一个是监听某一组键值。
+```
 
 ### 4.Share:
-ANTLR 4进阶（https://www.liangshuang.name/2017/08/20/antlr/）
+
+Logstash最佳实践
+http://doc.yonyoucloud.com/doc/logstash-best-practice-cn/index.html
+CentOS 7离线安装Redis
+https://www.jellythink.com/archives/379
+使用Redis的用户要请往这瞅瞅，小心数据泄漏！
+https://bbs.huaweicloud.com/blogs/103636

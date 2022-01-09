@@ -1,7 +1,7 @@
 # ARTS for 2021
 
 ---
-title: 目录
+2021: 目录
 ---
 [ARTS-week-52](./arts/2021/ARTS-week-52)  
 [ARTS-week-51](./arts/2021/ARTS-week-51)  

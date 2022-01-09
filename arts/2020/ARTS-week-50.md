@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-50
-date: 2020-08-22 17:16:44
+date: 2020-12-21 19:38:28
 tags:
 ---
 
@@ -13,157 +13,280 @@ tags:
 
 ### 1.Algorithm:
 
-Minimum Window Substring https://leetcode.com/submissions/detail/384577085/
+349. 两个数组的交集 https://leetcode-cn.com/submissions/detail/132714304/
 
 ### 2.Review:
 
-https://www.oreilly.com/content/the-state-of-data-analytics-and-visualization-adoption/
-数据分析和可视化采用的状态
+https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/
+REST API设计的最佳做法
 
 #### 点评：
 
-2017年春季，Zoomdata委托O'Reilly Media创建并执行一项评估数据和分析行业状况的调查。重点是了解现代大数据和流数据技术的渗透，用户如何使用数据分析以及组织对人员配备最感兴趣的技能。来自不同行业以及政府和学术界的近900人对此调查做出了回应。以下是调查提供的一些见解的预览。
+作者：John Au-Yeung 在本文中，我们将研究如何设计 REST API，以使使用它们的任何人都易于理解，面向未来，安全且快速，因为它们将数据提供给可能是机密的客户端。
 
-1.当然，关系数据库仍然是在线事务处理（OLTP）系统的核心。但是，最有趣的发现之一是，当被问及组织的主要数据来源时，不到三分之一的受访者列出了关系数据库，而大约三分之二的人选择了非关系来源。
-2.这些现代数据源经过优化，可以处理大数据的“三个V”：非常大的数据量；高速流数据；以及各种各样的非结构化和半结构化数据，例如文本和日志文件。
-3.分析数据库（19％）和Hadoop（14％）是两个最受欢迎的非关系源。
+主要优势：
+- 接受并使用JSON进行响应
+- 在端点路径中使用名词代替动词
+- 用复数名词来命名集合
+- 嵌套分层对象的资源
+- 妥善处理错误并返回标准错误代码
+- 允许过滤，排序和分页
+- 保持良好的安全习惯
+- 缓存数据以提高性能
+- 版本化我们的API
 
-参考资料：http://go.zoomdata.com/l/190352/2017-09-22/515vpz
-具有生产和开发中的大数据项目的组织的比例
-不同级别的数据新鲜度对组织有多么重要
-最受欢迎的流数据平台
-组织要配备的主要技术技能
-组织是通过独立的BI应用程序使用分析还是作为嵌入其他业务应用程序和流程的分析组件使用
+总结：
+    设计高质量REST API的最重要要点是遵循Web标准和约定以保持一致性。JSON，SSL / TLS和HTTP状态代码都是现代Web的标准构建块。性能也是重要的考虑因素。我们可以通过一次不返回太多数据来增加它。另外，我们可以使用缓存，这样就不必一直查询数据。端点的路径应该一致，我们仅使用名词，因为HTTP方法指示了我们要采取的行动。嵌套资源的路径应位于父资源的路径之后。他们应该告诉我们我们正在获取或操作的内容，而无需阅读额外的文档以了解它在做什么。
 
 ### 3.Tip:
 
-Velocity 模板引擎介绍
+Elasticsearch 数据迁移与任务状态相关 API
 
-Velocity 是一个基于 java 的模板引擎（template engine）。它允许任何人仅仅简单的使用模板语言（template language）来引用由 java 代码定义的对象。当 Velocity 应用于web开发时，界面设计人员可以和 java 程序开发人员同步开发一个遵循 MVC 架构的 web 站点，也就是说，页面设计人员可以只关注页面的显示效果，而由 java 程序开发人员关注业务逻辑编码。
+1. 基本形式
 
-1. Velocity 基本语法
+参数说明：
 
-```java
-"#"用来标识 Velocity 的关键字，包括 #set、#if 、#else、#end、#foreach、#end、#include、#parse、#macro 等；
-"$"用来标识 Velocity 的变量；如：$i、$msg、$TagUtil.options(...) 等。
-"{}"用来明确标识 Velocity 变量；比如在页面中，页面中有一个 $someonename，此时，Velocity 将把 someonename 作为变量名，若我们程序是想在 someone 这个变量的后面紧接着显示 name 字符，则上面的标签应该改成 ${someone}name。
-"!"用来强制把不存在的变量显示为空白。如：当找不到 username 的时候，$username 返回字符串 "$username"，而 $!username 返回空字符串""
+- version_type
+  - internal：忽略文档版本，如果目标索引中恰巧有相同主键的文档，则直接覆盖；（默认）
+  - external：保留源索引中文档版本，创建目标索引中没有的文档，并更新目标索引中比源索引中版本旧的文档
+- op_type
+  - create：仅在目标索引中创建丢失的文档，所有现有文档将导致版本冲突
+
+```shell
+POST _reindex
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "source_index"
+  },
+  "dest": {
+    "index": "target_index",
+    "op_type": "create"
+  }
+}
 ```
 
-2. Velocity 语法使用
+2. 进阶形式
 
-#### 变量定义
-```java
-#set($name ="velocity")
-```
-等号后面的字符串 Velocity 引擎将重新解析，例如出现以$开始的字符串时，将做变量的替换。
+- 多索引多类型
 
-#### 变量赋值
-```java
-#set($hello ="hello $name")
-```
-上面的这个等式将会给$hello赋值为"velocity"
-
-#### 循环
-```java
-#foreach($element in $list) 
-    <span>$!element</span><br>
-#end
-```
-Velocity引擎会将list中的值循环赋给element变量
-
-#### 条件语句
-```java
-#if(condition)
-...
-#elseif(condition)
-…
-#else
-…
-#end
+```shell
+POST _reindex
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": ["source_index_1","source_index_2"],
+    "type": ["source_index_1_type","source_index_2_type"]
+  },
+  "dest": {
+    "index": "target_index_together"
+  }
+}
 ```
 
-#### 关系操作符
-```java
-#if($foo && $bar)
-...
-#end
-```
-Velocity 引擎提供了 AND、OR 和 NOT 操作符，分别对应 &&、|| 和 !
+- 增加迁移条件
 
-#### 关系操作符
-```java
-
-```
-
-#### 宏
-```java
-Velocity 中的宏可以理解为函数定义
-#macro(macroName arg1 arg2 ...)
-...
-#end
-
-调用这个宏的语法是
-#macroName(arg1 arg2 ...)
-
-这里的参数之间使用空格隔开，下面是定义和使用 Velocity 宏的例子：
-#macro(sayHello $name)
-    hello $name
-#end
-
-#sayHello("velocity")
-输出的结果为 hello velocity
+```shell
+POST _reindex
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "source_index",
+    "query": {
+      "match_all": {}
+    }
+  },
+  "dest": {
+    "index": "target_index"
+  }
+}
 ```
 
-#### #parse 和 #include
-```java
-#parse 和 #include 指令的功能都是在外部引用文件，而两者的区别是，#parse 会将引用的内容当成类似于源码文件，会将内容在引入的地方进行解析，#include 是将引入文件当成资源文件，会将引入内容原封不动地以文本输出。分别看以下例子：
+- 迁移固定文档数
 
-foo.vm 文件：
-
-#set($name = "velocity")
-parse.vm：
-
-#parse("foo.vm")
-输出结果为：velocity
-
-include.vm：
-
-#include("foo.vm")
-输出结果为：#set($name = "velocity")
+```shell
+POST _reindex
+{
+  "conflicts": "proceed",
+  "size": 10000,
+  "source": {
+    "index": "source_index",
+    "sort": {
+      "xxx": "desc"
+    }
+  },
+  "dest": {
+    "index": "target_index"
+  }
+}
 ```
 
-#### 注释
-```java
-单行注释
+- 迁移特定字段
 
-##单行注释
-多行注释
-
-#*
-    多行注释
-*#
+```shell
+POST _reindex
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "source_index",
+    "_source": ["field_1","field_2"]
+  },
+  "dest": {
+    "index": "target_index"
+  }
+}
 ```
 
-#### 单双引号
-```java
-单引号不解析引用内容，双引号解析引用内容
+- 迁移过程中修改文档
 
-#set ($var="hello")
-
-'$var'  ## 结果为：$var
-"$var"  ## 结果为：hello
+```shell
+POST _reindex
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "source_index"
+  },
+  "dest": {
+    "index": "target_index",
+    "version_type": "external"
+  },
+  "script": {
+    "inline": "if (ctx._source.field_value == 'value') {ctx._version++; ctx._source.remove('field_value')}",
+    "lang": "painless"
+  }
+}
 ```
 
-#### 属性
-```java
-通过'.'操作符使用变量内容
+- 修改迁移时每批次的文档数量
 
-$Identifier.Identifier
-$user.name
+```shell
+POST _reindex
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "source_index",
+    "size": 2000
+  },
+  "dest": {
+    "index": "target_index"
+  }
+}
+```
+
+- 修改字段名称
+
+```shell
+POST _reindex
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "source_index"
+  },
+  "dest": {
+    "index": "target_index"
+  },
+  "script":{
+    "inline":"ctx._source.new_field = ctx._source.remove(\"old_field\")"
+  }
+}
+```
+
+- 多并发迁移 Reindex 支持 Sliced Scroll，分两种方式：
+  - Manual slicing（手动切片）
+  - Automatic slicing（自动切片）
+
+```shell
+POST _reindex?slices=5
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "source_index"
+  },
+  "dest": {
+    "index": "target_index"
+  }
+}
+```
+
+- 从远程集群 reindex
+
+```shell
+POST _reindex
+{
+  "source": {
+    "remote": {
+      "host": "http://otherhost:9200",
+      "username": "user",
+      "password": "pass"
+    },
+    "index": "source",
+    "query": {
+      "match_all": {}
+    }
+  },
+  "dest": {
+    "index": "dest"
+  }
+}
+```
+
+3. Task API
+
+- GET Task
+
+```shell
+GET _tasks?actions=*reindex
+GET _tasks?detailed=true&actions=*reindex
+```
+
+- GET Task
+
+```shell
+GET _tasks?actions=*reindex
+GET _tasks?detailed=true&actions=*reindex
+GET _tasks/taskId:number
+GET _cat/tasks
+GET _cat/tasks?detailed
+```
+
+- Cancel Task
+
+```shell
+POST _tasks/node_id:task_id/_cancel
+
+查看当前所有迁移任务
+GET _tasks?detailed=true&actions=*reindex
+
+取消单个迁移任务
+POST _tasks/node_id:task_id/_cancel
+
+取消节点 node_id1, node_id2 上的所有迁移任务
+POST _tasks/_cancel?nodes=node_id1,node_id2&actions=*reindex
+
+取消全部的迁移任务
+POST _tasks/_cancel?actions=*reindex
+
+取消全部的删除数据任务
+POST _tasks/_cancel?actions=*delete/byquery
+```
+
+- Wait for a specific task to complete
+
+```shell
+GET _tasks/node_id:task_id?wait_for_completion=true&timeout=10s
+GET _tasks?actions=*reindex&wait_for_completion=true&timeout=10s
 ```
 
 ### 4.Share:
 
-http://blog.itpub.net/31559354/viewspace-2712458/
-ClickHouse留存分析工具十亿数据秒级查询方案
+https://zhuanlan.zhihu.com/p/61113670
+Solr - Shards and Indexing Data in SolrCloud
+
+https://blog.csdn.net/liangcheng0523/article/details/105179592
+IDEA新建SpringBoot项目报错Cannot resolve symbol @springbootapplication和resolve symbol SpringApplication
+
+https://www.cnblogs.com/zlz099/p/7746056.html
+java学习路线和知识图谱
+
+https://blog.csdn.net/the_snail/article/details/79209593
+ng:command not found，ng不是内部或外部命令

@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-16
-date: 2019-12-15 07:53:52
+date: 2020-04-24 21:30:50
 tags:
 ---
 
@@ -12,125 +12,127 @@ tags:
 
 ### 1.Algorithm:
 
-Decode Ways https://leetcode.com/submissions/detail/286135648/
+Valid Perfect Square https://leetcode.com/submissions/detail/329455512/
 
 ### 2.Review:
 
-https://lemire.me/blog/2017/07/07/are-your-strings-immutable/
+http://www.brandonsmith.ninja/blog/three-types-of-data
 
 #### 点评：
-文章中用图文的方式分析了 Rabin-Karp如何进行字符串匹配的判断的。Rabin-Karp比较的是pat的hash值和当前对应的txt子串的hash值。如果hash值相等，然后再去逐个检查子串的字符。最直接的方法莫过于计算h(pat)和txt中所有子串的hash，然后一一比较。但光是计算txt中所有子串的hash就需要O(mn)的时间，这样一来，相比起 Naive Pattern Searching，这个方法就毫无优势了。
 
-如何计算hash值是Rabin-Karp的关键，最好是能够利用当前txt子串的hash值，计算后移一位以后的，以减少计算的开销。Rabin-Karp使用的hash叫做Rolling hash，基本实现是刚刚的方法实际上重复计算了很多重叠的部分，而Rolling hash就要利用当前子串的hash值，来计算后移一个位置之后子串的hash值。最后，文章给出了各个语言版本的具体实现。
+作者在软件中建立三种不同类型的数据：常量、状态和缓存。所谓“数据”，是指“代码中的变量”，但同样的原则也适用于磁盘上的文件、数据库中的表或其他任何东西。
+这三个类别是不相交的：即，如果一个数据属于其中一个类别，也不应将其视为其他类别之一。不同的语言通过类型系统或其他方式表达这种约束的能力会有所不同，因此最好将其视为一种约定或一种思维方式（尽管如果您能够实际执行它，那当然会更好）。
+
+常量#
+常数是在程序运行过程中不变的信息。它也可以采用配置文件或命令行参数的形式。常数可以在开发过程中更改，但不能在运行时更改。
+
+状态#
+状态是在程序运行态中自然变化的信息。这通常由可变值组成。它还可以由不可变的数据结构组成，其明确目的是允许您拥有不可变的状态（在这些结构中，新的状态是从前一个状态派生的，并与一些新信息结合在一起）。即使是Haskell等语言中基于monad的I/O也属于这一类。
+
+缓存#
+缓存是直接从常量和/或状态派生的信息。缓存值类似于常量，但实际上可能会使用与状态相同的语言功能，因为在顶层，它可以也将更改（否则将是常量！）。
+
+总结：
+常数既不可替换也不可变
+状态是任意可替换和可变的
+缓存值在特定情况下是可替换的，但不可更改
 
 ### 3.Tip:
 
-判断当前时间是否在某段时间范围内
+1.字符串和各个进制数字互转
 
-``` java
-public void isBelong(){
-    SimpleDateFormat df = new SimpleDateFormat("HH:mm");//设置日期格式
-    Date currentTime =null;
-    Date beginTime = null;
-    Date endTime = null;
-    try {
-        currentTime = df.parse(df.format(new Date()));
-        beginTime = df.parse("06:00");
-        endTime = df.parse("09:00");
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+``` javascript
+function convertStringToNumber(string, x){
+	if(arguments.length < 2) {
+		x = 10;
+	}
 
-    Boolean flag = belongCalendar(currentTime, beginTime, endTime);
-    System.out.println(flag);
+	var chars = string.split('');
+	var number = 0;
+
+	var i = 0;
+	while(i < chars.length && chars[i] != '.') {
+		number = number * x;
+		number += chars[i].codePointAt(0) - '0'.codePointAt(0);
+		i++;
+	}
+	if(chars[i] == '.') {
+		i++;
+	}
+	var fraction = 0;
+	while(i < chars.length) {
+		fraction = fraction / x;
+		fraction += chars[i].codePointAt(0) - '0'.codePointAt(0);
+		i++;
+	}
+	fraction = fraction / x;
+	return number + fraction;
 }
+convertStringToNumber("10.01");
 
+function convertNumberToString(number, x) {
+	var integer = Math.floor(number);
+	var fraction = number - integer;
+	var string = '';
+	while(integer > 0) {
+		string = String(integer % x) + string;
+		integer = Math.floor(integer / x); 
+	}
+	console.log(fraction);
+	var string1 = '';
+	while(fraction > 0) {
+		string1 = String(fraction % x) + string1;
+		fraction = Math.floor(fraction / x); 
+	}
+	return string + "." + string1;
+}
+convertNumberToString(100, 10)
+
+```
+
+2.各个进制数字之间互转
+
+``` javascript
 /**
- * 判断时间是否在某段时间范围内
- * @param currentTime
- * @param beginTime
- * @param endTime
- * @return
- */
-public static boolean belongCalendar(Date currentTime, Date beginTime, Date endTime) {
-    Calendar current = Calendar.getInstance();
-    current.setTime(currentTime);
+* number  数字
+* oriented  原进制
+* target  目标进制
+* orilist  原数进制字符表
+* targetlist  目标进制字符表
+*/
+function convertNumberToNumber(number, oriented, target, orilist, targetlist) {
+	var jslist = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+		tnum = [], m, negative = ((number += '').trim()[0] == '-'), decnum = 0;
+	orilist || (orilist = jslist);
+	targetlist || (targetlist = jslist);
+	if (negative) number = number.slice(1);
+	for (var i = number.length; i--;)
+		decnum += orilist.indexOf(number[i]) * Math.pow(oriented, number.length - i - 1);
+	for (; decnum != 0; tnum.unshift(targetlist[m])) {
+		m = decnum % target;
+		decnum = Math.floor(decnum / target);
+	}
+	decnum && tnum.unshift(targetlist[decnum]);
 
-    Calendar begin = Calendar.getInstance();
-    begin.setTime(beginTime);
+	var aNew;
+	var re = /([0-9]+\.[0-9]{2})[0-9]*/;
+	aNew = number.replace(re,"$1");
+	alert(Math.round(number*100)/100);
 
-    Calendar end = Calendar.getInstance();
-    end.setTime(endTime);
-
-    if (current.after(begin) && current.before(end)) {
-        return true;
-    } else {
-        return false;
-    }
+	return (negative ? '-' : '') + tnum.join('');
 }
+
+convertNumberToNumber(22.123456,10,10)            //"10011010010"
+convertNumberToNumber(15,10,16)            //"f"
+convertNumberToNumber('ABC',16,10)        //"9846"
+ 
+convertNumberToNumber(3245670,10,10,null,'零一二三四五六七八九')        //"三二四五六七零"
+convertNumberToNumber('①②③',10,2,'〇①②③④⑤⑥⑦⑧⑨')                    //"1111011"
+
 ```
 
 ### 4.Share:
 
-#### 数据结构
+运算符优先级： 
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
 
-##### 一维
-基础：数组 array(string)，链表 linked list
-高级：栈 stack，队列 queue，双端队列 deque，集合 set， 映射 map(hash or map), etc
-
-##### 二维
-基础：树 tree， 图 graph
-高级：二叉搜索树 binary search tree(red-black tree, AVL), 堆 heap, 并查集 disjoint set, 字典树 Trie, etc
-
-##### 特殊
-位运算 Bitwise, 布隆过滤器 BloomFilter
-LRU Cache
-
-#### 算法
-if-else, switch -> branch
-for, while loop -> iteration
-递归 Recursion(Divide & Conquer, Backtrace)
-搜索 Search:深度优先搜索 Depth first search, 广度优先搜索 Breadth first search, A\*, etc
-动态规划 Dynamic Programming
-二分查找 Binary Search
-贪心 Greedy
-数学 Math, 几何 Geometry
-注意： 在头脑中回忆上面每种算法的思想和代码模板
-
-#### 化繁为简的思想
-1.人肉递归低效、很累
-2.找到最近最简方法，将其拆解成可重复解决的问题
-3.数学归纳法思维
-本质： 寻找重复性 -> 计算机指令集
-
-#### 学习要点
-基本功是区别业余和职业选手的根本。深厚功底来自于-过遍数
-最大的误区: 只做一遍
-五毒神掌
-刻意练习-练习缺陷点地方、不舒服、枯燥
-反馈-看题解、看国际版的高票回答
-
-#### 经典习题
-爬楼梯、硬币兑换
-括号匹配、括号生成、直方图最大面积、滑动窗口
-二叉树遍历、分层输出树、判断二叉排序树
-股票买卖、偷房子、字符串编辑距离、最长上升子序列、最长公共子序列
-异位词(判断和归类)、回文串(最大回文串)、regex和通配符匹配
-高级数据结构(Trie、BloomFilter、LRU cache、etc)
-
-
-#### 五毒神掌
-第一遍：不要死磕，要看代码学习(一定要看国际版的高票回答)
-第二遍：自己写
-第三遍：24小时后
-第四遍：一周后
-第五遍：面试前
-
-#### 面试技巧
-1.Clarifica: 明确题目意思、边界、数据规模
-2.Possible solutions: 穷尽所有可能的解法
-- compare time/space
-- optimal solution
-3.Coding: 代码简洁、高性能、美感
-https://shimo.im/docs/rHTyt8hcpT6D9Tj8
-4.Test cases 

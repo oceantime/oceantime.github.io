@@ -1,8 +1,9 @@
 ---
 title: ARTS-week-28
-date: 2020-03-22 11:18:15
+date: 2020-07-19 20:27:42
 tags:
 ---
+
 
 ## ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
 1.Algorithm： 每周至少做一个 leetcode 的算法题
@@ -12,354 +13,448 @@ tags:
 
 ### 1.Algorithm:
 
-Assign Cookies https://leetcode.com/submissions/detail/314788039/
+Frog Jump https://leetcode.com/submissions/detail/368707533/
 
 ### 2.Review:
 
-https://css-tricks.com/svg-line-animation-works/
+https://www.oreilly.com/content/best-practices-for-data-lakes/
+数据湖的最佳实践
 
 #### 点评：
 
-How SVG Line Animation Works
-本文作者通过实例演示了如何实现 svg 线动态效果，并文章开头给出了其他人实现的例子效果。
-Jake Archibald  https://jakearchibald.com/2013/animated-line-drawing-svg/
-Brian Suda https://24ways.org/2013/animating-vectors-with-svg/
-Polygon https://product.voxmedia.com/2013/11/25/5426880/polygon-feature-design-svg-animations-for-fun-and-profit
-Codrops https://tympanus.net/Development/SVGDrawingAnimation/
+作者Alice LaPlante 和 Ben Sharma 讲了如何构建、维护和挖掘Hadoop数据湖的价值。。
 
-步骤如下：
-1. 有一个 SVG 图形
-补充：可以用AI图形工具生成svg文件，或者用开源svg工具生成 https://www.zhangxinxu.com/sp/svg/
+有价值的数据湖具备以下几点：
+1. 业务收益优先级列表：解决关键业务痛点或创造新的盈利点。
+2. 架构规划：这是一项长期投资，所以需要仔细把握技术的导向。有必要验证一下概念，从而得到一些经验，在此过程中不断调整和学习。规划中特别重要一点就是拥有很好的数据管理策略，包括数据治理和元数据，以及如何做好这几点。
+3. 安全策略：数据隐私和安全及多租户。
+4. I / O和内存模型：作为技术平台和体系结构的一部分，必须考虑数据湖的扩展功能。
+5. 数据库技能评估：专家应该具备构建数据平台实践经验，有丰富的数据管理和数据治理经验，这样他们就可以预先明确策略和项目流程。还需要邀请日后会使用这一数据湖的数据科学家们，并将其作为利益相关者参与到早期的建筑过程中去，听取他们的需求，了解他们更愿意怎样与数据湖交互。
+6. 运维计划：从服务水平协议，需要从几乎零停机时间、可重复读取、处理、改变数据的角度，制定适当的服务水平协议，需要有相关经验的人运维。
+7. 运营计划：如何考虑如何做广告宣传、拓展用户。
+8. 灾备计划：保证其关键性能高可用。
+9. 五年愿景：数据湖会成为下一代企业级数据技术的关键基础平台，企业需要提前计划如何将数据湖纳入长期策略。。
 
-2. 图形必须有线条（stroke）
-``` html
-<path id="svg_3" d="m33.829996,375.163847l57.876095,0l0,57.876095l-57.876095,0l0,-57.876095zm6.752211,-51.123884l0,44.371673l44.371673,0l0,-44.371673l-44.371673,0z" stroke-width="5" stroke="#000000" fill="#FF0000"/>
-```
-
-3. 线条可以被设置成线段模式
-``` xml
-<svg ...>
-  <path class="path" stroke="#000000" ... >
-</svg>
-
-.path {
-  stroke-dasharray: 100;
-}
-```
-
-4. 可以 “offset” 这些线段，以便让它们移动位置
-``` xml
-.path {
-  stroke-dasharray: 100;
-  animation: dash 5s linear;
-}
-
-@keyframes dash {
-  to {
-    stroke-dashoffset: 1000;
-  }
-}
-```
-
-5. 单个线段长度足以覆盖整个图形，给线条设置 offset，让它完全消失在图形范围内而不是覆盖整个图形。
-``` xml
-.path {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: dash 5s linear forwards;
-}
-
-@keyframes dash {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-```
-
-6. 可以用 JavaScript 获取图形长度
-``` JavaScript
-var path = document.querySelector('.path');
-var length = path.getTotalLength();
-```
-
-总结：
-svg 线动态效果可以通过 css 样式 dasharray 和 动态修改 dashoffset 达到动态效果，应用场景非常丰富。
 
 ### 3.Tip:
 
-Maven 打包 pom.xml 配置
+Java11 HttpClient 
 
-1.Maven打包过程（顺序）
+特性：
 
-``` shell
-clean清空之前生成的文件
-IDE内编译该程序 （并测试可成功运行）-- 必须生成class文件！（等待被打包）
-确定文件pom.xml中的各项配置
-Maven刷新：Reimport All Maven Projects
-Maven自动打包：Install或package
+- 从 java9 的 jdk.incubator.httpclient 模块迁移到 java.net.http 模块，包名由 jdk.incubator.http 改为 java.net.http
+- 原来的诸如 HttpResponse.BodyHandler.asString() 方法变更为 HttpResponse.BodyHandlers.ofString() ，变化一为 BodyHandler 改为 BodyHandlers，变化二为 asXXX() 之类的方法改为 ofXXX()，由 as 改为 of
+
+1. 设置超时时间
+
+```java
+
+public void testTimeout() throws IOException, InterruptedException {
+    //1.set connect timeout
+    HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofMillis(5000))
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            .build();
+
+    //2.set read timeout
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://www.google.com"))
+            .timeout(Duration.ofMillis(5009))
+            .build();
+
+    HttpResponse<String> response =
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    log.info(response.body());
+}
+
+HttpConnectTimeoutException
+
+Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+    at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:68)
+    at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1248)
+    at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:877)
+Caused by: java.net.ConnectException: HTTP connect timed out
+    at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:69)
+    ... 2 more
+
+HttpTimeoutException
+
+java.net.http.HttpTimeoutException: request timed out
+ 
+    at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:559)
+    at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:119)
+    at com.example.HttpClientTest.testTimeout(HttpClientTest.java:40)
 ```
 
-2.Maven打包依赖 scope (选项)
+2. 设置 authenticator
 
-``` shell
-scope可以配置5个值
-    * compile，缺省值，适用于所有阶段，会随着项目一起发布。 
-    * provided，类似compile，期望JDK、容器或使用者会提供这个依赖。如servlet.jar。 
-    * runtime，只在运行时使用，如JDBC驱动，适用运行和测试阶段。 
-    * test，只在测试时使用，用于编译和运行测试代码。不会随项目发布。 
-    * system，类似provided，需要显式提供包含依赖的jar，Maven不会在Repository中查找它。
-```
+- authenticator 可以用来设置 HTTP authentication，比如 Basic authentication
+- 虽然 Basic authentication 也可以自己设置 header，不过通过 authenticator 省得自己去构造 header
 
-3.Maven打包忽略单元测试 (参数)
+```java
+public void testBasicAuth() throws IOException, InterruptedException {
+    HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofMillis(5000))
+            .authenticator(new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("username","password".toCharArray());
+                }
+            })
+            .build();
 
-``` shell
-在进行编译、打包时，maven会执行src/test/java中的单元测试用例，跳过测试用例有如下方法
-1. mvn package -DskipTests
-   -DskipTests，不执行测试用例，但编译测试用例类生成相应的class文件至target/test-classes下。
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:8080/demo/login"))
+            .timeout(Duration.ofMillis(5009))
+            .build();
 
-2. mvn package -Dmaven.test.skip=true
-   -Dmaven.test.skip=true，不执行测试用例，也不编译测试用例类。
-```
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-4.单个 jar pom.xml 配置
-
-``` xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.demo</groupId>
-    <artifactId>demo</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
-
-    <name>demo</name>
-    <description>demo package</description>
-
-    <!-- 指定工程编码为UTF-8
-    这样maven install就不会发出警告 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-    -->
-    <properties>
-         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-	<!-- 项目依赖的jar包 -->
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>1.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-            <!-- 打jar包排除 -->
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-    
-        <plugins>
-        
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                           	<!--下面必须指定好主类 如com.demo.Main -->
-                            <mainClass>Main</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                        	<!--jar:META-INF/MANIFEST.MF增加属性 Change: 1fad356 -->
-                        	<Change>1fad356</Change>
-                        </manifestEntries>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-demo-jar-with-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
-
-</project>
+    log.info(response.statusCode());
+    log.info(response.body());
+}
 
 ```
 
-pom.xml 目录结构
+3. 设置 header
 
-``` shell
-.
-├── archive-tmp
-├── classes
-│   ├── CommandDemo.class
-│   ├── META-INF
-│   │   └── MANIFEST.MF
-│   └── Main.class
-├── maven-archiver
-│   └── pom.properties
-├── maven-status
-│   └── maven-compiler-plugin
-│       ├── compile
-│       │   └── default-compile
-│       │       ├── createdFiles.lst
-│       │       └── inputFiles.lst
-│       └── testCompile
-│           └── default-testCompile
-│               └── inputFiles.lst
-├── demo-1.0.0-jar-with-dependencies.jar
-└── demo-1.0.0.jar
-```
+- 通过 request 可以自定义设置 header
 
-5.单个 jar + lib pom.xml 配置
-
-``` xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.demo</groupId>
-    <artifactId>demo</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
-
-    <name>demo</name>
-    <description>demo package</description>
-
-    <!-- 指定工程编码为UTF-8
-    这样maven install就不会发出警告 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-    -->
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <!-- 项目依赖的jar包 -->
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>1.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-            <!-- 打jar包排除 -->
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-    
-        <!-- 下面这个plugin-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <!--指定classpath的前缀-->
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <!--指定主类的类名-->
-                            <mainClass>Main</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                        	<!--jar:META-INF/MANIFEST.MF增加属性 Change: 1fad356 -->
-                        	<Change>1fad356</Change>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <!--  -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <!--指定outputDirectory-->
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
-
-</project>
+```java
+public void testCookies() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofMillis(5000))
+                .build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/demo/cookie"))
+                .header("Cookie","JSESSIONID=ghco9xdnaco31gmafukxchph-eb636; userId=demo")
+                .timeout(Duration.ofMillis(5009))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+ 
+        log.info(response.statusCode());
+        log.info(response.body());
 
 ```
 
-pom.xml 目录结构
+4. GET
 
-``` shell
-#用下面的pom.xml 得到的 一部分目录结构（保证下面的目录结构即可运行jar程序）
+```java
+public void testSyncGet() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://www.google.com"))
+                .build();
+ 
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+ 
+        log.info(response.body());
+}
 
-─── lib  #依赖包
-│   ├── commons-cli-1.2.jar
-└── demo-1.0.0.jar #maven生成的 主jar包
+public void testAsyncGet() throws ExecutionException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://www.google.com"))
+                .build();
+ 
+        CompletableFuture<String> result = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body);
+        log.info(result.get());
+}
+```
 
-#用下面的pom.xml 得到的  完整目录结构：
+5. POST 表单
 
-── classes #maven生成的
-│   ├── CommandDemo.class
-│   ├── META-INF
-│   │   └── MANIFEST.MF #maven生成的 清淡文件
-│   └── Main.class
-├── lib  #依赖包
-│   ├── commons-cli-1.2.jar
-├── maven-archiver #maven生成的
-│   └── pom.properties
-├── maven-status#maven生成的
-│   └── maven-compiler-plugin
-│       ├── compile
-│       │   └── default-compile
-│       │       ├── createdFiles.lst
-│       │       └── inputFiles.lst
-│       └── testCompile
-│           └── default-testCompile
-│               └── inputFiles.lst
-└── demo-1.0.0.jar #maven生成的 主jar包
+- header 指定内容是表单类型，然后通过 BodyPublishers.ofString 传递表单数据，需要自己构建表单参数
+
+```java
+public void testPostForm() throws IOException, InterruptedException {
+    HttpClient client = HttpClient.newBuilder().build();
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://www.w3school.com.cn/demo/demo_form.asp"))
+            .header("Content-Type","application/x-www-form-urlencoded")
+            .POST(HttpRequest.BodyPublishers.ofString("name1=value1&name2=value2"))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    log.info(response.statusCode());
+}
+```
+
+6. POST JSON
+
+- body 自动把 json 化为 string，header 指定 json 格式
+
+```java
+public void testPostJsonGetJson() throws ExecutionException, InterruptedException, JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    StockDto dto = new StockDto();
+    dto.setName("demo");
+    dto.setSymbol("demo");
+    dto.setType(StockDto.StockType.SH);
+    String requestBody = objectMapper
+            .writerWithDefaultPrettyPrinter()
+            .writeValueAsString(dto);
+
+    HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:8080/demo/json"))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+            .build();
+
+    CompletableFuture<StockDto> result = HttpClient.newHttpClient()
+            .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenApply(HttpResponse::body)
+            .thenApply(body -> {
+                try {
+                    return objectMapper.readValue(body,StockDto.class);
+                } catch (IOException e) {
+                    return new StockDto();
+                }
+            });
+    log.info(result.get());
+}
+```
+
+7. 文件上传
+
+官方的HttpClient并没有提供类似WebClient那种现成的BodyInserters.fromMultipartData方法，因此这里需要自己转换
+这里使用org.apache.httpcomponents(httpclient及httpmime)的MultipartEntityBuilder构建multipartEntity，最后通过HttpRequest.BodyPublishers.ofInputStream来传递内容
+这里header要指定Content-Type值为multipart/form-data以及boundary的值，否则服务端可能无法解析
+
+```java
+public void testUploadFile() throws IOException, InterruptedException, URISyntaxException {
+    HttpClient client = HttpClient.newHttpClient();
+    Path path = Path.of(getClass().getClassLoader().getResource("demo.txt").toURI());
+    File file = path.toFile();
+
+    String multipartFormDataBoundary = "Java11HttpClientFormBoundary";
+    org.apache.http.HttpEntity multipartEntity = MultipartEntityBuilder.create()
+            .addPart("file", new FileBody(file, ContentType.DEFAULT_BINARY))
+            .setBoundary(multipartFormDataBoundary) //要设置，否则阻塞
+            .build();
+
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:8080/demo/upload"))
+            .header("Content-Type", "multipart/form-data; boundary=" + multipartFormDataBoundary)
+            .POST(HttpRequest.BodyPublishers.ofInputStream(() -> {
+                try {
+                    return multipartEntity.getContent();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    log.info(response.body());
+}
+```
+
+8. 文件下载
+
+- 使用 HttpResponse.BodyHandlers.ofFile 来接收文件
+
+```java
+public void testAsyncDownload() throws ExecutionException, InterruptedException {
+    HttpClient client = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:8080/demo/download"))
+            .build();
+
+    CompletableFuture<Path> result = client.sendAsync(request, HttpResponse.BodyHandlers.ofFile(Paths.get("/tmp/demo.txt")))
+            .thenApply(HttpResponse::body);
+    log.info(result.get());
+}
+```
+
+9. 并发请求
+
+- sendAsync 方法返回的是 CompletableFuture，可以方便地进行转换、组合等操作
+- 这里使用 CompletableFuture.allOf 组合在一起，最后调用 join 等待所有 future 完成
+
+```java
+public void testConcurrentRequests(){
+    HttpClient client = HttpClient.newHttpClient();
+    List<String> urls = List.of("http://www.baidu.com","http://www.alibaba.com/","http://www.tencent.com");
+    List<HttpRequest> requests = urls.stream()
+            .map(url -> HttpRequest.newBuilder(URI.create(url)))
+            .map(reqBuilder -> reqBuilder.build())
+            .collect(Collectors.toList());
+
+    List<CompletableFuture<HttpResponse<String>>> futures = requests.stream()
+            .map(request -> client.sendAsync(request, HttpResponse.BodyHandlers.ofString()))
+            .collect(Collectors.toList());
+    futures.stream()
+            .forEach(e -> e.whenComplete((resp,err) -> {
+                if(err != null){
+                    err.printStackTrace();
+                }else{
+                    log.info(resp.body());
+                    log.info(resp.statusCode());
+                }
+            }));
+    CompletableFuture.allOf(futures
+            .toArray(CompletableFuture<?>[]::new))
+            .join();
+}
+```
+
+
+10. 错误处理
+
+- HttpClient 异步请求返回的是 CompletableFuture<HttpResponse<T>>，其自带 exceptionally 方法可以用来做 fallback 处理
+- 另外值得注意的是 HttpClient 不像 WebClient 那样，它没有对 4xx 或 5xx 的状态码抛出异常，需要自己根据情况来处理，手动检测状态码抛出异常或者返回其他内容
+
+```java
+ public void testHandleException() throws ExecutionException, InterruptedException {
+    HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofMillis(5000))
+            .build();
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://twitter.com"))
+            .build();
+
+    CompletableFuture<String> result = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenApply(HttpResponse::body)
+            .exceptionally(err -> {
+                err.printStackTrace();
+                return "fallback";
+            });
+    log.info(result.get());
+}
+```
+
+11. HTTP2
+
+- 执行之后可以看到返回的 response 的 version 为 HTTP_2
+
+```java
+public void testHttp2() throws URISyntaxException {
+    HttpClient.newBuilder()
+            .followRedirects(HttpClient.Redirect.NEVER)
+            .version(HttpClient.Version.HTTP_2)
+            .build()
+            .sendAsync(HttpRequest.newBuilder()
+                            .uri(new URI("https://http2.akamai.com/demo"))
+                            .GET()
+                            .build(),
+                    HttpResponse.BodyHandlers.ofString())
+            .whenComplete((resp,t) -> {
+                if(t != null){
+                    t.printStackTrace();
+                }else{
+                    log.info(resp.version());
+                    log.info(resp.statusCode());
+                }
+            }).join();
+}
+```
+
+12. WebSocket
+
+- HttpClient 支持 HTTP2，也包含了 WebSocket，通过 newWebSocketBuilder 去构造 WebSocket
+- 传入 listener 进行接收消息，要发消息的话，使用 WebSocket 来发送，关闭使用 sendClose 方法
+
+```java
+public void testWebSocket() throws InterruptedException {
+    HttpClient client = HttpClient.newHttpClient();
+    WebSocket webSocket = client.newWebSocketBuilder()
+            .buildAsync(URI.create("ws://localhost:8080/echo"), new WebSocket.Listener() {
+
+                @Override
+                public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
+                    // request one more
+                    webSocket.request(1);
+
+                    // Print the message when it's available
+                    return CompletableFuture.completedFuture(data)
+                            .thenAccept(System.out::println);
+                }
+            }).join();
+    webSocket.sendText("hello ", false);
+    webSocket.sendText("world ",true);
+
+    TimeUnit.SECONDS.sleep(10);
+    webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "ok").join();
+}
+```
+
+11. reactive streams
+
+- BodySubscriber 接口继承了 Flow.Subscriber<List<ByteBuffer>> 接口
+- Subscription 来自 Flow 类，该类是 java9 引入的，里头包含了支持 Reactive Streams 的实现
+
+```java
+public static class ByteArraySubscriber<T> implements BodySubscriber<T> {
+    private final Function<byte[], T> finisher;
+    private final CompletableFuture<T> result = new MinimalFuture<>();
+    private final List<ByteBuffer> received = new ArrayList<>();
+
+    private volatile Flow.Subscription subscription;
+
+    public ByteArraySubscriber(Function<byte[],T> finisher) {
+        this.finisher = finisher;
+    }
+
+    @Override
+    public void onSubscribe(Flow.Subscription subscription) {
+        if (this.subscription != null) {
+            subscription.cancel();
+            return;
+        }
+        this.subscription = subscription;
+        // We can handle whatever you've got
+        subscription.request(Long.MAX_VALUE);
+    }
+
+    @Override
+    public void onNext(List<ByteBuffer> items) {
+        // incoming buffers are allocated by http client internally,
+        // and won't be used anywhere except this place.
+        // So it's free simply to store them for further processing.
+        assert Utils.hasRemaining(items);
+        received.addAll(items);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        received.clear();
+        result.completeExceptionally(throwable);
+    }
+
+    static private byte[] join(List<ByteBuffer> bytes) {
+        int size = Utils.remaining(bytes, Integer.MAX_VALUE);
+        byte[] res = new byte[size];
+        int from = 0;
+        for (ByteBuffer b : bytes) {
+            int l = b.remaining();
+            b.get(res, from, l);
+            from += l;
+        }
+        return res;
+    }
+
+    @Override
+    public void onComplete() {
+        try {
+            result.complete(finisher.apply(join(received)));
+            received.clear();
+        } catch (IllegalArgumentException e) {
+            result.completeExceptionally(e);
+        }
+    }
+
+    @Override
+    public CompletionStage<T> getBody() {
+        return result;
+    }
+}
 ```
 
 ### 4.Share:
 
-Jupyter Notebook 自定义主题 
-https://www.jianshu.com/p/168a2509db79
-
-python，pip国内源 
-https://www.cnblogs.com/hgSuper/p/8902448.html
+JVM - 参数配置影响线程数
+https://blackist.org/2019/09/29/java-jvm-thread-params/

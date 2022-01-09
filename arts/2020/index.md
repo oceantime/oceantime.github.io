@@ -1,27 +1,9 @@
 # ARTS for 2020
 
 ---
-title: 目录
+2020: 目录
 ---
 
-[ARTS-week-69](./arts/2020/ARTS-week-69)  
-[ARTS-week-68](./arts/2020/ARTS-week-68)  
-[ARTS-week-67](./arts/2020/ARTS-week-67)  
-[ARTS-week-66](./arts/2020/ARTS-week-66)  
-[ARTS-week-65](./arts/2020/ARTS-week-65)  
-[ARTS-week-64](./arts/2020/ARTS-week-64)  
-[ARTS-week-63](./arts/2020/ARTS-week-63)  
-[ARTS-week-62](./arts/2020/ARTS-week-62)  
-[ARTS-week-61](./arts/2020/ARTS-week-61)  
-[ARTS-week-60](./arts/2020/ARTS-week-60)  
-[ARTS-week-59](./arts/2020/ARTS-week-59)  
-[ARTS-week-58](./arts/2020/ARTS-week-58)  
-[ARTS-week-57](./arts/2020/ARTS-week-57)  
-[ARTS-week-56](./arts/2020/ARTS-week-56)  
-[ARTS-week-55](./arts/2020/ARTS-week-55)  
-[ARTS-week-54](./arts/2020/ARTS-week-54)  
-[ARTS-week-53](./arts/2020/ARTS-week-53)  
-[ARTS-week-52](./arts/2020/ARTS-week-52)  
 [ARTS-week-51](./arts/2020/ARTS-week-51)  
 [ARTS-week-50](./arts/2020/ARTS-week-50)  
 [ARTS-week-49](./arts/2020/ARTS-week-49)  
@@ -56,7 +38,7 @@ title: 目录
 [ARTS-week-20](./arts/2020/ARTS-week-20)  
 [ARTS-week-19](./arts/2020/ARTS-week-19)  
 [ARTS-week-18](./arts/2020/ARTS-week-18)  
-[ARTS-week-17](./arts/2020/ARTS-week-17)  
+[ARTS-week-16](./arts/2020/ARTS-week-17)  
 [ARTS-week-16](./arts/2020/ARTS-week-16)  
 [ARTS-week-15](./arts/2020/ARTS-week-15)  
 [ARTS-week-14](./arts/2020/ARTS-week-14)  
@@ -64,3 +46,12 @@ title: 目录
 [ARTS-week-12](./arts/2020/ARTS-week-12)  
 [ARTS-week-11](./arts/2020/ARTS-week-11)  
 [ARTS-week-10](./arts/2020/ARTS-week-10)  
+[ARTS-week-09](./arts/2020/ARTS-week-09)  
+[ARTS-week-08](./arts/2020/ARTS-week-08)  
+[ARTS-week-07](./arts/2020/ARTS-week-07)  
+[ARTS-week-06](./arts/2020/ARTS-week-06)  
+[ARTS-week-05](./arts/2020/ARTS-week-05)  
+[ARTS-week-04](./arts/2020/ARTS-week-04)  
+[ARTS-week-03](./arts/2020/ARTS-week-03)  
+[ARTS-week-02](./arts/2020/ARTS-week-02)  
+[ARTS-week-01](./arts/2020/ARTS-week-01)  

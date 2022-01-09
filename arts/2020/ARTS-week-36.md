@@ -1,8 +1,9 @@
 ---
 title: ARTS-week-36
-date: 2020-05-17 20:39:03
+date: 2020-09-13 20:40:13
 tags:
 ---
+
 
 ## ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
 1.Algorithm： 每周至少做一个 leetcode 的算法题
@@ -12,153 +13,71 @@ tags:
 
 ### 1.Algorithm:
 
-Unique Paths II https://leetcode.com/submissions/detail/340713979/
+Word Search II https://leetcode.com/submissions/detail/395080215/
 
 ### 2.Review:
 
-https://dev.to/lydiahallie/javascript-visualized-event-loop-3dif
-JavaScript️可视化：事件循环
+https://stackoverflow.blog/2020/09/02/if-everyone-hates-it-why-is-oop-still-so-widely-spread/?utm_source=Iterable&utm_medium=email&utm_campaign=the_overflow_newsletter
+如果每个人都讨厌它，为什么OOP仍然如此广泛传播？
 
 #### 点评：
 
-Lydia Hallie 通过可视化例子演示了调用栈 (call stack)、任务队列 (callback queue)、事件循环 (event Loop)的工作机制。
+作者 Medi Madelen Gwosdz OOP取得了巨大的成功。但是成功仅仅是偶然吗？并且它还能在2020年提供其他编程范例无法提供的独特功能吗？
 
-总结：
-1.调用栈：当调用一个函数时，它会被添加到一个叫做 调用栈 (call stack) 的地方，调用栈是 JS 引擎的一部分，而不是浏览器特有的。本质上它是一个栈，具有 后进先出 (Last In, First Out. 即 LIFO)的特点。当一个函数调用完成，它就被从调用栈中弹出。
-2.任务队列：在 Web API 中，一个定时器已经创建，它将会等待 1000 ms，当时间到后，这个箭头函数并不会立即被调用栈执行，它会被添加到一个任务队列 (callback queue)。
-3.事件循环：Event Loop 的唯一任务就是 连接任务队列和调用栈，它不停检查调用栈 中是否有任务需要执行，如果没有，就检查任务队列，从中弹出一个任务，放入调用栈中，如此往复循环。
+OOP可以做什么呢？OOP有一些有价值的方面，即使它有缺点，也有一些方面使其无处不在。让我们看一下OOP的基石。
+
+- 封装:这意味着，如果可能的话，通常会将数据从语言的其他部分隐藏起来（放在胶囊中）。OOP默认封装数据；对象包含数据和影响该数据的方法，良好的OOP实践意味着您提供了getter和setter方法来控制对数据的访问。这样可以防止可变数据被随意更改，并使应用程序数据更安全。据说，这是OOP的最大好处之一。尽管它最常与面向对象的编程相关联，但概念本身实际上与它是分开的，可以在不使用对象的情况下实现。抽象是此处封装的补充概念。在封装隐藏内部信息的地方，抽象提供了易于使用的公共数据接口。在任何情况下，它都不是唯一的OOP功能，并且可以通过隔离系统功能或模块数据以及模块中对这些数据的操作的模块来完成。
+
+- 继承:因为可以将对象创建为其他对象的子类型，所以它们可以从那些对象继承变量和方法。这允许对象支持由先前类型定义的操作，而不必提供自己的定义。目的是不要重复自己—难以维护同一代码的多次使用。但是函数式编程也可以通过可重用的函数来实现DRY。内存效率也是如此。即使继承确实对此有所贡献，FP中的闭包概念也是如此。 虽然继承是面向对象的特定概念，但有人认为继承可以通过组合更好地实现。如果失去继承，则对象和方法将迅速溶解为结构和过程的语法糖。注意：继承对于允许多态性也是必要的，我们将在下面讨论。
+
+- 多态性:从字面上讲，这种改变形状的概念允许一个对象或方法（无论是通用对象，接口还是常规对象）充当其他对象和方法的模板。有多种形式的多态性。单个函数可以重载，变形并适应其所在的任何类。面向对象的编程倾向于使用许多子类型多态性和即席多态性，但是同样，这不限于OOP。 
+
 
 ### 3.Tip:
 
-状态机实现字符串匹配。
+LINUX创建用户没有密码只使用ssh登录
 
-1.标准状态机实现 
+1.添加用户（不要密码）
 
-``` javascript
-function match(string) {
-	let state = start;
-	for(let c of string) {
-		console.log(c);
-		state = state(c);
-	}
-	return state === end;
-}
-
-function start(c) {
-	if(c === "a") {
-		return foundA;
-	} else {
-		return start;
-	}
-}
-
-function end(c) {
-	return end;
-}
-
-function foundA(c) {
-	if(c === "b") {
-		return foundA2;
-	} else {
-		return start(c);
-	}
-}
-
-function foundA2(c) {
-	if(c === "a") {
-		return foundB2;
-	} else {
-		return start(c);
-	}
-}
-
-function foundB2(c) {
-	if(c === "b") {
-		return foundA3;
-	} else {
-		return start(c);
-	}
-}
-
-function foundA3(c) {
-	if(c === "a") {
-		return foundB3;
-	} else {
-		return start(c);
-	}
-}
-
-function foundB3(c) {
-	if(c === "b") {
-		return foundX;
-	} else {
-		return start(c);
-	}
-}
-
-function foundX(c) {
-	if(c === "x") {
-		return end;
-	} else {
-		return foundA(c);
-	}
-}
-
-console.log(match("I am ababx! hhha! abababx"));
-
+```shell
+useradd -m -d /home/$username -s /bin/bash $username
 ```
 
-2.自动生成状态机
+2.添加sudo权限
 
-``` JavaScript
-//状态机数据结构
-//{"0":start,"1":machines[1],"2":machines[2],...,"n":end}
-let machines = {};
+```shell
+echo '$username ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/$username
+```
 
-function match(patten, string) {
-	
-	//自动生成状态机
-	for (var i = patten.length -1; i >= 0; i--) {
-		let c = patten.charAt(i);
-		// console.log(c);
-		if(i == 0) {
-			console.log(i);
-			var tpl = "return c === '" + c + "' ? machines[" + (i + 1) + "]:machines[0]; ";
-			machines[i] = new Function("c", tpl);
-			// console.log(machines[i]);
-		} else if(i == patten.length - 1) {
-			console.log(i);
-			var tpl = "return machines[" + i + "]; ";
-			machines[i] = new Function("c", tpl);
-			// console.log(machines[i]);
-		} else {
-			console.log(i);
-			var tpl = "return c === '" + c + "' ? machines[" + (i + 1) + "]:machines[" + i + "]; ";
-			machines[i] = new Function("c", tpl);
-			// console.log(machines[i]);
-		}
-	}
-	// console.log(machines);
-	let state = machines[0];
-	for(let c of string) {
-		console.log(c);
-		state = state(c);
-		// console.log(state);
-	}
-	
-	return state === machines[patten.length - 1];
-}
+3.进入用户，创建密钥
 
-console.log(match("abababx", "I am ababx! hhha! abababx"));
-console.log(match("ababx", "I am ababx! hhha!"));
+```shell
+su - $username
+ssh-keygen
+```
 
+4.处理密钥
+
+```shell
+cd ~/.ssh
+cat id_rsa.pub >> authorized_keys
+```
+
+5.SSH登录设置
+
+```shell
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+```
+
+6.添加配置 /etc/ssh/sshd_config
+
+```shell
+RSAAuthentication yes
+PubkeyAuthentication yes
 ```
 
 ### 4.Share:
 
-使用确定有限状态自动机解KMP算法
-https://cgiirw.github.io/2018/04/22/KMP/
-KMP算法和有限状态自动机
-https://github.com/WGrape/Blog/issues/2
-从有限状态机的角度去理解Knuth-Morris-Pratt Algorithm(又叫KMP算法)
-https://www.cnblogs.com/courtier/p/4273193.html
+https://sq.163yun.com/blog/article/184733100361850880s
+基于JavaScript的代码编辑器的比较和选型

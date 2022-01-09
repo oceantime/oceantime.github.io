@@ -1,6 +1,6 @@
 ---
 title: ARTS-week-11
-date: 2019-11-10 11:48:08
+date: 2020-03-22 11:18:15
 tags:
 ---
 
@@ -12,74 +12,354 @@ tags:
 
 ### 1.Algorithm:
 
-Two Sum II - Input array is sorted https://leetcode.com/submissions/detail/277482299/
-Climbing Stairs https://leetcode.com/submissions/detail/277483193/
-Maximum Depth of Binary Tree https://leetcode.com/submissions/detail/277483608/
+Assign Cookies https://leetcode.com/submissions/detail/314788039/
 
 ### 2.Review:
 
-http://michal.karzynski.pl/blog/2016/06/19/building-beautiful-restful-apis-using-flask-swagger-ui-flask-restplus/
+https://css-tricks.com/svg-line-animation-works/
 
 #### 点评：
-文章系统介绍了flask中如何实现rest api及swagger ui，并结合Blog例子给出实践案例。
-可以在实际flas项目开发中参考，rest api中给出以下特性：
-API输入验证
-格式化输出（如JSON）
-生成交互式文档（带有UI）
-将Python异常转换为机器可读的HTTP响应
+
+How SVG Line Animation Works
+本文作者通过实例演示了如何实现 svg 线动态效果，并文章开头给出了其他人实现的例子效果。
+Jake Archibald  https://jakearchibald.com/2013/animated-line-drawing-svg/
+Brian Suda https://24ways.org/2013/animating-vectors-with-svg/
+Polygon https://product.voxmedia.com/2013/11/25/5426880/polygon-feature-design-svg-animations-for-fun-and-profit
+Codrops https://tympanus.net/Development/SVGDrawingAnimation/
+
+步骤如下：
+1. 有一个 SVG 图形
+补充：可以用AI图形工具生成svg文件，或者用开源svg工具生成 https://www.zhangxinxu.com/sp/svg/
+
+2. 图形必须有线条（stroke）
+``` html
+<path id="svg_3" d="m33.829996,375.163847l57.876095,0l0,57.876095l-57.876095,0l0,-57.876095zm6.752211,-51.123884l0,44.371673l44.371673,0l0,-44.371673l-44.371673,0z" stroke-width="5" stroke="#000000" fill="#FF0000"/>
+```
+
+3. 线条可以被设置成线段模式
+``` xml
+<svg ...>
+  <path class="path" stroke="#000000" ... >
+</svg>
+
+.path {
+  stroke-dasharray: 100;
+}
+```
+
+4. 可以 “offset” 这些线段，以便让它们移动位置
+``` xml
+.path {
+  stroke-dasharray: 100;
+  animation: dash 5s linear;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+```
+
+5. 单个线段长度足以覆盖整个图形，给线条设置 offset，让它完全消失在图形范围内而不是覆盖整个图形。
+``` xml
+.path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 5s linear forwards;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+```
+
+6. 可以用 JavaScript 获取图形长度
+``` JavaScript
+var path = document.querySelector('.path');
+var length = path.getTotalLength();
+```
+
+总结：
+svg 线动态效果可以通过 css 样式 dasharray 和 动态修改 dashoffset 达到动态效果，应用场景非常丰富。
 
 ### 3.Tip:
 
-##### ImportError: No module named _ssl_ 解决方法
-``` bash
-如果系统没有 openssl 则手动安装
-1.下载openssl，地址为 http://www.openssl.org/source/openssl-1.0.2a.tar.gz
-2.安装：
-tar -xzvf openssl-1.0.2a.tar.gz
-./config --prefix=/usr/local --openssldir=/usr/local/openssl
-make && make install
- 
-3.在/usr/local目录下找到lib64和include目录，(注意openssl的库是被安装到lib还是lib64，这步很重要)
-找到路径/usr/local/lib64、/usr/local/include，后面的步骤会用到这两个路径
-[root@Linux local]# pwd
-/usr/local
-[root@Linux local]# ll /usr/local/include
-drwxr-xr-x 2 root  root 4096 Nov  6 17:19 openssl
- 
-4.下载Python安装包并解压
-tar -xzf Python-3.6.0.tgz
-cd Python-3.6.0
- 
-5.在Modules找到Setup.dist文件，按如下步骤修改，使编译Python的时候能找到刚才安装的openssl的库
-1）找到SSL相关配置
-#SSL=/usr/local/ssl
-#_ssl _ssl.c \
-#        -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \
-#        -L$(SSL)/lib -lssl -lcrypto
- 
-2) 由于openssl是被安装在/usr/local目录下的lib64和include目录的不是安装在/usr/local/ssl目录，所有把步骤1）找到的4行的注释去掉，如下修改
-SSL=/usr/local
-_ssl _ssl.c \
-        -DUSE_SSL -I$(SSL)/include -I$(SSL)/include/openssl \
-        -L$(SSL)/lib64 -lssl -lcrypto
-        
-6.编译安装Python，并创建软连接
-./configure --prefix=/usr/local/python3
-make && make altinstall
-ln -s /usr/local/python3/bin/python3.6 /usr/bin/python3
-ln -s /usr/local/python3/bin/pip3.6 /usr/bin/pip3
-[root@Linux local]# which python3
-/usr/local/bin/python3
-[root@Linux local]# 
+Maven 打包 pom.xml 配置
 
-7.测试ssl是否能正常使用
-[root@Linux local]# python3
-Python 3.6.0 (default, Nov  6 2019, 17:36:49) 
-[GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux2
-Type "help", "copyright", "credits" or "license" for more information.
->>> import ssl
->>>
-``` 
+1.Maven打包过程（顺序）
+
+``` shell
+clean清空之前生成的文件
+IDE内编译该程序 （并测试可成功运行）-- 必须生成class文件！（等待被打包）
+确定文件pom.xml中的各项配置
+Maven刷新：Reimport All Maven Projects
+Maven自动打包：Install或package
+```
+
+2.Maven打包依赖 scope (选项)
+
+``` shell
+scope可以配置5个值
+    * compile，缺省值，适用于所有阶段，会随着项目一起发布。 
+    * provided，类似compile，期望JDK、容器或使用者会提供这个依赖。如servlet.jar。 
+    * runtime，只在运行时使用，如JDBC驱动，适用运行和测试阶段。 
+    * test，只在测试时使用，用于编译和运行测试代码。不会随项目发布。 
+    * system，类似provided，需要显式提供包含依赖的jar，Maven不会在Repository中查找它。
+```
+
+3.Maven打包忽略单元测试 (参数)
+
+``` shell
+在进行编译、打包时，maven会执行src/test/java中的单元测试用例，跳过测试用例有如下方法
+1. mvn package -DskipTests
+   -DskipTests，不执行测试用例，但编译测试用例类生成相应的class文件至target/test-classes下。
+
+2. mvn package -Dmaven.test.skip=true
+   -Dmaven.test.skip=true，不执行测试用例，也不编译测试用例类。
+```
+
+4.单个 jar pom.xml 配置
+
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.demo</groupId>
+    <artifactId>demo</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>demo</name>
+    <description>demo package</description>
+
+    <!-- 指定工程编码为UTF-8
+    这样maven install就不会发出警告 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+    -->
+    <properties>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+	<!-- 项目依赖的jar包 -->
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <!-- 打jar包排除 -->
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+    
+        <plugins>
+        
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                           	<!--下面必须指定好主类 如com.demo.Main -->
+                            <mainClass>Main</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                        	<!--jar:META-INF/MANIFEST.MF增加属性 Change: 1fad356 -->
+                        	<Change>1fad356</Change>
+                        </manifestEntries>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-demo-jar-with-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
+
+```
+
+pom.xml 目录结构
+
+``` shell
+.
+├── archive-tmp
+├── classes
+│   ├── CommandDemo.class
+│   ├── META-INF
+│   │   └── MANIFEST.MF
+│   └── Main.class
+├── maven-archiver
+│   └── pom.properties
+├── maven-status
+│   └── maven-compiler-plugin
+│       ├── compile
+│       │   └── default-compile
+│       │       ├── createdFiles.lst
+│       │       └── inputFiles.lst
+│       └── testCompile
+│           └── default-testCompile
+│               └── inputFiles.lst
+├── demo-1.0.0-jar-with-dependencies.jar
+└── demo-1.0.0.jar
+```
+
+5.单个 jar + lib pom.xml 配置
+
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.demo</groupId>
+    <artifactId>demo</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>demo</name>
+    <description>demo package</description>
+
+    <!-- 指定工程编码为UTF-8
+    这样maven install就不会发出警告 [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+    -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- 项目依赖的jar包 -->
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <!-- 打jar包排除 -->
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+    
+        <!-- 下面这个plugin-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <!--指定classpath的前缀-->
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!--指定主类的类名-->
+                            <mainClass>Main</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                        	<!--jar:META-INF/MANIFEST.MF增加属性 Change: 1fad356 -->
+                        	<Change>1fad356</Change>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!--  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <!--指定outputDirectory-->
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
+
+```
+
+pom.xml 目录结构
+
+``` shell
+#用下面的pom.xml 得到的 一部分目录结构（保证下面的目录结构即可运行jar程序）
+
+─── lib  #依赖包
+│   ├── commons-cli-1.2.jar
+└── demo-1.0.0.jar #maven生成的 主jar包
+
+#用下面的pom.xml 得到的  完整目录结构：
+
+── classes #maven生成的
+│   ├── CommandDemo.class
+│   ├── META-INF
+│   │   └── MANIFEST.MF #maven生成的 清淡文件
+│   └── Main.class
+├── lib  #依赖包
+│   ├── commons-cli-1.2.jar
+├── maven-archiver #maven生成的
+│   └── pom.properties
+├── maven-status#maven生成的
+│   └── maven-compiler-plugin
+│       ├── compile
+│       │   └── default-compile
+│       │       ├── createdFiles.lst
+│       │       └── inputFiles.lst
+│       └── testCompile
+│           └── default-testCompile
+│               └── inputFiles.lst
+└── demo-1.0.0.jar #maven生成的 主jar包
+```
 
 ### 4.Share:
-Elasticsearch实现类似 like '?%' 搜索（https://www.cnblogs.com/clonen/p/6674492.html）
+
+Jupyter Notebook 自定义主题 
+https://www.jianshu.com/p/168a2509db79
+
+python，pip国内源 
+https://www.cnblogs.com/hgSuper/p/8902448.html

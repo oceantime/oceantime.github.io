@@ -26,7 +26,7 @@ Elasticsearch 桶脚本
 
 在管道聚合博客系列的前几期中，我们讨论了可以与查询一起使用的现成聚合。在这篇文章中，我们探索了使用脚本进行操作的管道聚合，从而为用户处理字段数据提供了灵活性。
 
-[!数据集]https://drive.google.com/file/d/0B6ayo5tF48fZTkJrOVpLNW5PNXZ2cnltYV80TEFoR0lkZllB/view?usp=sharing
+[数据集](https://drive.google.com/file/d/0B6ayo5tF48fZTkJrOVpLNW5PNXZ2cnltYV80TEFoR0lkZllB/view?usp=sharing)
 
 - 桶脚本
 该"bucket_script"管道聚集落在父类的聚合下。它可以执行一个脚本，该脚本可以对父多桶聚合的所需指标进行每桶计算。要操作的指标应该是数字。该脚本将返回一个数值。

@@ -3,17 +3,17 @@
 ---
 
 
-## ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
-1.Algorithm： 每周至少做一个 leetcode 的算法题
-2.Review: 阅读并点评至少一篇英文技术文章
-3.Tip: 学习至少一个技术技巧
-4.Share: 分享一篇有观点和思考的技术文章
+###### ARTS-2019 左耳听风社群活动--每周完成一个 ARTS
+- Algorithm： 每周至少做一个 leetcode 的算法题
+- Review: 阅读并点评至少一篇英文技术文章
+- Tip: 学习至少一个技术技巧
+- Share: 分享一篇有观点和思考的技术文章
 
 ### 1.Algorithm:
 
-1185. 一周中的第几天：https://leetcode-cn.com/submissions/detail/254434993/
-913. 猫和老鼠：https://leetcode-cn.com/submissions/detail/254948657/
-23. 合并K个升序链表：https://leetcode-cn.com/submissions/detail/255139576/
+[1185. 一周中的第几天](https://leetcode-cn.com/submissions/detail/254434993/)  
+[913. 猫和老鼠](https://leetcode-cn.com/submissions/detail/254948657/)  
+[23. 合并K个升序链表](https://leetcode-cn.com/submissions/detail/255139576/)  
 
 ### 2.Review:
 

@@ -13,14 +13,14 @@
 ### 1.Algorithm:
 
 - [2045. 到达目的地的第二短时间](https://leetcode-cn.com/submissions/detail/262011003/)  
-思路：BFS
- - dist1[i] 记录到节点i的最短路径 dist2[i] 记录到节点i的次最短路径
- - 需加入等红绿灯的时间 由于红绿转换 所以循环是时间 2*change
+  + 思路：BFS
+    * dist1[i] 记录到节点i的最短路径 dist2[i] 记录到节点i的次最短路径
+    * 需加入等红绿灯的时间 由于红绿转换 所以循环是时间 2*change
 - [2013. 检测正方形](https://leetcode-cn.com/submissions/detail/262658053/)  
-思路：设计 哈希表
- - 左侧黄色区域或者右侧红色区域 
+  + 思路：设计 哈希表
+    * 左侧黄色区域或者右侧红色区域 
 - [1996. 游戏中弱角色的数量](https://leetcode-cn.com/submissions/detail/263275497/)  
-思路：对象数组 排序
+  + 思路：对象数组 排序
 
 ### 2.Review:
 

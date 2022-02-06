@@ -12,13 +12,13 @@
 
 ### 1.Algorithm:
 
-[75. 颜色分类](https://leetcode-cn.com/submissions/detail/254201313/)  
-- 思路：快排
-    + nums[l+1...lt] < v, nums[lt+1, i-1] == v, nums[gt...r] > v
-[451. 根据字符出现频率排序](https://leetcode-cn.com/submissions/detail/254271311/)  
-- 思路：快排
-[912. 排序数组](https://leetcode-cn.com/submissions/detail/254197148/)  
-- 思路：快排
+- [75. 颜色分类](https://leetcode-cn.com/submissions/detail/254201313/)  
+  + 思路：快排
+    * nums[l+1...lt] < v, nums[lt+1, i-1] == v, nums[gt...r] > v
+- [451. 根据字符出现频率排序](https://leetcode-cn.com/submissions/detail/254271311/)  
+    + 思路：快排
+- [912. 排序数组](https://leetcode-cn.com/submissions/detail/254197148/)  
+    + 思路：快排
 
 ### 2.Review:
 

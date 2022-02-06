@@ -13,11 +13,11 @@
 ### 1.Algorithm:
 
 - [306. 累加数](https://leetcode-cn.com/submissions/detail/257100560/)  
-思路：穷举 [0,i] 和 [i,j] 的前两个数字组合并 DFS 剩余的数字  
+  + 思路：穷举 [0,i] 和 [i,j] 的前两个数字组合并 DFS 剩余的数字  
 - [1036. 逃离大迷宫](https://leetcode-cn.com/submissions/detail/257452542/)  
-思路：双向 DFS 从起点和终点分别 DFS 判断能否走过包围圈最大的范围  
+  + 思路：双向 DFS 从起点和终点分别 DFS 判断能否走过包围圈最大的范围  
 - [334. 递增的三元子序列](https://leetcode-cn.com/submissions/detail/257795189/)  
-思路：贪心 遍历数组获取第一大和第二大的数字  
+  + 思路：贪心 遍历数组获取第一大和第二大的数字  
 
 ### 2.Review:
 

@@ -12,18 +12,18 @@
 
 ### 1.Algorithm:
 
-[1185. 一周中的第几天](https://leetcode-cn.com/submissions/detail/254434993/)  
-- 思路：模拟+基姆拉尔森计算公式
-[913. 猫和老鼠](https://leetcode-cn.com/submissions/detail/254948657/)  
-- 思路：回溯
-  + 回溯算法的「做选择」和「撤销选择」在 for 循环⾥⾯，⽽对 visited 数组的操作在 for 循环外⾯。
-  + 递归每个相邻的节点
-[23. 合并K个升序链表](https://leetcode-cn.com/submissions/detail/255139576/)  
-- 思路：优先队列
-  + 创建虚拟头节点
-  + 将 k 个链表的头结点加入最小堆
-  + 获取最小节点，接到结果链表中
-  + 获取最小节点，接到结果链表中
+- [1185. 一周中的第几天](https://leetcode-cn.com/submissions/detail/254434993/)  
+  + 思路：模拟+基姆拉尔森计算公式
+- [913. 猫和老鼠](https://leetcode-cn.com/submissions/detail/254948657/)  
+  + 思路：回溯
+    * 回溯算法的「做选择」和「撤销选择」在 for 循环⾥⾯，⽽对 visited 数组的操作在 for 循环外⾯。
+    * 递归每个相邻的节点
+- [23. 合并K个升序链表](https://leetcode-cn.com/submissions/detail/255139576/)  
+  + 思路：优先队列
+    * 创建虚拟头节点
+    * 将 k 个链表的头结点加入最小堆
+    * 获取最小节点，接到结果链表中
+    * 获取最小节点，接到结果链表中
 
 ### 2.Review:
 

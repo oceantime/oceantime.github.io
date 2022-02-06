@@ -98,26 +98,18 @@ git push --set-upstream origin bug-001  # 创建远程分支
 
 ### 4.Share:
 
-https://blog.csdn.net/x541211190/article/details/79597236
-Java 数组转 List 的三种方式及对比
+[Java 数组转 List 的三种方式及对比](https://blog.csdn.net/x541211190/article/details/79597236)  
 
-https://blog.csdn.net/xiaowanziwuha/article/details/47734315
-ThreadMXBean 定位 CPU 占用过高 JSP
+[ThreadMXBean 定位 CPU 占用过高 JSP](https://blog.csdn.net/xiaowanziwuha/article/details/47734315)  
 
-https://blog.csdn.net/u014532901/article/details/78820124
-Java Array、List、Set互相转化
+[Java Array、List、Set互相转化](https://blog.csdn.net/u014532901/article/details/78820124)  
 
-https://www.cnblogs.com/shamo89/p/9885779.html
-TreeMap 升序|降序排列
+[TreeMap 升序|降序排列](https://www.cnblogs.com/shamo89/p/9885779.html)  
 
-https://www.jianshu.com/p/c8419c40596b
-终结：IntelliJ IDEA(idea) 查看 maven依赖树
+[终结：IntelliJ IDEA(idea) 查看 maven依赖树](https://www.jianshu.com/p/c8419c40596b)  
 
-http://ignite-service.cn/doc/java/Persistence.html
-Apache Ignite技术服务-配置持久化
+[Apache Ignite技术服务-配置持久化](http://ignite-service.cn/doc/java/Persistence.html)  
 
-http://events.jianshu.io/p/57ff1ec380b5
-全面对比，深度解析 Ignite 与 Spark
+[全面对比，深度解析 Ignite 与 Spark](http://events.jianshu.io/p/57ff1ec380b5)  
 
-https://www.saoniuhuo.com/question/detail-2070582.html
-apache ignite 2.7.5监控指标
+[Apache ignite 2.7.5监控指标](https://www.saoniuhuo.com/question/detail-2070582.html)  

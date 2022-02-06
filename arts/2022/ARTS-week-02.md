@@ -1,5 +1,6 @@
 ---
-> 2022-01-09 19:27:28 **ARTS-week-02**
+> **ARTS-week-02**
+> 2022-01-09 19:27
 ---
 
 
@@ -12,13 +13,21 @@
 ### 1.Algorithm:
 
 [1185. 一周中的第几天](https://leetcode-cn.com/submissions/detail/254434993/)  
+- 思路：模拟+基姆拉尔森计算公式
 [913. 猫和老鼠](https://leetcode-cn.com/submissions/detail/254948657/)  
+- 思路：回溯
+  + 回溯算法的「做选择」和「撤销选择」在 for 循环⾥⾯，⽽对 visited 数组的操作在 for 循环外⾯。
+  + 递归每个相邻的节点
 [23. 合并K个升序链表](https://leetcode-cn.com/submissions/detail/255139576/)  
+- 思路：优先队列
+  + 创建虚拟头节点
+  + 将 k 个链表的头结点加入最小堆
+  + 获取最小节点，接到结果链表中
+  + 获取最小节点，接到结果链表中
 
 ### 2.Review:
 
-https://qbox.io/blog/all-about-elasticsearch-bucket-script
-Elasticsearch 桶脚本
+[Elasticsearch 桶脚本](https://qbox.io/blog/all-about-elasticsearch-bucket-script)  
 
 #### 点评：
 
@@ -245,26 +254,19 @@ pwdx PID
 
 ### 4.Share:
 
-https://coolcao.com/2020/04/30/SlidingWindowAlgorithm/
-滑动窗口算法思想
+- [滑动窗口算法思想](https://coolcao.com/2020/04/30/SlidingWindowAlgorithm/)  
 
-https://zhuanlan.zhihu.com/p/74930691
-OpenTelemetry-可观察性的新时代
+- [OpenTelemetry-可观察性的新时代](https://zhuanlan.zhihu.com/p/74930691)  
 
-https://www.jianshu.com/p/b1215d6b1cf7
-使用 opentelemetry 搭建新一代可视化分布式监控系统
+- [使用 opentelemetry 搭建新一代可视化分布式监控系统](https://www.jianshu.com/p/b1215d6b1cf7)  
 
-https://www.blackvoid.club/loki-log-aggregation-platform-from-the-creators-of-grafana/
-Loki - log aggregation platform from the creators of Grafana
+- [Loki - log aggregation platform from the creators of Grafana](https://www.blackvoid.club/loki-log-aggregation-platform-from-the-creators-of-grafana/)  
 
-https://www.jianshu.com/p/5be3aeb27488
-Elasticsearch 的索引别名管理
+- [Elasticsearch 的索引别名管理](https://www.jianshu.com/p/5be3aeb27488)  
 
-https://blog.csdn.net/qingmou_csdn/article/details/106275097
-Elasticsearch 数据迁移与任务状态相关 API
+- [Elasticsearch 数据迁移与任务状态相关 API](https://blog.csdn.net/qingmou_csdn/article/details/106275097)  
 
-https://www.codeleading.com/article/28525244095/
-Filebeat自动关闭问题解决
+- [Filebeat自动关闭问题解决](https://www.codeleading.com/article/28525244095/)  
 
-https://blog.csdn.net/sky__man/article/details/78178821
-systemctl 命令的使用及服务状态的查看
+- [systemctl 命令的使用及服务状态的查看](https://blog.csdn.net/sky__man/article/details/78178821)  
+

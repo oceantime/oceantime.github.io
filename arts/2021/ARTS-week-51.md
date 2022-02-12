@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-48
-date: 2022-01-03 19:47:00
-tags:
+> **ARTS-week-51**
+> 2022-01-03 19:47
 ---
 
 
@@ -13,9 +12,12 @@ tags:
 
 ### 1.Algorithm:
 
-1500. 设计文件分享系统：https://leetcode-cn.com/submissions/detail/248023832/
-631. 设计 Excel 求和公式：https://leetcode-cn.com/submissions/detail/248052078/
-895. 最大频率栈：https://leetcode-cn.com/submissions/detail/248255005/
+- [1500. 设计文件分享系统](https://leetcode-cn.com/submissions/detail/248023832/)  
+  + 思路：设计 用户ID->文件块列表 文件块
+- [631. 设计 Excel 求和公式](https://leetcode-cn.com/submissions/detail/248052078/)  
+  + 思路：设计 表格数据 行列->求和公式 行列分隔符
+- [895. 最大频率栈](https://leetcode-cn.com/submissions/detail/248255005/)  
+  + 思路：设计 valToFreq freqToVal
 
 ### 2.Review:
 
@@ -269,7 +271,7 @@ Goroutine 184 (running) created at:
 
 ### 3.Tip:
 
-#### vim 文本编辑器比较两文件 
+#### vim 文本编辑器比较两文件
 ```shell
 vim -d <file1> <file2>
 ```
@@ -311,23 +313,16 @@ select from_unixtime(1252999488);
 
 ### 4.Share:
 
-https://elasticstack.blog.csdn.net/article/details/107489737
-Kibana：Markdown 可视化教程
+[Kibana：Markdown 可视化教程](https://elasticstack.blog.csdn.net/article/details/107489737)  
 
-https://zhuanlan.zhihu.com/p/83649046
-Markdown cheatsheet（个人版本）
+[Markdown cheatsheet（个人版本）](https://zhuanlan.zhihu.com/p/83649046)  
 
-https://www.runoob.com/w3cnote/linux-crontab-tasks.html
-Linux Crontab 定时任务
+[Linux Crontab 定时任务](https://www.runoob.com/w3cnote/linux-crontab-tasks.html)  
 
-https://blog.csdn.net/weixin_33762321/article/details/85949391
-mysql 计算时间差函数
+[mysql 计算时间差函数](https://blog.csdn.net/weixin_33762321/article/details/85949391)  
 
-https://www.cnblogs.com/heyonggang/p/8117754.html
-Mysql 字符串截取总结：left()、right()、substring()、substring_index()
+[Mysql 字符串截取总结：left()、right()、substring()、substring_index()](https://www.cnblogs.com/heyonggang/p/8117754.html)  
 
-https://www.cnblogs.com/simpledev/p/3965964.html
-mysql 关联修改 SQL 及 long 与 datetime 类型相互转换
+[mysql 关联修改 SQL 及 long 与 datetime 类型相互转换](https://www.cnblogs.com/simpledev/p/3965964.html)  
 
-https://zhuanlan.zhihu.com/p/354603010
-Windows Terminal美化（oh-my-posh3）
+[Windows Terminal美化（oh-my-posh3）](https://zhuanlan.zhihu.com/p/354603010)  

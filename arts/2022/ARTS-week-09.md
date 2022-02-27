@@ -247,7 +247,7 @@ curl -X POST "localhost:9200/traffic_stats/_search?size=0&pretty" -H 'Content-Ty
 ```
 
 Kibana 支持标准偏差边界的可视化，可能会在上面的响应中看到这一点。在下图中，我们看到了日期直方图生成的每个存储桶的上限（蓝色）和下限（绿色）标准偏差边界：
-![An image](./images/ARTS-week-09-1.gif)
+![An image](./images/ARTS-week-09-1.png)
 
 ### 3.Tip:
 

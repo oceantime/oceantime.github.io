@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-24
-date: 2021-06-20 21:35:28
-tags:
+> **ARTS-week-24**
+> 2021-06-20 21:35
 ---
 
 
@@ -83,7 +82,7 @@ GC forced
 gc 15 @121.340s 0%: 0.058+1.2+0.015 ms clock, 0.46+0/2.0/4.1+0.12 ms cpu, 1->1->1 MB, 4 MB goal, 8 P
 ```
 
-####  MySQL
+#### MySQL
 
 1.1 MySQL 日期时间列的默认值：
 

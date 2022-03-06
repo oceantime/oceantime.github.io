@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-22
-date: 2021-06-06 18:06:28
-tags:
+> **ARTS-week-22**
+> 2021-06-06 18:06
 ---
 
 
@@ -106,7 +105,7 @@ Arrays.sort(int[] nums, Comparator<Integer>(){
 })
 ```
 
-####  MySQL
+#### MySQL
 
 1.1 MySQL 日期时间列的默认值：
 

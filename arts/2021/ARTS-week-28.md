@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-28
-date: 2021-07-18 19:50:00
-tags:
+> **ARTS-week-28**
+> 2021-07-18 19:50
 ---
 
 
@@ -60,7 +59,7 @@ go env
 go env -w GOPROXY=https://goproxy.cn,direct
 ```
 
-####  Go 计算程序运行时间
+#### Go 计算程序运行时间
 
 1.计算代码块的运行时间：
 

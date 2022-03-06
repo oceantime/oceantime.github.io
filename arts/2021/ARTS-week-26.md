@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-26
-date: 2021-07-04 20:00:28
-tags:
+> **ARTS-week-26**
+> 2021-07-04 20:00
 ---
 
 
@@ -76,7 +75,7 @@ String s = String.valueof(1025);  //直接转成了
 String s = Integer.toHexString(18);   //输出结果12
 ```
 
-####  Java 中 List<String> 与 String 字符串互转
+#### Java 中 List<String> 与 String 字符串互转
 
 ```java
 System.out.println("+++++++++++++++++++++++++++++++++");

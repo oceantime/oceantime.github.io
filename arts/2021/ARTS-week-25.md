@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-25
-date: 2021-06-27 21:19:28
-tags:
+> **ARTS-week-25**
+> 2021-06-27 21:19
 ---
 
 
@@ -241,7 +240,7 @@ func main() {
 map2 = sync.Map{}
 ```
 
-####  go map[string]interface{} 类型判断
+#### go map[string]interface{} 类型判断
 
 1.1 有时候，map[string]interface{} 有可能存储的是map，也可能是数组等等，那么在取值的时候需要做类型判断，例如：
 

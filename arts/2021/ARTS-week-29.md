@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-29
-date: 2021-07-25 17:09:00
-tags:
+> **ARTS-week-29**
+> 2021-07-25 17:09
 ---
 
 
@@ -53,7 +52,7 @@ https://www.mihaileric.com/posts/we-need-data-engineers-not-data-scientists/?utm
 sudo apt-get install libpq-dev python-dev
 ```
 
-####  Go 语言通用重试函数封装
+#### Go 语言通用重试函数封装
 
 1.重试次数、时间：
 

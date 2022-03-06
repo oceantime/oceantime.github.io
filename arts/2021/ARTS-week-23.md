@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-23
-date: 2021-06-13 21:09:28
-tags:
+> **ARTS-week-23**
+> 2021-06-13 21:09
 ---
 
 
@@ -48,7 +47,7 @@ app = Celery('celery_tasks.tasks', broker='redis://:@127.0.0.1:6379/0')
 ```
 
 
-####  docker-compose 安装 redis
+#### docker-compose 安装 redis
 
 1.1 创建 docker-compose.yml：
 

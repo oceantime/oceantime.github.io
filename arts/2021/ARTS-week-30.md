@@ -1,7 +1,6 @@
 ---
-title: ARTS-week-30
-date: 2021-08-01 17:52:00
-tags:
+> **ARTS-week-30**
+> 2021-08-01 17:52
 ---
 
 
@@ -83,7 +82,7 @@ https://www.mihaileric.com/posts/introduction-data-science-life-cycle/
 sudo apt-get install libpq-dev python-dev
 ```
 
-####  Go 语言通用重试函数封装
+#### Go 语言通用重试函数封装
 
 1.从屏幕上可以执行的操作：
 - 创建用户

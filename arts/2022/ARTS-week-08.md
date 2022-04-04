@@ -63,7 +63,7 @@ curl -X POST "localhost:9200/traffic_stats/_search?size=0&pretty" -H 'Content-Ty
 }
 '
 ```
-如您所见，此管道聚合面向表示每月总访问量的同级聚合。响应应如下所示：total_visits
+如您所见，此管道聚合面向表示每月总访问量的同级聚合。响应应如下所示：
 
 ```json
 "aggregations" : {
@@ -113,7 +113,7 @@ curl -X POST "localhost:9200/traffic_stats/_search?size=0&pretty" -H 'Content-Ty
 
 累积总和聚合采用不同的方法。通常，累积和是给定序列的部分和序列。例如，序列 {a，b，c，,...} 的累积和为 a、 a+b、 a+b+c、 ...
 
-累积总和聚合是父管道聚合，用于计算父直方图（或date_histogram）聚合中指定指标的累积总和。与其他父管道聚合一样，指定的指标必须是数字，并且封闭的直方图必须设置为（聚合的默认值）。min_doc_count0histogram：
+累积总和聚合是父管道聚合，用于计算父直方图（或date_histogram）聚合中指定指标的累积总和。与其他父管道聚合一样，指定的指标必须是数字，并且封闭的直方图必须设置为（聚合的默认值）：
 
 ```json
 curl -X POST "localhost:9200/traffic_stats/_search?size=0&pretty" -H 'Content-Type: application/json' -d'

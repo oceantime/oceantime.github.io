@@ -67,7 +67,7 @@ curl -X POST "localhost:9200/traffic_stats/_search?size=0&pretty" -H 'Content-Ty
 }
 '
 ```
-如下图所见，第一个导数使用由和聚合计算的路径，而第二个导数使用指向 的路径，这是第一个导数管道。这样，我们可以将二阶导数计算视为双管道聚合。上述查询应返回以下响应：total_visitsvisits_deriv：
+如下图所见，第一个导数使用由和聚合计算的路径，而第二个导数使用指向 的路径，这是第一个导数管道。这样，我们可以将二阶导数计算视为双管道聚合。上述查询应返回以下响应：
 
 ```json
 "aggregations" : {

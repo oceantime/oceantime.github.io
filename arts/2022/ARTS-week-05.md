@@ -293,7 +293,7 @@ curl -X POST "localhost:9200/traffic_stats/_search?size=0&pretty" -H 'Content-Ty
 }
 '
 ```
-指示导数聚合将父聚合的输出用于导数（我们应该使用父聚合，因为导数是父管道聚合）。buckets_pathtotal_visits
+指示导数聚合将父聚合的输出用于导数（我们应该使用父聚合，因为导数是父管道聚合）。
 
 对上述查询的响应应如下所示：
 ```json

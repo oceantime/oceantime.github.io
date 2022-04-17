@@ -1,5 +1,5 @@
 ---
-> **ARTS-week-15**
+> **ARTS-week-15 **
 > 2022-04-09 19:43
 ---
 
@@ -90,20 +90,16 @@ curl -X POST "localhost:9200/traffic_stats/_search?size=0&pretty" -H 'Content-Ty
 
 ### 3.Tip:
 
-#### 解决 ubuntu sshd: no hostkeys available -- exiting.
+#### 解决 WSL Centos sshd: no hostkeys available -- exiting.
 ```shell
 #启动ssh
-~$ sudo service ssh restart
+~$ service ssh restart
 sshd: no hostkeys available -- exiting.
 #解决
-~$ sudo apt-get install openssl-server
-~$ sudo ssh-keygen -A
-~$ sudo /etc/init.d/ssh start
-~$ sudo ps -e | grep ssh
-
-~$ sudo service ssh status
-~$ sudo service ssh stop
-~$ sudo service ssh restart
+~$ yum -y install openssh-server openssh-clients
+~$ /usr/sbin/ssh-keygen -A
+~$ nohup /usr/sbin/sshd -D &
+~$ netstat -ant | grep 22
 ```
 
 #### Failed to download metadata for repo ‘AppStream’ [CentOS]
@@ -117,18 +113,12 @@ Error: Failed to download metadata for repo 'AppStream': Cannot prepare internal
 ~$ sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
 ~$ sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 #再次执行 yum update 成功
-~$ yum update -y
+~$ yum -y update
 ```
 
 #### "-bash: netstat: command not found"
 ```shell
-~$ yum install net-tools
-```
-
-#### "-bash: ssh: command not found"
-```shell
-~$ yum -y install openssh-clients
-~$ ssh root@127.0.0.1
+~$ yum -y install net-tools
 ```
 
 #### "-bash: nmap: command not found"
@@ -138,7 +128,7 @@ Error: Failed to download metadata for repo 'AppStream': Cannot prepare internal
 
 #### docker 容器内 centos8 修改 root 密码
 ```shell
-~$ yum install -y passwd openssh-server openssh-clients
+~$ yum install -y passwd
 # 安装完成后再输入passwd root即可
 ~$ passwd root
 ```

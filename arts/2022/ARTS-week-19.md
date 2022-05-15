@@ -15,7 +15,7 @@
 - [591. 标签验证器 (困难) ?](https://leetcode-cn.com/submissions/detail/308330856/)  
   + 思路：正则
 - [1823. 找出游戏的获胜者 (中等) ?](https://leetcode-cn.com/submissions/detail/309141498/)  
-  + 思路：与瑟夫环
+  + 思路：约瑟夫环
 - [713. 乘积小于 K 的子数组 (中等) +](https://leetcode-cn.com/submissions/detail/309603355/)  
   + 思路：滑动窗口
 - [433. 最小基因变化 (中等) ?](https://leetcode-cn.com/submissions/detail/310861600/)  
@@ -23,7 +23,7 @@
 
 ### 2.Review:
 
-- [家Kubernetes
+- [Kubernetes
 VM 服务 – 通过将 KUBERNETES 节点与物理基础架构对齐来帮助开发人员](https://frankdenneman.nl/2021/05/03/vm-service-help-developers-by-aligning-their-kubernetes-nodes-to-the-physical-infrastructure/)  
 
 #### 点评：

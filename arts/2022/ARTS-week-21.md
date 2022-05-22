@@ -118,3 +118,5 @@ Github Stars（2019年12月）|  83,200 | 81,200
 - [Sentry 实时事件日志聚合平台](https://gitbook.curiouser.top/origin/sentry.html)  
 
 - [使用Docsify做文档网站的详细配置教程](https://www.cnblogs.com/xhemj/p/How-to-Use-Docsify.html)  
+
+- [Docsify+腾讯云对象存储 COS，一键搭建云上静态博客](https://cloud.tencent.com/developer/article/1756468)

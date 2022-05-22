@@ -17,7 +17,7 @@
 - [720. 词典中最长的单词（简单）?](https://leetcode-cn.com/submissions/detail/284985447/)  
   + 思路：哈希表
 - [2043. 简易银行系统（中等）\*](https://leetcode-cn.com/submissions/detail/285497375/)  
-  + 思路：模拟
+  + 思路：设计
 
 ### 2.Review:
 

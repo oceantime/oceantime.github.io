@@ -15,7 +15,7 @@
 - [661. 图片平滑器 (简单) ?](https://leetcode-cn.com/submissions/detail/288743923/)  
   + 思路：模拟
 - [567. 字符串的排列 (中等) ?](https://leetcode-cn.com/submissions/detail/293689730/)  
-  + 思路：模拟
+  + 思路：滑动窗口
 
 ### 2.Review:
 

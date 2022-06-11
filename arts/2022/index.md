@@ -4,6 +4,7 @@
 2022: 目录
 ---
 
+[ARTS-week-24](./arts/2022/ARTS-week-24)  
 [ARTS-week-23](./arts/2022/ARTS-week-23)  
 [ARTS-week-22](./arts/2022/ARTS-week-22)  
 [ARTS-week-21](./arts/2022/ARTS-week-21)  

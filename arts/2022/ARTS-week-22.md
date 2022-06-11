@@ -16,7 +16,7 @@
   + 思路: DFS
 - [467. 环绕字符串中唯一的子字符串 (中等) +](https://leetcode.cn/submissions/detail/318084757/)  
   + 思路: 滑动窗口
-- [面试题 17.11. 单词距离 (中等) *](https://leetcode.cn/submissions/detail/318805520/)  
+- [面试题 17.11. 单词距离 (中等) \*](https://leetcode.cn/submissions/detail/318805520/)  
   + 思路: 通过
 
 ### 2.Review:

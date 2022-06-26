@@ -28,7 +28,7 @@
 
 虽然 Android 正在继续开发，但 Android M 的最新更新完全不同，因为有一些重大变化会改变一切，比如新的运行时权限。令人惊讶的是，它在 Android 开发人员社区中并不怎么被谈论，尽管它非常重要，并且可能会在不久的将来引起一些大麻烦。
 
-这就是我今天决定写博客讨论这个话题的原因。您需要了解的有关此新运行时权限的所有信息，包括如何在代码中实现它。让我们在为时已晚之前这样做。
+这就是我今天决定写博客讨论这个话题的原因。需要了解的有关此新运行时权限的所有信息，包括如何在代码中实现它。让我们在为时已晚之前这样做。
 
 - 新建运行时权限
 Android 的权限系统一直是最大的安全问题之一，因为这些权限是在安装时要求的。安装后，应用程序将能够访问授予的所有内容，而无需任何用户确认应用程序对权限的确切操作。
@@ -80,11 +80,11 @@ Android 的权限系统一直是最大的安全问题之一，因为这些权限
 
 但从长远来看，我相信会有数百万用户关闭一些权限。让我们的应用程序不能在新设备上完美运行是不可接受的。
 
-为了使它完美地工作，您最好修改您的应用程序以支持这个新的权限系统，我建议您立即开始这样做！
+为了使它完美地工作，最好修改的应用程序以支持这个新的权限系统，我建议立即开始这样做！
 
-对于源代码未成功修改以支持运行时权限的应用程序，请勿使用 targetSdkVersion 23 发布它，否则会给您带来麻烦。仅当通过所有测试时，才将 targetSdkVersion 移动到 23。
+对于源代码未成功修改以支持运行时权限的应用程序，请勿使用 targetSdkVersion 23 发布它，否则会给带来麻烦。仅当通过所有测试时，才将 targetSdkVersion 移动到 23。
 
-警告：现在，当您在 Android Studio 中创建新项目时。targetSdkVersion 将自动设置为最新版本 23。如果您还没有准备好使应用程序完全支持运行时权限，我建议您先将 targetSdkVersion 降级到 22。
+警告：现在，当在 Android Studio 中创建新项目时。targetSdkVersion 将自动设置为最新版本 23。如果还没有准备好使应用程序完全支持运行时权限，我建议先将 targetSdkVersion 降级到 22。
 
 - 自动授予的权限
 有一些权限将在安装时自动授予，并且无法撤销。我们称之为普通权限（PROTECTION_NORMAL）。以下是它们的完整列表：
@@ -189,13 +189,62 @@ private void insertDummyContact() {
 <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
 ```
 
-下一步是我们必须创建另一个函数来检查是否授予了权限。如果不是，则调用对话框以请求用户权限。否则，您可以继续下一步，创建新联系人。
+下一步是我们必须创建另一个函数来检查是否授予了权限。如果不是，则调用对话框以请求用户权限。否则，可以继续下一步，创建新联系人。
 
 权限分组到权限组中，如下表所示。
 
-![An image](./images/ARTS-week-24-10.png)
+![An image](./images/ARTS-week-25-9.png)
 
-...未完待续
+如果授予了权限组中的任何权限。同一组中的另一个权限也将自动授予。在这种情况下，一旦获得批准，申请也将授予和。WRITE_CONTACTSREAD_CONTACTSGET_ACCOUNTS
+
+用于检查和请求权限的源代码分别是活动的和。这些方法在 API 级别 23 中添加。checkSelfPermissionrequestPermissions
+```java
+final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
+private void insertDummyContactWrapper() {
+    int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_CONTACTS);
+    if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+        requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS},
+                REQUEST_CODE_ASK_PERMISSIONS);
+        return;
+    }
+    insertDummyContact();
+}
+```
+
+如果已经授予权限，将突然被调用。否则，将调用以启动如下所示的权限请求对话框。insertDummyContact()requestPermissions
+
+![An image](./images/ARTS-week-25-10.png)
+
+无论选择“允许”还是“拒绝”，都将始终调用 Activity 来通知一个结果，我们可以从第 3 个参数中检查该结果，如下所示：onRequestPermissionsResultgrantResults
+```java
+@Override
+public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    switch (requestCode) {
+        case REQUEST_CODE_ASK_PERMISSIONS:
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                insertDummyContact();
+            } else {
+                // Permission Denied
+                Toast.makeText(MainActivity.this, "WRITE_CONTACTS Denied", Toast.LENGTH_SHORT)
+                        .show();
+            }
+            break;
+        default:
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+}
+```
+
+这就是运行时权限的工作原理。代码相当复杂，但要习惯它...为了使的应用程序与运行时权限完美运行，必须使用上面显示的相同方法处理所有情况。
+
+如果你想打一些墙，现在是一个好时机...
+
+
+- 处理“再也不问”
+
+
 
 ### 3.Tip:
 

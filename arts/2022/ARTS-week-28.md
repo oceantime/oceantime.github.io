@@ -180,7 +180,7 @@ ROUTINE ======================== _~/scratch/vecdeepdive.mulIntDatums in ~/scratc
       .       .   15:}
 ```
 
-正如预期的那样，在mulIntDatums中花费的大部分时间都在乘法线上。让我们通过使用 disasm（反汇编）命令（省略了一些说明）来仔细看看引擎盖下发生了什么：
+正如预期的那样，在 mulIntDatums 中花费的大部分时间都在乘法线上。让我们通过使用 disasm（反汇编）命令（省略了一些说明）来仔细看看引擎盖下发生了什么：
 
 ```
 (pprof) disasm mulIntDatums
@@ -200,10 +200,64 @@ ROUTINE ======================== _~/scratch/vecdeepdive.mulIntDatums in ~/scratc
     90ms    350ms 11734c4: CALL runtime.convT64(SB)
 ```
 
-令人惊讶的是，执行IMULQ指令只花费了70ms，这是最终执行乘法的指令。大部分时间都花在调用 convT64 上，convT64 是一个 Go 运行时包函数，用于（在本例中）将 Int 类型转换为 Datum 接口。
+令人惊讶的是，执行 IMULQ 指令只花费了 70ms，这是最终执行乘法的指令。大部分时间都花在调用 convT64 上，convT64 是一个 Go 运行时包函数，用于（在本例中）将 Int 类型转换为 Datum 接口。
 
-函数的分解视图表明，将值相乘所花费的大部分时间是将参数从基准s 转换为 Ints，并将 Int 的结果转换回基准。
+函数的分解视图表明，将值相乘所花费的大部分时间是将参数从 Datums 转换为 Ints，并将 Int 的结果转换回 Datum。
 
+- 使用混合类型
+为了避免这些转换的开销，我们需要使用具体类型。这是一个很难解决的问题，因为我们一直在讨论的执行引擎使用接口来与类型无关。如果不使用接口，每个操作员都需要了解它正在使用的类型。换句话说，我们需要为每个类型实现一个运算符。
+
+幸运的是，我们有MonetDB团队的先前研究来指导我们。鉴于他们的工作，我们知道删除接口所带来的痛苦将通过巨大的潜在性能改进来证明。
+
+稍后，我们将看看我们如何出于性能原因使用具体类型运算符来避免类型转换，而不会牺牲使用Go与类型无关的接口所带来的所有可维护性。首先，让我们看一下什么将取代 Datum 接口：
+
+```
+type T int
+
+const (
+    // Int64Type is a value of type int64
+    Int64Type T = iota
+    // Float64Type is a value of type float64
+    Float64Type
+)
+
+type TypedDatum struct {
+    t T
+    int64 int64
+    float64 float64
+}
+
+type TypedOperator interface {
+    next() []TypedDatum
+}
+```
+
+基准现在为它可能包含的每个可能类型都有一个字段，而不是为每个类型具有单独的接口实现。还有一个附加的枚举字段用作类型标记，因此当我们确实需要时，我们可以检查基准面的类型，而无需执行任何昂贵的类型断言。由于每种类型的字段都有一个字段，因此此类型使用额外的内存，即使一次只使用其中一个字段也是如此。这可能会导致 CPU 缓存效率低下，但在本节中，我们将跳过这些问题，并专注于处理接口解释开销。在后面的部分中，我们将更多地讨论效率低下并解决它。
+
+mulInt64Operator 现在将如下所示：
+
+```
+func (m mulInt64Operator) next() []TypedDatum {
+    row := m.input.next()
+    if row == nil {
+     return nil
+    }
+    for _, c := range m.columnsToMultiply {
+     row[c].int64*= m.arg
+    }
+    return row
+}
+```
+
+请注意，乘法现已到位。针对此新版本运行基准测试显示，速度提高了近2倍。
+
+```
+$ go test -bench "BenchmarkRowBasedTyped$" -count 10 > tmp && benchstat tmp && rm tmp
+name                time/op
+RowBasedTyped-12      390µs ± 8%
+```
+
+但是，现在我们正在为每种类型的编写专用运算符，我们必须编写的代码量几乎翻了一番，更糟糕的是，代码违反了保持DRY的可维护性原则（Don't Repeat Yourself）。如果我们考虑到在真正的数据库引擎中，要支持的两种类型远远超过两种类型，情况似乎更糟。如果有人要稍微更改乘法功能（例如，添加溢出处理），他们将不得不重写每个运算符，这很乏味且容易出错。类型越多，更新代码需要做的工作量就越多。
 
 ### 3.Tip:
 
@@ -272,4 +326,4 @@ GenerationTool.generate(configuration);
 
 - [数据库计算向量化](https://plantegg.github.io/2021/11/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%A1%E7%AE%97%E5%90%91%E9%87%8F%E5%8C%96/)
 
-- [JCommander学习总结](https://blog.csdn.net/pandeng6032/article/details/121316207)
+- [一个 DAG 工作流引擎的设计实现源代码实例](https://cloud.tencent.com/developer/article/1840183)

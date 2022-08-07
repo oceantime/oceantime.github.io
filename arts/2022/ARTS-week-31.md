@@ -127,8 +127,9 @@ cd ~/Library/Android/sdk/build-tools/31.0.0 \
 3.可添加监听事件，在监听到Entry过期时调度监听函数。
 4.可以设置懒加载，在调用get()方法时创建对象。
 
-依赖：
-```
+pom.xml 依赖：
+
+```xml
 <dependency> 
     <groupId>net.jodah</groupId> 
     <artifactId>expiringmap</artifactId> 
@@ -138,7 +139,7 @@ cd ~/Library/Android/sdk/build-tools/31.0.0 \
 
 示例源码：
 
-```
+```java
 public class ExpiringMapApp {
 
     public static void main(String[] args) {

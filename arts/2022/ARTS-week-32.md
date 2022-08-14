@@ -14,7 +14,7 @@
 
 - [622. 设计循环队列 (中等) +](https://leetcode.cn/submissions/detail/342561658/)  
   + 思路:数组实现循环队列
-- [623. 在二叉树中增加一行 +](https://leetcode.cn/submissions/detail/346398090/)  
+- [623. 在二叉树中增加一行 (中等) +](https://leetcode.cn/submissions/detail/346398090/)  
   + 思路:递归
 - [636. 函数的独占时间 (中等) +](https://leetcode.cn/submissions/detail/346997168/)  
   + 思路: 栈

@@ -12,13 +12,13 @@
 
 ### 1.Algorithm:
 
-- [946. 验证栈序列 (??+)](https://leetcode.cn/submissions/detail/357378258/)  
+- [946. 验证栈序列 (^^^ +)](https://leetcode.cn/submissions/detail/357378258/)  
   + 思路:栈
-- [687. 最长同值路径 (??+)](https://leetcode.cn/submissions/detail/358256583/)  
+- [687. 最长同值路径 (^^ +)](https://leetcode.cn/submissions/detail/358256583/)  
   + 思路:递归-分解问题
-- [646. 最长数对链 (??+)](https://leetcode.cn/submissions/detail/358425425/)  
+- [646. 最长数对链 (^^ +)](https://leetcode.cn/submissions/detail/358425425/)  
   + 思路: 贪心
-- [998. 最大二叉树 II (???+)](https://leetcode.cn/submissions/detail/356876070/)  
+- [998. 最大二叉树 II (^^^ +)](https://leetcode.cn/submissions/detail/356876070/)  
   + 思路: 递归-分解问题
 
 ### 2.Review:
@@ -59,12 +59,15 @@ Facebook-MyRocks 工程团队也为我提供了关于MyRocks最佳设置的意�
 让我们回顾一下不同内存大小的结果。
 
 第一个图表显示了吞吐量抖动。这有助于了解吞吐量结果的分布。吞吐量每 1 秒测量一次，在图表上，我显示一次运行 2000 秒后的所有测量值（每次运行的总长度为 3600 秒）。因此，我显示每次运行的最后 1600 秒（以消除预热阶段）：
+
 ![An image](./images/ARTS-week-36-1.png)
 
 为了更好地量化结果，让我们在箱线图上看一下它们。了解箱线图的最快方法是查看中线。它表示测量值的中位数（在 https://www.percona.com/blog/2012/02/23/some-fun-with-r-visualization/ 查看更多内容）：
+
 ![An image](./images/ARTS-week-36-2.png)
 
 在我们跳到结果摘要之前，让我们看一下 InnoDB 和 MyRocks 的吞吐量变化。我们将缩放到 100 GB 分配内存的 1 秒分辨率图表：
+
 ![An image](./images/ARTS-week-36-3.png)
 
 我们可以看到，MyRocks 的周期性1秒性能下降有很多变化。此时此刻，我不知道是什么原因导致这些下降。
@@ -113,6 +116,7 @@ Facebook-MyRocks 工程团队也为我提供了关于MyRocks最佳设置的意�
 | 100  | 184867.5   | 97998.26
 
 我们还可以计算每个存储引擎执行的每个事务执行的写入次数：
+
 ![An image](./images/ARTS-week-36-4.png)
 
 这张图表显示了 InnoDB 和 MyRocks 之间的本质区别。 MyRocks 作为写入优化引擎，每个事务使用恒定的写入量。
@@ -121,6 +125,7 @@ Facebook-MyRocks 工程团队也为我提供了关于MyRocks最佳设置的意�
 
 - 那么读呢？
 下表显示了每秒 KB 的读取数。
+
 | Memory, GB | InnoDB | MyRocks |
 | ---------- | ------ | ------- |
 | 5    | 218343.1   | 171957.77
@@ -136,18 +141,24 @@ Facebook-MyRocks 工程团队也为我提供了关于MyRocks最佳设置的意�
 | 100  | 1998.137   | 62894.54
 
 我们可以将其转换为每笔交易的读取次数：
+
 ![An image](./images/ARTS-week-36-5.png)
+
 这显示了MyRocks的读取放大。分配更多内存有助于减少IO读取，但不如InnoDB那么多。
 
 - 处理器使用率
 我们还将查看每个存储引擎的 CPU 使用情况。让我们从 InnoDB 开始：
+
 ![An image](./images/ARTS-week-36-6.png)
 
 该图表显示，对于 5GB 内存大小，InnoDB 将大部分时间花在 IO 等待（绿色区域）上，CPU 使用率（蓝色区域）随着内存的增加而增加。
 
 这是MyRocks的相同图表：
+
 ![An image](./images/ARTS-week-36-7.png)
+
 表格形式：
+
 | Memory, GB | engine | us | sys | wa | id |
 | ---------- | ------ | -- | --- | -- | -- |
 | 5    |  InnoDB  | 8   | 2  | 57 | 33

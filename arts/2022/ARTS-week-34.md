@@ -12,11 +12,11 @@
 
 ### 1.Algorithm:
 
-- [641 设计循环双端队列 (??+)](https://leetcode.cn/submissions/detail/350675652/)  
+- [641 设计循环双端队列 (^^ +)](https://leetcode.cn/submissions/detail/350675652/)  
   + 思路:设计
-- [1302. 层数最深叶子节点的和 (??+)](https://leetcode.cn/submissions/detail/351627461/)  
+- [1302. 层数最深叶子节点的和 (^^ +)](https://leetcode.cn/submissions/detail/351627461/)  
   + 思路:BFS
-- [654. 最大二叉树 (??+)](https://leetcode.cn/submissions/detail/352695873/)  
+- [654. 最大二叉树 (^^ +)](https://leetcode.cn/submissions/detail/352695873/)  
   + 思路: 递归
 
 

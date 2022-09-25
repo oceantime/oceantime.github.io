@@ -252,6 +252,90 @@ mvn tomcat:redeploy
 mvn war:exploded tomcat:exploded
 ```
 
+#### IDEA 使用快捷键
+
+```
+默认
+ctrl + shift + u 大小写转换
+CamelCase 插件
+shift + alt + u 不停按 u 会自动转换
+```
+
+#### java 中 asList() 方法的使用
+
+```java
+String s[] = {"aa","bb","cc"};
+List<String> sList = Arrays.asList(s);
+for(String str:sList){//能遍历出各个元素
+    System.out.println(str);
+}
+System.out.println(sList.size());//为3
+
+System.out.println("- - - - - - - - - - -");
+
+int i[] = {11,22,33};
+List intList = Arrays.asList(i);  //intList中就有一个Integer数组类型的对象，整个数组作为一个元素存进去的
+for(Object o:intList){//就一个元素
+    System.out.println(o.toString());
+}
+
+System.out.println("- - - - - - - - - - -");
+
+Integer ob[] = {11,22,33};
+List<Integer> objList=Arrays.asList(ob);    //数组里的每一个元素都是作为list中的一个元素
+for(int a:objList){
+    System.out.println(a);
+}
+
+System.out.println("- - - - - - - - - - -");
+
+//objList.remove(0);//asList()返回的是arrays中私有的终极ArrayList类型，它有set,get，contains方法，但没有增加和删除元素的方法，所以大小固定,会报错
+//objList.add(0);//由于asList返回的list的实现类中无add方法，所以会报错
+```
+
+运行结果：
+
+```shell
+aa
+bb
+cc
+3
+- - - - - - - - - - -
+[I@287efdd8
+- - - - - - - - - - -
+11
+22
+33
+- - - - - - - - - - -
+```
+
+之所以有以上原因，看看asList的源码就明白了：
+
+```java
+public static <T> List<T> asList(T... a) {
+    return new ArrayList<T>(a);
+}
+
+// ...
+
+private final E[] a;
+ 
+ArrayList(E[] array) {
+    if (array==null)
+        throw new NullPointerException();
+    a = array;
+}
+
+// 如果想根据数组得到一个新的正常的list,当然可可以循环一个一个添加，也可以才有以下2个种方法：
+ArrayList<Integer> copyArrays=new ArrayList<Integer>(Arrays.asList(ob)); // 这样就是得到一个新的 list，可对其进行 add,remove 了
+copyArrays.add(222); // 正常，不会报错
+        
+Collections.addAll(new ArrayList<Integer>(5), ob); // 或者新建一个空的 list,把要转换的数组用 Collections.addAll 添加进去
+
+// 如果你想直接根据基本类型的数组如 int[],long[] 直接用 asList 转成 list,那么我们可以选择用 apache commons-lang 工具包里的数组工具类 ArrayUtils 类的 toObject() 方法，非常方便，如下：
+Arrays.asList(ArrayUtils.toObject(i)); // 上边的代码：int i[] = {11,22,33}; 达到了我们想要的效果
+```
+
 ### 4.Share:
 
 - [历程剖析：阿里云自研HTAP数据库的技术发展之路](https://developer.aliyun.com/article/193401)
@@ -267,3 +351,7 @@ mvn war:exploded tomcat:exploded
 - [一份难得的数据库市场分析报告](https://aijishu.com/a/1060000000128340)
 
 - [让RDS（for MySQL）数据库的慢日志、审计日志跨空间转存OBS变得更加自动化](https://bbs.huaweicloud.com/blogs/360430)
+
+- [关于java：如何避免“安全性-从非恒定字符串生成预准备语句” FindBugs警告](https://www.codenong.com/10500305/)
+
+- [java中asList()方法的使用](https://blog.csdn.net/rocling/article/details/102768442)

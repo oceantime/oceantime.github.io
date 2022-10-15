@@ -5,6 +5,7 @@
 ---
 
 
+[ARTS-week-42](./arts/2022/ARTS-week-42)  
 [ARTS-week-41](./arts/2022/ARTS-week-41)  
 [ARTS-week-40](./arts/2022/ARTS-week-40)  
 [ARTS-week-39](./arts/2022/ARTS-week-39)  

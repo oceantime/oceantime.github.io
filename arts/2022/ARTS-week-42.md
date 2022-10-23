@@ -119,10 +119,8 @@
               (HttpURLConnection) url.openConnection();
 
           connection.setDoOutput(true);
-          connection.setRequestProperty("Content-Type",
-              "application/x-www-form-urlencoded");
-          connection.setRequestProperty("Content-Length",
-              Integer.toString(data.length));
+          connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+          connection.setRequestProperty("Content-Length", Integer.toString(data.length));
           connection.setRequestMethod("GET");
           connection.setInstanceFollowRedirects(false);
           OutputStream os = connection.getOutputStream();
@@ -189,7 +187,7 @@ public static Cookie createNonPersistentCookie() {
 
 or simply
 
-```
+```java
 OkHttpClient client = new OkHttpClient().newBuilder()
     .addInterceptor(chain -> {
         final Request original = chain.request();

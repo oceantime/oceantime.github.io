@@ -21,7 +21,6 @@
 
 ### 2.Review:
 
-- [Apache Parquet support for ScyllaDB](https://docslib.org/doc/11888741/apache-parquet-support-for-scylladb)  
 - [Dremel: Interactive Analysis of WebScaleDatasets](http://research.google.com/pubs/pub36632.html)
 
 #### 点评：
@@ -136,8 +135,8 @@ Dremel还有一个配置，就是在执行查询的时候，可以指定扫描�
 |T1 | 85 billion | 87 TB    |   270   |  A   |     3×     
 |T2 | 24 billion | 13 TB    |   530   |  A   |     3×     
 |T3 | 4 billion  | 70 TB    |   1200  |  A   |     3×     
-|T4 | 1+ trillion|  105 TB  |   50    |  B   |     2×     
-|T5 | 1+ trillion|  20 TB   |   30    |  B   |     3×
+|T4 | 1+ trillion| 105 TB   |   50    |  B   |     2×     
+|T5 | 1+ trillion| 20 TB    |   30    |  B   |     3×
 
   - 列存测试 　　
 

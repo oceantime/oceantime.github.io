@@ -234,6 +234,8 @@ DROP USER 'username'@'host';
 
 - [Lucene概览](https://zhuanlan.zhihu.com/p/45293591)
 
+- [Lucene深入浅出](https://new.qq.com/rain/a/20210415A039RA00)
+
 - [腾讯Elasticsearch海量规模背后的内核优化剖析](https://z.itpub.net/article/detail/3F51D223FAE926C3578F9702732A31D6)
 
 - [StoneDB的编译安装 ](https://www.cnblogs.com/yangwilly/p/16596473.html)

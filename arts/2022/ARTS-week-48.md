@@ -17,7 +17,7 @@
 - [795. 区间子数组个数 (^^+)](https://leetcode.cn/submissions/detail/384458762/)  
   + 思路:模拟
 - [809. 情感丰富的文字 (^^+)](https://leetcode.cn/submissions/detail/384896120/)  
-  + 思路: 模拟
+  + 思路:模拟
 
 ### 2.Review:
 

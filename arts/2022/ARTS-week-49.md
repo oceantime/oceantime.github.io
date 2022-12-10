@@ -16,7 +16,7 @@
   + 思路:缓存
 - [791. 自定义字符串排序 (^^+)](https://leetcode.cn/submissions/detail/386704994/)  
   + 思路:缓存
-- [1774. 最接近目标价格的甜点成本](https://leetcode.cn/submissions/detail/386814833/)  
+- [1774. 最接近目标价格的甜点成本 (^^+)](https://leetcode.cn/submissions/detail/386814833/)  
   + 思路:DFS
 
 ### 2.Review:

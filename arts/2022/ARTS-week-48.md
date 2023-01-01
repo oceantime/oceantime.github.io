@@ -21,7 +21,6 @@
 
 ### 2.Review:
 
-- [Apache Parquet support for ScyllaDB](https://docslib.org/doc/11888741/apache-parquet-support-for-scylladb)  
 - [ScyllaDB Student Projects, Part III: Kafka Client for Seastar and ScyllaDB](https://www.scylladb.com/2020/11/17/scylla-student-projects-part-iii-kafka-client-for-seastar-and-scylla/)
 
 #### 点评：

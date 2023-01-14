@@ -411,6 +411,16 @@ client.setConnectionSpecs(Collections.singletonList(spec));
 
 [Jmeter_api](https://github.com/donrifad/Jmeter_api)
 
-[JMeter VS Postman](https://www.jianshu.com/p/c02a38f4f805)
+[JmeterCodeTest](https://github.com/AresZone/JmeterCodeTest)
 
-[compare-jmeter-vs-postman](https://www.saashub.com/compare-jmeter-vs-postman)
+[WebView（四）—— JSBridge原理](https://blog.csdn.net/xingyu19911016/article/details/121339597)
+
+[Carson带你学Android：你要的WebView与 JS 交互方式都在这里了](https://blog.csdn.net/carson_ho/article/details/64904691)
+
+[彻底搞懂JsBridge的实现原理以及源码分析](https://juejin.cn/post/7046265810515394597)
+
+[redis学习--redis客户端协议（RESP协议）](https://developer.aliyun.com/article/553255)
+
+[JSBridge技术原理分析](http://blog.caogo.cn/2021/02/12/JSBridge%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/)
+
+[YY博客园UML用例图-活动图-状态图之博客模块](https://developer.aliyun.com/article/319464)

@@ -12,12 +12,13 @@
 
 ### 1.Algorithm:
 
+- [1813. 句子相似性 III](https://leetcode.cn/submissions/detail/395558148/)
+    + 模拟
 - [1814. 统计一个数组中好对子的数目](https://leetcode.cn/submissions/detail/395788029/)  
     + 思路：哈希表
 - [1817. 查找用户活跃分钟数](https://leetcode.cn/submissions/detail/396378308/)  
     + 思路：哈希表
-- [1824. 最少侧跳次数](https://leetcode.cn/submissions/detail/396532855/)  
-    + 思路：BFS
+
 
 ### 2.Review:
 

@@ -206,9 +206,13 @@ file–>settings…–>languages & frameworks–>Schemas and DTDs–>点击右�
 5.运行
 
 ![An image](./images/ARTS-week-10-9.png)
+
 ![An image](./images/ARTS-week-10-10.png)
+
 ![An image](./images/ARTS-week-10-11.png)
+
 ![An image](./images/ARTS-week-10-12.png)
+
 
 ### 4.Share:
 

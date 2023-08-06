@@ -18,7 +18,7 @@ Maximal Square https://leetcode.com/submissions/detail/362290763/
 ### 2.Review:
 
 https://posts.specterops.io/ready-to-hunt-first-show-me-your-data-a642c6b170d6
-准备好狩猎了吗？先给我看下你的数据
+准备好狩猎了吗？先给我看下的数据
 
 #### 点评：
 

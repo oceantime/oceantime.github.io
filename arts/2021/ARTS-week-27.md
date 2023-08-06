@@ -46,7 +46,7 @@ public Object exceptionHandler(IOException e, HttpServletRequest request) {
 (2) 真正的例外在于根本原因，我们不想抛弃每一个都有。因此，我们需要筛选出消息的例外。为了更安全，我想得到根本原因的信息。apache 常见的包有相当不错的实用程序的例外，我们将使用  ExceptionUtils.getRootCauseMessage 检索根因。
 (3) 正如我上面提到的，我们不想处理每一个有，这是一个典型的代码味道。这里的处理者应遵循单一的责任原则，只处理 broken pipe 错误。IOException
 
-总结：我只是直观地解决了这个问题。希望它能减少您的调试时间。。
+总结：我只是直观地解决了这个问题。希望它能减少的调试时间。。
 
 ### 3.Tip:
 

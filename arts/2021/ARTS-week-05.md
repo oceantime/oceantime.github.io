@@ -28,7 +28,7 @@ class requests.adapters.HTTPAdapter(pool_connections=10, pool_maxsize=10, max_re
 参数：
  * pool_connections–要缓存的 urllib3 连接池的数量。
  * pool_maxsize–要保存在池中的最大连接数。
- * max_retries(int)–每个连接应尝试的最大重试次数。请注意，这仅适用于失败的 DNS 查找，套接字连接和连接超时，不适用于将数据发送到服务器的请求。默认情况下，请求不会重试失败的连接。如果您需要对我们重试请求的条件进行精细控制，请导入 urllib3 的 Retry 类，然后传递该类。
+ * max_retries(int)–每个连接应尝试的最大重试次数。请注意，这仅适用于失败的 DNS 查找，套接字连接和连接超时，不适用于将数据发送到服务器的请求。默认情况下，请求不会重试失败的连接。如果需要对我们重试请求的条件进行精细控制，请导入 urllib3 的 Retry 类，然后传递该类。
  * pool_block–连接池是否应阻止连接。
 
 ### 3.Tip:

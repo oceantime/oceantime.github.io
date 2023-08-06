@@ -35,7 +35,7 @@ https://towardsdatascience.com/why-90-percent-of-all-machine-learning-models-nev
 - IT、数据科学和工程之间的脱节
 
 机器学习模型有其自身的一系列挑战：
-- 扩大规模比你想象的要难
+- 扩大规模比想象的要难
 - 劳动是重复的
 - 高管们并不总是买账
 - 缺乏跨语言和框架支持

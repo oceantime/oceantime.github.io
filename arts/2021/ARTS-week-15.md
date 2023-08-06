@@ -25,7 +25,7 @@ https://towardsdatascience.com/supercharge-your-python-string-with-textblob-2d9c
 
 作者 Khuyen Tran
 
-TextBlob 旨在通过熟悉的界面提供对常见文本处理操作的访问。你可以把 TextBlob 对象当作是 Python strings 他们学会了如何进行自然语言处理：
+TextBlob 旨在通过熟悉的界面提供对常见文本处理操作的访问。可以把 TextBlob 对象当作是 Python strings 他们学会了如何进行自然语言处理：
 - 分词
 - 名词短语提取
 - 情感分析

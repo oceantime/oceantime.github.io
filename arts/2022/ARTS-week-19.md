@@ -83,7 +83,7 @@ kubectl get virtualmachineclassbindings.vmoperator.vmware.com -n onlinebankapp
 
 
 - 通过将 Kubernetes 节点与物理基础架构对齐来帮助开发人员
-借助新的 VM 服务和可自定义的 VM 类，可以帮助开发人员将其节点与基础结构对齐。基础架构细节在 Kubernetes 层中并不总是可见的，也许并非所有开发人员都热衷于了解环境的复杂性。VM 服务仅允许你发布你认为适合该特定应用程序项目的 VM 类。其中一个原因可能是避免了怪物虚拟机部署。在此更新之前，开发人员可以使用保证的 8XLarge 类（每个工作线程节点配备 32 个 vCPU，128Gi 全部保留）部署一个六工作节点 Kubernetes 集群，如果的主机配置足够， 则授予。但限制只是这种情况的一个角度。长期关系通常是自然共生的，权力游戏通常无助于在开发人员和InfraOps团队之间建立关系。更好的做法是将其与群集中 ESXi 主机的 NUMA 配置对齐。
+借助新的 VM 服务和可自定义的 VM 类，可以帮助开发人员将其节点与基础结构对齐。基础架构细节在 Kubernetes 层中并不总是可见的，也许并非所有开发人员都热衷于了解环境的复杂性。VM 服务仅允许发布认为适合该特定应用程序项目的 VM 类。其中一个原因可能是避免了怪物虚拟机部署。在此更新之前，开发人员可以使用保证的 8XLarge 类（每个工作线程节点配备 32 个 vCPU，128Gi 全部保留）部署一个六工作节点 Kubernetes 集群，如果的主机配置足够， 则授予。但限制只是这种情况的一个角度。长期关系通常是自然共生的，权力游戏通常无助于在开发人员和InfraOps团队之间建立关系。更好的做法是将其与群集中 ESXi 主机的 NUMA 配置对齐。
 
 
 - NUMA 对齐
@@ -199,7 +199,7 @@ make && make install
 
 - [Kubernetes 监控集群资源利用率 (Metrics-server+cAdvisor)](https://ld246.com/article/1591759807672)  
 
-- [一篇带给你DDD领域建模实战](https://developer.51cto.com/article/706868.html)  
+- [一篇带给DDD领域建模实战](https://developer.51cto.com/article/706868.html)  
 
 - [kubectl top node error- metrics not available yet 问题追踪](https://www.modb.pro/db/187740)  
 

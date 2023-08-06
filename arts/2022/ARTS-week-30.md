@@ -42,9 +42,9 @@ MySQL服务器以模块化方式构建：
 - 创建存储引擎源文件
 实现新存储引擎的最简单方法是从复制和修改存储引擎开始。这些文件和可以在MySQL 5.1源代码树的目录中找到。有关如何获取 5.1 源代码树的说明，请参阅从源代码安装 MySQL。EXAMPLEha_example.ccha_example.hstorage/example
 
-复制文件时，请将名称从和更改为适合您的存储引擎的名称，例如 和 。ha_example.ccha_example.hha_foo.ccha_foo.h
+复制文件时，请将名称从和更改为适合的存储引擎的名称，例如 和 。ha_example.ccha_example.hha_foo.ccha_foo.h
 
-复制并重命名文件后，必须将 存储引擎的所有实例 都替换为 存储引擎的名称。如果您熟悉 ，则可以自动完成以下步骤（在此示例中，存储引擎的名称将为 FOO）：EXAMPLEexamplesed
+复制并重命名文件后，必须将 存储引擎的所有实例 都替换为 存储引擎的名称。如果熟悉 ，则可以自动完成以下步骤（在此示例中，存储引擎的名称将为 FOO）：EXAMPLEexamplesed
 
 ```
 sed -e s/EXAMPLE/FOO/g -e s/example/foo/g ha_example.h > ha_foo.h
@@ -194,7 +194,7 @@ HTON_ALTER_NOT_SUPPORTED用于指示存储引擎不能接受语句。存储引�
 
 #### springboot 中 mybatis 连接池中 maxIdle,MaxActive,maxWait 参数
 
-name：表示你的连接池的名称也就是你要访问连接池的地址
+name：表示的连接池的名称也就是要访问连接池的地址
 auth：是连接池管理权属性，Container表示容器管理
 type：是对象的类型
 driverClassName：是数据库驱动的名称

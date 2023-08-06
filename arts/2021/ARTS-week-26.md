@@ -43,7 +43,7 @@ https://www.confluent.io/blog/analytics-with-apache-kafka-and-rockset/
   - 与其他数据集连接
   - 为Kafka数据生成实时监控仪表盘
 
-总结：对可扩展的事件流数据进行交互式分析，以便在数据热时采取行动,借助 Confluent Platform 和 Rockset，您可以使用 SQL 查询实时处理和分析大量数据流，无论是通过命令行上的人工交互还是自定义用户界面，集成到您公司的标准 BI 工具中，还是内部自动化卡夫卡应用程序。
+总结：对可扩展的事件流数据进行交互式分析，以便在数据热时采取行动,借助 Confluent Platform 和 Rockset，可以使用 SQL 查询实时处理和分析大量数据流，无论是通过命令行上的人工交互还是自定义用户界面，集成到公司的标准 BI 工具中，还是内部自动化卡夫卡应用程序。
 
 ### 3.Tip:
 

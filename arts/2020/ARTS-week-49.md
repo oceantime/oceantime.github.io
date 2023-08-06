@@ -110,7 +110,7 @@ https://blog.csdn.net/cjfeii/article/details/48494089
 MySql 启动报错:The server quit without updating PID file 如何解决
 
 https://zhuanlan.zhihu.com/p/137574234?utm_source=wechat_session
-带你走进神一样的Elasticsearch索引机制
+带走进神一样的Elasticsearch索引机制
 
 https://blog.csdn.net/hanniel/article/details/94294155
 Pipenv使用入门

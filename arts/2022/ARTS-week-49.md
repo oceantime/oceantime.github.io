@@ -74,7 +74,7 @@ RocksDB的三个基本结构是memtable, sstfile和logfile。memtable是一个�
 
   - Persistence
     - RocksDB有一个预写日志(Write Ahead Log, WAL)。所有写操作(Put, Delete和Merge)都存储在内存缓冲区中，称为memtable，也可以插入到WAL中。在重新启动时，它会重新处理日志中记录的所有事务。
-    - 可以将WAL配置为存储在与SST文件存储目录不同的目录中。对于希望将所有数据文件存储在非持久快速存储中的情况，这是必要的。同时，您可以通过将所有事务日志放在较慢但持久的存储中来确保没有数据丢失。
+    - 可以将WAL配置为存储在与SST文件存储目录不同的目录中。对于希望将所有数据文件存储在非持久快速存储中的情况，这是必要的。同时，可以通过将所有事务日志放在较慢但持久的存储中来确保没有数据丢失。
     - 每个Put都有一个通过WriteOptions设置的标志，该标志指定是否应该将Put插入事务日志中。WriteOptions还可以指定在声明Put被提交之前是否向事务日志发出fsync调用。
     - 在内部，RocksDB使用批提交机制将事务批处理到日志中，这样它就可以使用一个fsync调用提交多个事务。
 
@@ -92,7 +92,7 @@ RocksDB的三个基本结构是memtable, sstfile和logfile。memtable是一个�
     - 级别样式压缩(默认)通常通过最小化每个压缩步骤中涉及的文件来优化磁盘占用空间和逻辑数据库大小(空间放大):将Ln中的一个文件与Ln+1中的所有重叠文件合并，并用Ln+1中的新文件替换它们。
     - Universal Style Compaction通常通过一次合并多个文件和级别来优化写入磁盘的字节总数和逻辑数据库大小(写入放大)，这需要更多的临时空间。与级别样式压缩相比，通用压缩通常会导致更低的写放大，但更高的空间和读放大。
     - FIFO风格压缩在过时时会删除最旧的文件，并可用于缓存类数据。在FIFO压缩中，所有文件都处于0级。当数据的总大小超过配置的大小(CompactionOptionsFIFO::max_table_files_size)时，我们删除最老的表文件。
-    - 我们还允许开发人员开发和试验自定义压缩策略。因此，RocksDB有适当的钩子来关闭内置的压缩算法，并有其他api允许应用程序操作自己的压缩算法。选项。如果设置了Disable_auto_compaction，则禁用本机压缩算法。GetLiveFilesMetaData API允许外部组件查看数据库中的每个数据文件，并决定合并和压缩哪些数据文件。调用CompactFiles来压缩你想要的文件。DeleteFile API允许应用程序删除被认为过时的数据文件。
+    - 我们还允许开发人员开发和试验自定义压缩策略。因此，RocksDB有适当的钩子来关闭内置的压缩算法，并有其他api允许应用程序操作自己的压缩算法。选项。如果设置了Disable_auto_compaction，则禁用本机压缩算法。GetLiveFilesMetaData API允许外部组件查看数据库中的每个数据文件，并决定合并和压缩哪些数据文件。调用CompactFiles来压缩想要的文件。DeleteFile API允许应用程序删除被认为过时的数据文件。
 
   - Metadata storage
     - 清单日志文件用于记录所有数据库状态的更改。压缩过程从数据库中添加新文件并删除现有文件，并且通过在MANIFEST中记录这些操作，使这些操作具有持久性。
@@ -113,7 +113,7 @@ RocksDB的三个基本结构是memtable, sstfile和logfile。memtable是一个�
     - RocksDB 支持 lz4、zstd、snappy、zlib 和 lz4_hc 压缩，以及 Windows 下的 xpress。RocksDB 可以配置为支持最底层数据的不同压缩算法，其中 90% 的数据位于最底层。典型的安装可能会为最底层的级别配置 ZSTD（或 Zlib，如果不可用），为其他级别配置 LZ4（如果不可用，则配置 Snappy）。请参阅压缩。
 
   - Full Backups and Replication
-    - RocksDB提供备份API BackupEngine。你可以在这里阅读更多:如何备份RocksDB
+    - RocksDB提供备份API BackupEngine。可以在这里阅读更多:如何备份RocksDB
     - RocksDB本身不是一个复制的，但它提供了一些帮助函数，使用户可以在RocksDB的基础上实现他们的复制系统，参见replication Helpers。
 
   - Support for Multiple Embedded Databases in the same process
@@ -150,7 +150,7 @@ RocksDB的三个基本结构是memtable, sstfile和logfile。memtable是一个�
 有一堆测试数据库特定特性的单元测试。生成检查命令运行所有单元测试。单元测试触发了RocksDB的特定特性，并不是为了大规模测试数据正确性而设计的。db_stress测试用于大规模验证数据的正确性。看到压力测试。
 
 - Performance
-RocksDB的性能是通过一个名为db_bench的实用程序进行基准测试的。db_bench是RocksDB源代码的一部分。这里描述了使用Flash存储的几个典型工作负载的性能结果。您还可以在这里找到针对内存工作负载的RocksDB性能结果。
+RocksDB的性能是通过一个名为db_bench的实用程序进行基准测试的。db_bench是RocksDB源代码的一部分。这里描述了使用Flash存储的几个典型工作负载的性能结果。还可以在这里找到针对内存工作负载的RocksDB性能结果。
 
 ### 3.Tip:
 
@@ -185,7 +185,7 @@ int a11 = 052_; // 无效的，不能以下划线结尾
 ```shell
 # 1.创建用户
 CREATE USER 'username'@'host' IDENTIFIED BY 'password';
-# username：你将创建的用户名
+# username：将创建的用户名
 # host：指定该用户在哪个主机上可以登陆，如果是本地用户可用localhost，如果想让该用户可以从任意远程主机登陆，可以使用通配符%
 # password：该用户的登陆密码，密码可以为空，如果为空则该用户可以不需要密码登陆服务器
 
@@ -224,7 +224,7 @@ REVOKE privilege ON databasename.tablename FROM 'username'@'host';
 # 例子
 REVOKE SELECT ON *.* FROM 'pig'@'%';
 
-# 注意:假如你在给用户'pig'@'%'授权的时候是这样的（或类似的）：GRANT SELECT ON test.user TO 'pig'@'%'，则在使用REVOKE SELECT ON *.* FROM 'pig'@'%';命令并不能撤销该用户对test数据库中user表的SELECT 操作。相反，如果授权使用的是GRANT SELECT ON *.* TO 'pig'@'%';则REVOKE SELECT ON test.user FROM 'pig'@'%';命令也不能撤销该用户对test数据库中user表的Select权限。具体信息可以用命令SHOW GRANTS FOR 'pig'@'%'; 查看。
+# 注意:假如在给用户'pig'@'%'授权的时候是这样的（或类似的）：GRANT SELECT ON test.user TO 'pig'@'%'，则在使用REVOKE SELECT ON *.* FROM 'pig'@'%';命令并不能撤销该用户对test数据库中user表的SELECT 操作。相反，如果授权使用的是GRANT SELECT ON *.* TO 'pig'@'%';则REVOKE SELECT ON test.user FROM 'pig'@'%';命令也不能撤销该用户对test数据库中user表的Select权限。具体信息可以用命令SHOW GRANTS FOR 'pig'@'%'; 查看。
 
 # 5.删除用户
 DROP USER 'username'@'host';

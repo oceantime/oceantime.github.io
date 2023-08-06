@@ -21,7 +21,7 @@
 
 ### 2.Review:
 
-- [React Native vs Native App 开发 ：哪一个最适合你的应用？](https://www.excellentwebworld.com/react-native-vs-native)  
+- [React Native vs Native App 开发 ：哪一个最适合的应用？](https://www.excellentwebworld.com/react-native-vs-native)  
 
 #### 点评：
 
@@ -81,7 +81,7 @@ React Native 是由 Jordan Walke 在 Facebook 举办的黑客马拉松项目中�
   - 希望在应用中加入 Facebook 广告
 
 - 结论 React Native vs Native
-总而言之，这取决于的规模和项目的紧迫性。如果你想尽早进入移动应用程序，雇用 React Native 开发人员是你的最佳选择。然而，如果你有一个很好的预算，并且你不想在应用程序的 UI 和功能上妥协，那么 Native 应该是你的选择。
+总而言之，这取决于的规模和项目的紧迫性。如果想尽早进入移动应用程序，雇用 React Native 开发人员是的最佳选择。然而，如果有一个很好的预算，并且不想在应用程序的 UI 和功能上妥协，那么 Native 应该是的选择。
 
 ### 3.Tip:
 
@@ -93,9 +93,9 @@ emulator -avd Nexus_5X_API_27 -prop net.eth0.dns1=192.168.xxx.xxx （Nexus_5X_AP
 
 方案二：
 进入到 SDK 安装目录下执行：
-emulator @你模拟器的名字 -dns-server 8.8.8.8,114.114.114.114
+emulator @模拟器的名字 -dns-server 8.8.8.8,114.114.114.114
 
-这时候你的模拟器就可以启动了
+这时候的模拟器就可以启动了
 
 方案三：
 进入到 SDK 安装目录的 platform_tools 目录下，然后使用 adb shell 命令，
@@ -114,7 +114,7 @@ setprop net.dns1 192.168.xxx.xxx
 
 - [DevEco Studio 一直提示下载 gradle-5.4.1-all.zip](https://blog.csdn.net/weixin_45214268/article/details/108674720)  
 
-- [Android WebView 清除缓存，总有一个方法适合你](https://blog.csdn.net/ezconn/article/details/106460367)  
+- [Android WebView 清除缓存，总有一个方法适合](https://blog.csdn.net/ezconn/article/details/106460367)  
 
 - [Android Studio vs React Native（stackshare）](https://stackshare.io/stackups/android-studio-vs-react-native)  
 

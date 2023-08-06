@@ -51,7 +51,7 @@ https://hackernoon.com/the-rise-of-robots-insights-into-the-global-robotics-mark
 #### [ElasticSearch] API
 
 什么是聚合分析:聚合分析有点类似于SQL语句中的那种group by、where age > 20 and age < 30、这种操作。常见的聚合分析就是根据某一个字段进行分组分析，要求这个字段是不能被分词的，如果被聚合的字段被分词，按照倒排索引的方式去索引的话，就不得不去扫描整个倒排索引(才可能将被聚合的字段找全，效率很低)。聚合分析是基于doc value的数据结果集进行操作的，这个doc value 其实就是正排索引，关于聚合分析有三个重要的概念：
-- bucket:特别是你去使用一下java、golang中的es相关的api，就会看到这个bucket关键字，bucket就是聚合操作得到的结果集。
+- bucket:特别是去使用一下java、golang中的es相关的api，就会看到这个bucket关键字，bucket就是聚合操作得到的结果集。
 - metric:metric就是对bucket进行分析，比如取最大值、最小值、平均值。
 - 下钻:下钻就是在现有的分好组的bucket继续分组，比如可以先按性别分组、下钻再按年龄分组。
 
@@ -78,7 +78,7 @@ GET /your_index/your_type/_search
   "aggs": {
     "group_by_xxx": { # 自定义的名字
      # 除了使用term还可以使用terms
-     # trems允许你指定多个字段
+     # trems允许指定多个字段
      "terms": {
          # 指定聚合的字段， 意思是 group by v1、v2、v3
         "field": {"value1","value2","value3"}

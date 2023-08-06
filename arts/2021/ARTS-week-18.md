@@ -30,7 +30,7 @@ https://developpaper.com/how-to-use-lua-to-expand-in-golang/
 
 #### 点评：
 
-最近，需要在项目中使用 Lua 进行扩展。发现在 GitHub 上有一个用 golang 编写的 Lua 虚拟机，名为 gopher Lua 。使用后还不错，所以我将与您分享。我不会多说。让我们看一下详细的介绍。
+最近，需要在项目中使用 Lua 进行扩展。发现在 GitHub 上有一个用 golang 编写的 Lua 虚拟机，名为 gopher Lua 。使用后还不错，所以我将与分享。我不会多说。让我们看一下详细的介绍。
 
 - 数据类型：
 
@@ -43,7 +43,7 @@ L.LString(str)
 L.LNumber(float64(num))
 ```
 
- - Lua 中的数据将转换为 golang 中的数据。该项目提供 toint 和 checkstring 等功能进行转换。但是，您必须事先知道类型。如果您不知道，则必须判断类型：
+ - Lua 中的数据将转换为 golang 中的数据。该项目提供 toint 和 checkstring 等功能进行转换。但是，必须事先知道类型。如果不知道，则必须判断类型：
 
 ```golang
 value := L.Get(1)
@@ -126,7 +126,7 @@ fmt.Printf("%s %d", person.Name, person.Age)
 ```
 
 - 模块加载和使用
- - 项目中提供了 Lua 基本模块，可以通过调用 openlibs 来加载它们，包括 IO，math，OS，debug 等。如果要自己加载，可以使用 skipponlibs 参数跳过，如果您要开发自己的库，则在文档中也对此进行了说明：
+ - 项目中提供了 Lua 基本模块，可以通过调用 openlibs 来加载它们，包括 IO，math，OS，debug 等。如果要自己加载，可以使用 skipponlibs 参数跳过，如果要开发自己的库，则在文档中也对此进行了说明：
 
 ```golang
 func Loader(L *lua.LState) int {

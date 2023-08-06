@@ -19,7 +19,7 @@
 ### 2.Review:
 
 https://medium.com/towards-artificial-intelligence/machine-learning-with-low-code-75d152172e4b
-手把手教你使用建模神器Pycaret，几行代码搞定房价预测模型!
+手把手教使用建模神器Pycaret，几行代码搞定房价预测模型!
         
 
 #### 点评：
@@ -31,7 +31,7 @@ https://medium.com/towards-artificial-intelligence/machine-learning-with-low-cod
 - 建模和评估
 - 进行提交
 
-结论:在这一节中，我们可以得出一些结论，构建一个低代码的机器学习模型是非常可行的。但是，我们得到的性能模型并没有更好。因为我们不做EDA，预处理数据和特征工程。所以，如果你想改进你的性能模型，请这样做。
+结论:在这一节中，我们可以得出一些结论，构建一个低代码的机器学习模型是非常可行的。但是，我们得到的性能模型并没有更好。因为我们不做EDA，预处理数据和特征工程。所以，如果想改进的性能模型，请这样做。
 
 ### 3.Tip:
 
@@ -45,11 +45,11 @@ https://medium.com/towards-artificial-intelligence/machine-learning-with-low-cod
 \timing off
 
 方法二： 查看执行计划
-explain select count(*) from  你的表;
+explain select count(*) from  的表;
                                      QUERY PLAN                                     
 ------------------------------------------------------------------------------------
  Aggregate  (cost=14798.38..14798.39 rows=1 width=0)
-   ->  Seq Scan on 你的表  (cost=0.00..14423.10 rows=150110 width=0)
+   ->  Seq Scan on 的表  (cost=0.00..14423.10 rows=150110 width=0)
 (2 rows)
 cost=说明：
 第一个数字 0.00 表示启动 cost，这是执行到返回第一行时需要的 cost 值。

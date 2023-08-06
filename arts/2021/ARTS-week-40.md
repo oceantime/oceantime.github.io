@@ -21,7 +21,7 @@
 ### 2.Review:
 
 https://www.analyticsvidhya.com/blog/2020/11/build-your-own-desktop-voice-assistant-in-python/
-用Python构建你自己的桌面语音助手
+用Python构建自己的桌面语音助手
 
 #### 点评：
 

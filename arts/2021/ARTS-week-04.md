@@ -21,7 +21,7 @@ Go 中的 JSON 和结构组合
 
 #### 点评：
 
-作者：Attila Oláh 假设您要将 JSON 对象转为 Go 结构。可能会用 json.Marshaler , 但它有一些缺点:
+作者：Attila Oláh 假设要将 JSON 对象转为 Go 结构。可能会用 json.Marshaler , 但它有一些缺点:
 - 复杂性：为大型结构添加了许多额外的代码
 - 内存使用情况：必须注意不要做不必要的分配
 
@@ -164,7 +164,7 @@ conda install --offline 对应的安装包文件名字
 ### 4.Share:
 
 https://blog.csdn.net/weixin_36048246/article/details/106641543
-带你体验Apache NIFI新建数据同步流程(NIFI入门)
+带体验Apache NIFI新建数据同步流程(NIFI入门)
 
 https://blog.csdn.net/bobo79888/article/details/95068654
 大数据流处理：Flume、Kafka和NiFi对比

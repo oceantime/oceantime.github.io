@@ -16,7 +16,7 @@
     + 思路：BFS
 - [1145. 二叉树着色游戏](https://leetcode.cn/submissions/detail/399017966/)  
     + 思路：递归
-- [1798. 你能构造出连续值的最大数目](https://leetcode.cn/submissions/detail/399296943/)  
+- [1798. 能构造出连续值的最大数目](https://leetcode.cn/submissions/detail/399296943/)  
     + 思路：贪心
 
 ### 2.Review:
@@ -69,7 +69,7 @@
 
 findViewById 的优点:
 
-- 兼容性好，下面各种替代方案，都有其适用的场景，但是 findViewById 适用所有的场景，当你不知道用哪种方案的时候，那就用 findViewById 吧，肯定没有错。
+- 兼容性好，下面各种替代方案，都有其适用的场景，但是 findViewById 适用所有的场景，当不知道用哪种方案的时候，那就用 findViewById 吧，肯定没有错。
 - 非常灵活，适合动态加载 layout 文件。比如一个 Activity，需要在不同的业务中，加载两个不同的 layout 文件，但是两个 layout 文件只有部分间距不同，其他各个元素都是相同的。这个时候，用 findViewId 就可以完美适用。
 
 findViewById 的缺点:

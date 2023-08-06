@@ -221,7 +221,7 @@ func (m mulInt64ColOperator) next() colBatch {
 }
 ```
 
-我们引入新的向量类型的原因是，我们可以有一个可以表示任何类型的一批数据的结构。结构对于每种类型的类型都有一个切片字段，但这些切片中只有一个将非 nil。您可能已经注意到，我们现在已经重新引入了一些接口转换，但是由于批处理，我们为它支付的性能价格现在已经摊销。现在让我们来看看基准测试。
+我们引入新的向量类型的原因是，我们可以有一个可以表示任何类型的一批数据的结构。结构对于每种类型的类型都有一个切片字段，但这些切片中只有一个将非 nil。可能已经注意到，我们现在已经重新引入了一些接口转换，但是由于批处理，我们为它支付的性能价格现在已经摊销。现在让我们来看看基准测试。
 
 ```
 $ go test -bench "BenchmarkColBasedTyped" -count 10 > tmp && benchstat tmp && rm tmp
@@ -237,7 +237,7 @@ ColBasedTyped-12    38.2µs ±24%
 
 在CockroachDB中，我们将这篇博客文章中介绍的所有更改合并到我们的矢量化执行引擎中。这导致我们自己的微基准的 CPU 时间缩短了 70 倍，行业标准 TPC-H 基准测试中某些查询的端到端延迟提高了 4 倍。我们实现的端到端延迟改进比在玩具示例中实现的改进要小得多，但请注意，我们在此博客文章中仅关注改进查询的内存中执行。在 CockroachDB 上运行 TPC-H 查询时，在处理之前，需要以原始的面向行的格式从磁盘读取数据，这将占查询执行延迟的最大份额。然而，这是一个很大的改进。
 
-在 CockroachDB 19.2 中，您将能够在许多常见的扫描、联接和聚合查询上享受这些性能优势。下面是这篇博客文章中原始示例查询的演示，该查询使用我们的新矢量化引擎时运行速度几乎是其 2 倍：
+在 CockroachDB 19.2 中，将能够在许多常见的扫描、联接和聚合查询上享受这些性能优势。下面是这篇博客文章中原始示例查询的演示，该查询使用我们的新矢量化引擎时运行速度几乎是其 2 倍：
 
 ```
 oot@127.0.0.1:64128/defaultdb> CREATE TABLE inventory (id INT PRIMARY KEY, price FLOAT);
@@ -325,7 +325,7 @@ gradle-xx-all.zip是完整版，包含了各种二进制文件，源代码文件
 
 gradle-xx-bin.zip是二进制版，只包含了二进制文件（可执行文件），没有文档和源代码。例如，https://services.gradle.org/distributions/gradle-2.14.1-bin.zip
 
-gradle-xx-src.zip是源码版，只包含了Gradle源代码，不能用来编译你的工程。例如，https://services.gradle.org/distributions/gradle-2.14.1-src.zip
+gradle-xx-src.zip是源码版，只包含了Gradle源代码，不能用来编译的工程。例如，https://services.gradle.org/distributions/gradle-2.14.1-src.zip
 
 
 #### 获取Android设备的序列号（SN号）

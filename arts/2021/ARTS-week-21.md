@@ -22,7 +22,7 @@ SQLAlchemy 高级功能
 
 #### 点评：
 
-如果您是 Python 开发人员并且您使用 SQL 数据库，那么 SQLAlchemy 很可能是您熟悉的库。它是强大而灵活的工具包，用于在 Python 中使用具有许多功能的 SQL。其中一些功能（如 ORM 和基本查询）是常识，但有很多功能您可能不知道并且绝对应该利用。因此，让我们看看如何利用混合属性、嵌套查询、表元数据、方言等！。
+如果是 Python 开发人员并且使用 SQL 数据库，那么 SQLAlchemy 很可能是熟悉的库。它是强大而灵活的工具包，用于在 Python 中使用具有许多功能的 SQL。其中一些功能（如 ORM 和基本查询）是常识，但有很多功能可能不知道并且绝对应该利用。因此，让我们看看如何利用混合属性、嵌套查询、表元数据、方言等！。
 
 - 实际上有四类内存问题具有相似和重叠的特征，但原因和解决方案各不相同：
   - Performance (性能):通常与过多的对象创建和删除，垃圾收集的长时间延迟，过多的操作系统页面交换等相关联。
@@ -130,10 +130,10 @@ user = session.query(User).filter(User.has_pending_orders).scalar()  # evaluate 
 
 ```
 - 为了展示 的功能hybrid_property，我们实现了User和之间的简单关系Order，其中每个用户都有订单列表，.state在这种情况下，要么是Pending要么是Complete。现在，如果我们想知道用户是否有任何Pending订单，我们需要考虑两种情况 - 如果我们正在处理已经加载到 Python 对象中的行，那么我们可以只使用 Python 表达式并生成 Python 值 ( has_pending_orders(self)) . 另一方面，如果我们直接从数据库查询这些信息，我们不能使用 Python 表达式，因为数据库引擎不会理解它。因此，对于这种情况 ( has_pending_orders(cls))，我们编写了可以针对数据库运行的 SQL 表达式。
-- 附带说明 - 如果您的表达式对于 Python 和 SQL 评估都相同，那么您可以省略用装饰的第二个函数.expression，SQLAlchemy 将在这两种情况下使用第一个函数。
+- 附带说明 - 如果的表达式对于 Python 和 SQL 评估都相同，那么可以省略用装饰的第二个函数.expression，SQLAlchemy 将在这两种情况下使用第一个函数。
 
 3. 混合
-- Mixin不仅是 SQLAlchemy 特有的，而且它们在与 ORM 模型结合使用时特别有用。很多时候你可能会遇到这样的情况，你有多个类（模型）需要相同的属性或相同的classmethod. 一个这样的例子是User下面的模型：
+- Mixin不仅是 SQLAlchemy 特有的，而且它们在与 ORM 模型结合使用时特别有用。很多时候可能会遇到这样的情况，有多个类（模型）需要相同的属性或相同的classmethod. 一个这样的例子是User下面的模型：
 
 ```python
 class MixinAsDict:
@@ -166,7 +166,7 @@ print(f"User: {john.username} with ID: {john.id}")
 - 在这个例子中，我们有 2 个Mixin类，User模型继承自这些类。首先 -MixinAsDict提供方法as_dict(self)，可用于获取dict模型的表示。另一个MixinGetByUsername提供username列和静态方法，用于按用户名查询用户。将这些函数定义为Mixins允许我们使它们可重用并将它们添加到其他模型中，而无需在任何地方复制粘贴相同的代码。
 
 4. 使用元数据
-- 有时您可能需要访问表列名，检查表上的约束或检查列是否可以为空。所有这些都可以通过MetaData()类来完成：
+- 有时可能需要访问表列名，检查表上的约束或检查列是否可以为空。所有这些都可以通过MetaData()类来完成：
 
 ```python
 class Address(Base):
@@ -204,10 +204,10 @@ print(meta.tables["address"].primary_key)
 # PrimaryKeyConstraint(Column('id', Integer(), table=<address>, primary_key=True, nullable=False))
 ```
 
-- 这里的重要部分是print代码片段底部的语句。它们中的每一个都演示了您可以通过元数据对象访问的一些内容。这包括表名、列名、列类型、外键和主键以及其他约束。
+- 这里的重要部分是print代码片段底部的语句。它们中的每一个都演示了可以通过元数据对象访问的一些内容。这包括表名、列名、列类型、外键和主键以及其他约束。
 
 5. 配置表
-- 您的某些数据库表可能需要更广泛的初始设置。例如 - 您可能希望包含一些检查约束、索引或指定不同的架构：。
+- 的某些数据库表可能需要更广泛的初始设置。例如 - 可能希望包含一些检查约束、索引或指定不同的架构：。
 
 ```python
 class Card(Base):
@@ -229,7 +229,7 @@ class Card(Base):
 - 所有这些都可以使用__table_args__class 属性进行配置。在这里，我们设置了 2 个检查约束、1 个 ID 列索引和外键约束。我们还开启了自动表扩展，这意味着如果我们在创建该表后向该表添加列，那么它会被自动添加。最后，我们还指定该表属于哪个模式。
 
 6. 使用自定义方言
-- 每个数据库引擎都有一些您可能想要使用的自定义功能。对于我 - 作为 PostgreSQL 用户 - 我想使用 PostgreSQL 拥有的一些自定义列类型。那么如何将它们与 SQLAlchemy 一起使用呢？
+- 每个数据库引擎都有一些可能想要使用的自定义功能。对于我 - 作为 PostgreSQL 用户 - 我想使用 PostgreSQL 拥有的一些自定义列类型。那么如何将它们与 SQLAlchemy 一起使用呢？
 
 ```python
 from uuid import uuid4
@@ -270,7 +270,7 @@ print(session.query(Example).filter(Example.pg_json["key"].astext == "value").sc
 
 # <__main__.Example object at 0x7f04dee05070>  # Object we previously inserted
 ```
-- 以上示出了一个代码Example具有PostgreSQL表UUID，INT4RANGE，NUMRANGE，JSON和ARRAY列。所有这些以及更多内容都可以从sqlalchemy.dialects.postgresql. 创建包含这些类型值的行是不言自明的。但是，在查询它们时，您将需要使用方言和类型特定的比较器，如上所示，以及 PostgreSQLARRAY类型和.contains比较器。对于像JSON您这样的其他类型，只需将它们作为文本进行比较（使用.astext）。
+- 以上示出了一个代码Example具有PostgreSQL表UUID，INT4RANGE，NUMRANGE，JSON和ARRAY列。所有这些以及更多内容都可以从sqlalchemy.dialects.postgresql. 创建包含这些类型值的行是不言自明的。但是，在查询它们时，将需要使用方言和类型特定的比较器，如上所示，以及 PostgreSQLARRAY类型和.contains比较器。对于像JSON这样的其他类型，只需将它们作为文本进行比较（使用.astext）。
 
 7. 使用 PostgreSQL 进行全文搜索
 而关于 PostgreSQL 特性的话题。使用tsqeury和进行全文搜索tsvector怎么样？我们也可以使用 SQLAchemy 做到这一点：
@@ -339,7 +339,7 @@ row = session.query(Example).scalar()
 print(row.updated_at)
 # 10:13:16.590945+00:00
 ```
-- 因为updated_at您只需要设置onupdate为func.now()which 将使得每次更新行时，此列将设置为当前时间戳。至于created_at列，您可以省略onupdate参数，而是使用server_defaultwhich 设置创建行时调用的函数。
+- 因为updated_at只需要设置onupdate为func.now()which 将使得每次更新行时，此列将设置为当前时间戳。至于created_at列，可以省略onupdate参数，而是使用server_defaultwhich 设置创建行时调用的函数。
 
 9. 自引用表
 - 在数据库中具有递归/自我参照关系的情况并不少见-无论是经理人->雇员关系，树状结构还是某些物化路径。这个技巧展示了如何使用 SQLAlchemy 设置这种关系：
@@ -388,10 +388,10 @@ print(rows[2])
 # 'Node 3'
 #     'Node 5'
 ```
-- 对于这个例子，我们使用使用Node记录创建的树结构。每个节点都有 some data，对其父节点及其子节点列表的引用。作为一种方便的方法，我们还包括__str__并__repr__帮助我们更好地可视化树。如果您对正常的一对多关系没问题，那么您可以像处理任何非自引用关系那样进行操作。为了使其适用于双向关系，您还需要包括backrefwith，remote_side=[id]如上所示。
+- 对于这个例子，我们使用使用Node记录创建的树结构。每个节点都有 some data，对其父节点及其子节点列表的引用。作为一种方便的方法，我们还包括__str__并__repr__帮助我们更好地可视化树。如果对正常的一对多关系没问题，那么可以像处理任何非自引用关系那样进行操作。为了使其适用于双向关系，还需要包括backrefwith，remote_side=[id]如上所示。
 
 10. 使用 Flask 绑定多个数据库
-- 最后一个适用于所有Flask用户。如果您需要连接到多个数据库 - 例如因为多个地理区域或多个数据源 - 那么您可以使用SQLALCHEMY_BINDS指定额外的数据库绑定：
+- 最后一个适用于所有Flask用户。如果需要连接到多个数据库 - 例如因为多个地理区域或多个数据源 - 那么可以使用SQLALCHEMY_BINDS指定额外的数据库绑定：
 
 ```python
 # Config
@@ -409,7 +409,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
 ```
 
-- 在上面的代码片段中，我们通过设置SQLALCHEMY_DATABASE_URI和替代绑定来配置默认数据库SQLALCHEMY_BINDS。通过此配置，我们将可以使用上述所有数据库。接下来，我们设置__bind_key__一个表来引用其中一个绑定，这样每当我们与这个特定的表交互时，SQLAlchemy 就会知道要连接到哪个数据库。但是，如果您需要连接到具有相同表/模式的多个数据库，您可以使用多个引擎和会话 - 每个数据库一个，并根据需要在它们之间切换，如下所示：
+- 在上面的代码片段中，我们通过设置SQLALCHEMY_DATABASE_URI和替代绑定来配置默认数据库SQLALCHEMY_BINDS。通过此配置，我们将可以使用上述所有数据库。接下来，我们设置__bind_key__一个表来引用其中一个绑定，这样每当我们与这个特定的表交互时，SQLAlchemy 就会知道要连接到哪个数据库。但是，如果需要连接到具有相同表/模式的多个数据库，可以使用多个引擎和会话 - 每个数据库一个，并根据需要在它们之间切换，如下所示：
 
 ```python
 engine_emea   = create_engine(...)
@@ -422,7 +422,7 @@ session_la    = sessionmaker(bind=engine_la)
 ```
 
 11. 结论
-希望这里显示的这些提示和技巧中至少有一些对您有用，并且在您下次需要使用 SQLAlchemy 时会让您的生活更轻松一些。这篇文章绝对不是你可以用 SQLAlchemy 做的所有很酷的事情的详尽列表，你可以通过滚动浏览https://docs.sqlalchemy.org/en/13/core/index.html找到一堆有用的东西。
+希望这里显示的这些提示和技巧中至少有一些对有用，并且在下次需要使用 SQLAlchemy 时会让的生活更轻松一些。这篇文章绝对不是可以用 SQLAlchemy 做的所有很酷的事情的详尽列表，可以通过滚动浏览https://docs.sqlalchemy.org/en/13/core/index.html找到一堆有用的东西。
 
 
 ### 3.Tip:

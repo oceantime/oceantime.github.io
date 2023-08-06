@@ -39,9 +39,9 @@ JVM抛出 java.lang.OutOfMemoryError: GC overhead limit exceeded 错误就是发
 
 要搞清这一点, 可能需要好几天时间。下面是大致的流程:
 - 获得在生产服务器上执行堆转储(heap dump)的权限。“转储”(Dump)是堆内存的快照, 稍后可以用于内存分析. 这些快照中可能含有机密信息, 例如密码、信用卡账号等, 所以有时候, 由于企业的安全限制, 要获得生产环境的堆转储并不容易。
-- 在适当的时间执行堆转储。一般来说,内存分析需要比对多个堆转储文件, 假如获取的时机不对, 那就可能是一个“废”的快照. 另外, 每次执行堆转储, 都会对JVM进行“冻结”, 所以生产环境中,也不能执行太多的Dump操作,否则系统缓慢或者卡死,你的麻烦就大了。
-- 用另一台机器来加载Dump文件。一般来说, 如果出问题的JVM内存是8GB, 那么分析 Heap Dump 的机器内存需要大于 8GB. 打开转储分析软件(我们推荐Eclipse MAT , 当然你也可以使用其他工具)。
-- 检测快照中占用内存最大的 GC roots。详情请参考: Solving OutOfMemoryError (part 6) – Dump is not a waste。 这对新手来说可能有点困难, 但这也会加深你对堆内存结构以及navigation机制的理解。
+- 在适当的时间执行堆转储。一般来说,内存分析需要比对多个堆转储文件, 假如获取的时机不对, 那就可能是一个“废”的快照. 另外, 每次执行堆转储, 都会对JVM进行“冻结”, 所以生产环境中,也不能执行太多的Dump操作,否则系统缓慢或者卡死,的麻烦就大了。
+- 用另一台机器来加载Dump文件。一般来说, 如果出问题的JVM内存是8GB, 那么分析 Heap Dump 的机器内存需要大于 8GB. 打开转储分析软件(我们推荐Eclipse MAT , 当然也可以使用其他工具)。
+- 检测快照中占用内存最大的 GC roots。详情请参考: Solving OutOfMemoryError (part 6) – Dump is not a waste。 这对新手来说可能有点困难, 但这也会加深对堆内存结构以及navigation机制的理解。
 - 接下来, 找出可能会分配大量对象的代码. 如果对整个系统非常熟悉, 可能很快就能定位了。使用 Plumbr 能捕获所有的 java.lang.OutOfMemoryError , 并找出其他的性能问题, 例如最消耗内存的数据结构等等。
 
 Plumbr 在后台负责收集数据 —— 包括堆内存使用情况(只统计对象分布图, 不涉及实际数据),以及在堆转储中不容易发现的各种问题。 如果发生 java.lang.OutOfMemoryError , 还能在不停机的情况下, 做必要的数据处理. 下面是Plumbr 对一个 java.lang.OutOfMemoryError 的提醒:
@@ -66,7 +66,7 @@ http://127.0.0.1:9200/{index}/{type}/_mapping?pretty
 
 http://127.0.0.1:9200/b2bware/commercial_sku/_mapping?pretty
 
-以上是看某个 type 下的 mapping 结构，如果你要看整个库的 mapping，URL 请去掉 type 断即可，如：
+以上是看某个 type 下的 mapping 结构，如果要看整个库的 mapping，URL 请去掉 type 断即可，如：
 
 http://127.0.0.1:9200/b2bware/_mapping?pretty
 
@@ -117,7 +117,7 @@ URL:http://127.0.0.1:9200/b2bware
     }
   },
   "mappings": {
-    "commercial_sku": { //这是其中一个mapping，你还可以创建其他mapping
+    "commercial_sku": { //这是其中一个mapping，还可以创建其他mapping
       "_timestamp": {  //这个配置可以删掉
         "enabled": true
       },

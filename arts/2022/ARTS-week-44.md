@@ -229,7 +229,7 @@ Q6: SELECT COUNT(DISTINCT a) FROM T5
 
   - Google Dremel 的影响 　　
 
-Google Dremel的能在如此短的时间内处理这么大的数据，的确是十分惊艳的。有个伯克利分校的教授Armando Fox说过一句话“如果你曾事先告诉我Dremel声称其将可做些什么，那么我不会相信你能开发出这种工具”。这么给力的技术，必然对业界造成巨大的影响。第一个被波及到的必然是Hadoop。 　
+Google Dremel的能在如此短的时间内处理这么大的数据，的确是十分惊艳的。有个伯克利分校的教授Armando Fox说过一句话“如果曾事先告诉我Dremel声称其将可做些什么，那么我不会相信能开发出这种工具”。这么给力的技术，必然对业界造成巨大的影响。第一个被波及到的必然是Hadoop。 　
 
   - Dremel与Hadoop 　　
 

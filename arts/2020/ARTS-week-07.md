@@ -64,7 +64,7 @@ bin/logstash-plugin prepare-offline-pack logstash-input-*
 bin/logstash-plugin prepare-offline-pack logstash-output-* logstash-input-jdbc
 
 # 安装
- 1、下载打包好的文件，通过你最方便的方式上传到生产设备中，记住存放的目录和文件名，例如这里为logstash-input-plugins-6.5.0.zip
+ 1、下载打包好的文件，通过最方便的方式上传到生产设备中，记住存放的目录和文件名，例如这里为logstash-input-plugins-6.5.0.zip
  2、执行bin/logstash-plugin install命令进行安装
 
 ## 在Windows下

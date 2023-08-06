@@ -31,7 +31,7 @@ JSR223（Java Specification Request 223）是一个将脚本嵌入到 Apache JMe
 ```
 类是通过描述相应对象的字段和方法来创建对象的模板。JMeter 是用 Java 编写的，因此所有 JMeter 实体（如采样器、缓存、侦听器、结果）都在关联的 Java 类中描述。
 ```
-因此，您可以在 JSR223 组件中使用这些类来根据需要修改实体的行为。
+因此，可以在 JSR223 组件中使用这些类来根据需要修改实体的行为。
 
 若要调用类方法，需要类对象。幸运的是，大多数有用的对象，如当前采样器或当前结果，已经在 JSR223 组件中为它们定义了一个变量。例如，要访问 Logger 类对象，只需编写 “log”，然后调用类方法。“sampler” 变量也是如此，它指向 HTTPSamplerProxy 类的当前采样器对象。
 
@@ -77,7 +77,7 @@ log.warn('Could not convert string, using default encoding');
 log.error("Malformed URL detected:", e);
 
 // 跟踪方法
-// 当您需要输出有关脚本的非常详细的信息时，trace 方法用于精细调试：
+// 当需要输出有关脚本的非常详细的信息时，trace 方法用于精细调试：
 
 log.error("Response data:"+ prev.getResponseDataAsString());
 ```
@@ -126,7 +126,7 @@ sampler.addArgument("", requestBodyData);
 sampler.setPostBodyRaw(true);
 sampler.addArgument("name", requestBodyData);
 ```
-可以将任何字符串值作为请求正文传递。某些协议（如 OCSP 和 NTRIP）通过 HTTP 进行通信，因此您可以将 OCSP 请求封装到采样器的正文数据中，以测试其他协议。
+可以将任何字符串值作为请求正文传递。某些协议（如 OCSP 和 NTRIP）通过 HTTP 进行通信，因此可以将 OCSP 请求封装到采样器的正文数据中，以测试其他协议。
 
 设置“关注重定向”值：
 ```java
@@ -158,20 +158,20 @@ sampler.addTestElement(headerManager);
 ```
 将新的标头“接受：应用程序/json”添加到当前采样器。
 
-类描述控制缓存条目的对象。例如，此类的方法允许您检查 URL 在 JMeter 缓存中是否有关联的条目，如果有 - 清除缓存：
+类描述控制缓存条目的对象。例如，此类的方法允许检查 URL 在 JMeter 缓存中是否有关联的条目，如果有 - 清除缓存：
 ```java
 if(sampler.getCacheManager().inCache(sampler.getUrl())){
     sampler.getCacheManager().clear();
 }
 ```
 
-类的对象控制请求的 cookie。例如，通过调用此类的方法，您可以手动指定清除 cookie 的位置：
+类的对象控制请求的 cookie。例如，通过调用此类的方法，可以手动指定清除 cookie 的位置：
 ```java
 if(sampler.getDomain()== vars.get(“ignoreCookieHost”)){
     sampler.getCookieManager().setPolicy(“ignoreCookies”);
 }
 ```
-类表示一个对象，该对象控制您发送请求的服务器的授权。通过使用 AuthManager 类的方法，您可以控制对发出请求的服务器的授权：
+类表示一个对象，该对象控制发送请求的服务器的授权。通过使用 AuthManager 类的方法，可以控制对发出请求的服务器的授权：
 ```java
 importorg.apache.jmeter.protocol.http.control.Authorization;
 importorg.apache.jmeter.protocol.http.control.AuthManager;
@@ -179,7 +179,7 @@ importorg.apache.jmeter.protocol.http.control.AuthManager;
 Authorization authorization = new Authorization(sampler.getUrl().toString,"admin","adminPa$$w0rd","","", Mechanism.BASIC_DIGEST);
 sampler.getAuthManager().addAuth(authorization);
 ```
-从字面上看，描述这些“控制”类的所有用例及其所有方法是不可能的。因此，我强烈建议您进行个人调查、实验并与同事协商，以了解使用它们的最佳方法。
+从字面上看，描述这些“控制”类的所有用例及其所有方法是不可能的。因此，我强烈建议进行个人调查、实验并与同事协商，以了解使用它们的最佳方法。
 
 #### 总结
 编写 JMeter Java 类是为了通过脚本轻松访问其方法。只需稍作努力，就可以微调测试计划以解决最复杂的任务。有任何问题，可以查阅详尽的API 文档。创建完脚本后，运行 JMX 文件。
@@ -415,7 +415,7 @@ client.setConnectionSpecs(Collections.singletonList(spec));
 
 [WebView（四）—— JSBridge原理](https://blog.csdn.net/xingyu19911016/article/details/121339597)
 
-[Carson带你学Android：你要的WebView与 JS 交互方式都在这里了](https://blog.csdn.net/carson_ho/article/details/64904691)
+[Carson带学Android：要的WebView与 JS 交互方式都在这里了](https://blog.csdn.net/carson_ho/article/details/64904691)
 
 [彻底搞懂JsBridge的实现原理以及源码分析](https://juejin.cn/post/7046265810515394597)
 

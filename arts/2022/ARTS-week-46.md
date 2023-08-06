@@ -97,11 +97,11 @@ parquet4seastar 相对于 Apache Arrow 的读取时间（越短意味着 parquet
 
 结果表明，parquet4seastar在执行时间方面与Apache Arrow大致相似（短字符串场景除外，这是设计决策的结果，请在下面的论文中找到更多详细信息）。结果很有希望，因为它们意味着通过使用非阻塞 I/O 和未来/承诺模型提供更好的延迟保证不会导致任何执行时间开销。除了将库与Apache Arrow进行比较之外，还运行了更多的测试场景 - 测量反应堆失速，比较以本机MC格式存储的SSTables的大小与Parquet存储的大小等。
 
-在这里，我们比较了Parquet和SSTables之间的磁盘使用情况。上图显示了第一次测试的结果，其中学生每次插入一百万行随机字符串，但有些值是重复的。横轴显示每个值的重复项数，纵轴显示文件的总大小。您可以看到，在此测试中，镶木地板的效率更高。
+在这里，我们比较了Parquet和SSTables之间的磁盘使用情况。上图显示了第一次测试的结果，其中学生每次插入一百万行随机字符串，但有些值是重复的。横轴显示每个值的重复项数，纵轴显示文件的总大小。可以看到，在此测试中，镶木地板的效率更高。
 
 ![An image](./images/ARTS-week-46-6.png)
 
-在此示例中，学生测试了一个具有多个 NULL 值的表，这是稀疏数据集的典型特征。水平轴显示随机选择的列数，这些列不是 NULL，而是具有随机值。在这种情况下，您可以看到当大多数列为 NULL 时，SSTables 是一种更好的格式。
+在此示例中，学生测试了一个具有多个 NULL 值的表，这是稀疏数据集的典型特征。水平轴显示随机选择的列数，这些列不是 NULL，而是具有随机值。在这种情况下，可以看到当大多数列为 NULL 时，SSTables 是一种更好的格式。
 
 从这些测试中可以得出结论，当数据不为空但唯一值的数量不是很大时，使用 Parquet 可以节省大量磁盘空间。
 
@@ -144,7 +144,7 @@ public class MyApplication extends Application {
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000,
                 restartIntent); // 1秒钟后重启应用
 
-        //结束进程之前可以把你程序的注销或者退出代码放在这段代码之前
+        //结束进程之前可以把程序的注销或者退出代码放在这段代码之前
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 

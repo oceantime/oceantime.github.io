@@ -33,7 +33,7 @@
 
 
 - 为什么有必要选择 Apt 技术堆栈？
-让我们想象一下，你正在建造一所房子 -你自己的房子。难道你不能确保房子的基础是坚固的吗？当然，一旦创建了房屋，可以经常更改室内设计，但不能更改底座。同样，如果正在考虑开发移动应用程序，则在为 Android 应用程序开发和 iOS 应用程序开发选择正确的技术时需要谨慎。在开发应用程序时，必须选择平台，框架，设计和每个工具的最佳组合。坚实的基础使进一步的开发过程变得容易！同样，探索移动应用程序开发技术列表并从众多技术中选择最好的一个至关重要，因为应用程序市场是庞大且不断增长的。
+让我们想象一下，正在建造一所房子 -自己的房子。难道不能确保房子的基础是坚固的吗？当然，一旦创建了房屋，可以经常更改室内设计，但不能更改底座。同样，如果正在考虑开发移动应用程序，则在为 Android 应用程序开发和 iOS 应用程序开发选择正确的技术时需要谨慎。在开发应用程序时，必须选择平台，框架，设计和每个工具的最佳组合。坚实的基础使进一步的开发过程变得容易！同样，探索移动应用程序开发技术列表并从众多技术中选择最好的一个至关重要，因为应用程序市场是庞大且不断增长的。
 
 
 - 关于移动应用开发市场
@@ -63,7 +63,7 @@
     - 在开发过程中发现的 Bug 更少。
 
   - 原生安卓应用
-人们可以用 JAVA 开发原生 Android 应用程序，C++Kotlin。但是，其中最受欢迎的移动应用程序开发技术是什么？以下是该研究要说的：许多专家认为 Kotlin 是应用程序开发的最佳技术。你不同意吗？好吧，图像证明了一切！
+人们可以用 JAVA 开发原生 Android 应用程序，C++Kotlin。但是，其中最受欢迎的移动应用程序开发技术是什么？以下是该研究要说的：许多专家认为 Kotlin 是应用程序开发的最佳技术。不同意吗？好吧，图像证明了一切！
 
 ![An image](./images/ARTS-week-22-2.png)
 
@@ -264,7 +264,7 @@ import java.lang.reflect.Method;
 public class TestAspect {
  
     // @Before 可以有两者写法, @annotation(形参test)
-    @Before("@annotation(test)")// 拦截被 TestAnnotation 注解的方法；如果你需要拦截指定 package 指定规则名称的方法，可以使用表达式 execution(...)
+    @Before("@annotation(test)")// 拦截被 TestAnnotation 注解的方法；如果需要拦截指定 package 指定规则名称的方法，可以使用表达式 execution(...)
     public void beforeTest(JoinPoint point, TestAnnotation test) throws Throwable {
         System.out.println("beforeTest:" + test.name());   // 直接获取注解参数
     }
@@ -326,7 +326,7 @@ public class TestAOPController {
 
 - [太厉害了！终于有人把Spring Boot常用注释讲明白了！](https://blog.51cto.com/u_15323646/4996882)
 
-- [一文带你玩转SpringBoot @Value 注解，真心强大！](https://blog.51cto.com/u_15323646/3408312)
+- [一文带玩转SpringBoot @Value 注解，真心强大！](https://blog.51cto.com/u_15323646/3408312)
 
 - [深入理解k8s中的list-watch机制](http://yost.top/2019/08/01/inside-list-watch-in-k8s/)
 

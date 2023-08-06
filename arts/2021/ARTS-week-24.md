@@ -34,8 +34,8 @@ https://fraugster.com/resources/post/future-proofing-our-storage-needs-with-aws-
 - 开发 Parquet-Go
   自公司成立以来，Fraugster 一直在研发团队中使用 Go，虽然分析和数据科学也在使用 Go，但他们往往更喜欢 Python 进行研究。因此，虽然 Parquet 文件格式在 Java 和 Python 世界中得到了很好的支持，但我们看到了 Go 支持方面的差距。已经存在用于读取和写入 Parquet 文件的包，我们在我们的概念验证中成功地使用了它们，但最终发现它们太有限，无法在未来可靠地管理我们的数据。还有一个担忧是，作为一个长期项目，我们需要对我们正在构建的内容充满信心。有一些考虑只是将我们的一些基础设施迁移到 Java 并使用官方 Parquet 实现，但由于我们没有任何（愿意的）Java 程序员，因此支持它并不容易。此外，虽然有官方的 parquet 实现，但没有一个标准的 parquet 实现，但它没有用于 presto 的两个“官方”实现中的任何一个。我们确实考虑过 ORC，但它与 Parquet 存在相同的问题，即没有维护良好的 Go 包，也不支持嵌套数据。因此，我们着手为 Go 实现我们自己的 Parquet 库，这将为我们提供管理任意、不断变化的数据所需的灵活性。通过让库的用户访问有关其 Parquet 文件中的数据和元数据的低级详细信息，对我们而言，提供最大程度的灵活性和内省对我们来说非常重要。同时，我们还确保提供简单的接口，允许开发人员在更高的抽象级别上读取和写入 Parquet 文件，只需将现有的 Go 对象写入他们的文件或直接从文件中读取它们，而无需烦恼太多细节。
 
-- 你在哪里可以得到它？
-  您可以从 Fraugster 的 GitHub 存储库下载该软件包：github.com/fraugster/parquet-go
+- 在哪里可以得到它？
+  可以从 Fraugster 的 GitHub 存储库下载该软件包：github.com/fraugster/parquet-go
 
 ### 3.Tip:
 
@@ -158,4 +158,4 @@ https://ld246.com/article/1526032653405/comment/1528621487992
 将 Go 的文件 IO 性能提高 100 倍的方法
 
 https://www.cnblogs.com/sunsky303/p/11077030.html
-教你如何找到Go内存泄露【精编实战】
+教如何找到Go内存泄露【精编实战】

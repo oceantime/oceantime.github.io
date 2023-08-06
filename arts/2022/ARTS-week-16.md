@@ -14,7 +14,7 @@
 
 - [357. 统计各位数字都不同的数字个数 (中等) +](https://leetcode-cn.com/submissions/detail/298576908/)  
   + 思路：归纳
-- [385. 迷你语法分析器 (中等) +](https://leetcode-cn.com/submissions/detail/300619047/)  
+- [385. 迷语法分析器 (中等) +](https://leetcode-cn.com/submissions/detail/300619047/)  
   + 思路：栈
 
 ### 2.Review:

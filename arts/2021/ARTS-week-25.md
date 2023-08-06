@@ -39,7 +39,7 @@ type user struct {
   CreatedAt time.Time //wont be saved in the parquet file
 }
 ```
-此代码中的重要细节是 tags，它说明 struct 在生成 parquet 文件时将如何处理 的每个字段。为了处理数据，我使用了github.com/xitongsys/parquet-go 包，在存储库中，您可以看到更多可用标签示例。 
+此代码中的重要细节是 tags，它说明 struct 在生成 parquet 文件时将如何处理 的每个字段。为了处理数据，我使用了github.com/xitongsys/parquet-go 包，在存储库中，可以看到更多可用标签示例。 
 
 - 现在让我们以以下 parquet 格式生成我们的第一个文件：
 ```golang

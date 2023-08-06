@@ -38,7 +38,7 @@ http://recursion.org/query-parser
 ``` html
 <input type="text"  maxlength="0" value="maxlength属性：规定输入字段的最大长度">
 ```
-4.onfocus="this.blur();"onfocuse是聚焦的意思，当你把光标放在文本框上输入的时候，就是聚焦，但这里添加了"this.blur()"，blur的作用就是去除聚焦，也就是你不能把光标放在这个文本框上，换句话说就是你不能输入文本了
+4.onfocus="this.blur();"onfocuse是聚焦的意思，当把光标放在文本框上输入的时候，就是聚焦，但这里添加了"this.blur()"，blur的作用就是去除聚焦，也就是不能把光标放在这个文本框上，换句话说就是不能输入文本了
 ``` html
 <input type="text" onfocus="this.blur();" value="我是000">
 ```

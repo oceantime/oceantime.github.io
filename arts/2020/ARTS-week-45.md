@@ -23,7 +23,7 @@ https://towardsdatascience.com/trying-out-dask-dataframes-in-python-for-fast-dat
 #### 点评：
 
 作者：Luciano Strika 
-当使用 Python 的 Pandas 打开了一个几百万行的数据集，尝试获取一些指标，可能要等一整分钟才能获得一系列简单的平均值，而当如果达到数十亿时，无法进行分析。Dask 是一个开源项目，可为解决这个问题。 Dask 提供有关 NumPy 数组，Pandas 数据帧和常规​​列表的抽象，从而允许您使用多核处理并行运行它们。
+当使用 Python 的 Pandas 打开了一个几百万行的数据集，尝试获取一些指标，可能要等一整分钟才能获得一系列简单的平均值，而当如果达到数十亿时，无法进行分析。Dask 是一个开源项目，可为解决这个问题。 Dask 提供有关 NumPy 数组，Pandas 数据帧和常规​​列表的抽象，从而允许使用多核处理并行运行它们。
 
 Dask 官方文档中介绍的特性：
 - 处理大型数据集，即使这些数据集不适合存储在内存中

@@ -176,7 +176,7 @@ r.request.headers
 4.SSL 证书验证
 
 ```shell
-Requests可以为HTTPS请求验证SSL证书，就像web浏览器一样。要想检查某个主机的SSL证书，你可以使用 verify 参数:
+Requests可以为HTTPS请求验证SSL证书，就像web浏览器一样。要想检查某个主机的SSL证书，可以使用 verify 参数:
 >>> requests.get('https://kennethreitz.com', verify=True)
 requests.exceptions.SSLError: hostname 'kennethreitz.com' doesn't match either of '*.herokuapp.com', 'herokuapp.com'
 
@@ -229,7 +229,7 @@ f.write(data)
 7.流式上传
 
 ```python
-Requests 支持流式上传，这允许你发送大的数据流或文件而无需先把它们读入内存。要使用流式上传，仅需为你的请求体提供一个类文件对象即可:
+Requests 支持流式上传，这允许发送大的数据流或文件而无需先把它们读入内存。要使用流式上传，仅需为的请求体提供一个类文件对象即可:
 读取文件请使用字节的方式，这样 Requests 会生成正确的 Content-Length
 with open('massive-body', 'rb') as f:
     requests.post('http://some.url/streamed', data=f)
@@ -238,7 +238,7 @@ with open('massive-body', 'rb') as f:
 8.分块传输编码
 
 ```python
-对于出去和进来的请求，Requests也支持分块传输编码。要发送一个块编码的请求，仅需为你的请求体提供一个生成器注意生成器输出应该为bytes
+对于出去和进来的请求，Requests也支持分块传输编码。要发送一个块编码的请求，仅需为的请求体提供一个生成器注意生成器输出应该为bytes
 def gen():
     yield b'hi'
     yield b'there'

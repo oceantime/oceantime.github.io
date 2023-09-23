@@ -157,6 +157,8 @@ private Camera.PreviewCallback getPreviewCallback() {
 
 [5 分钟，彻底掌握 MyBatis 缓存！](https://segmentfault.com/a/1190000039860909)
 
+[mybatis的缓存机制（一级缓存二级缓存和刷新缓存）和mybatis整合ehcache](https://blog.csdn.net/u012373815/article/details/47069223)
+
 [Android图像格式类及图像转换方法](https://www.cnblogs.com/liumin-txgt/p/13164372.html)
 
 [Android Gradle依赖详解](https://blog.csdn.net/pkorochi/article/details/86294396?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-2-86294396-blog-79697922.235^v38^pc_relevant_default_base&spm=1001.2101.3001.4242.2&utm_relevant_index=5)

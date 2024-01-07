@@ -4,6 +4,7 @@
 ARTS 2019-2023:
 
 
+[2024](./arts/2024/index.md)  
 [2023](./arts/2023/index.md)  
 [2022](./arts/2022/index.md)  
 [2021](./arts/2021/index.md)  

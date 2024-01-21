@@ -178,18 +178,18 @@ alter table t_users drop constraint if EXISTS uk_users_name1;
 改变自己最快的方式就是做你害怕的事情
 培养自己结构化解决问题的能力
 
-![An image](./images/ARTS-week-03-1.png)
+![An image](./images/ARTS-week-03-1.jpg)
 
 
 1.问题拆解：
 我要怎么做才能达成目标：分解为每个小问题
 
-![An image](./images/ARTS-week-03-2.png)
+![An image](./images/ARTS-week-03-2.jpg)
 
 2.消除未知：
 每个小问题进行未知信息消除
 
-![An image](./images/ARTS-week-03-3.png)
+![An image](./images/ARTS-week-03-3.jpg)
 
 3.成本风险
 测算风险与成本
@@ -199,26 +199,27 @@ alter table t_users drop constraint if EXISTS uk_users_name1;
 风险过高的目标往往不切实际
 了解成本接收风险 能力和期望不匹配
 
-![An image](./images/ARTS-week-03-4.png)
+![An image](./images/ARTS-week-03-4.jpg)
 
 4.步骤分解
 
 时间导向思维转为目标导向思维
 
-![An image](./images/ARTS-week-03-5.png)
+![An image](./images/ARTS-week-03-5.jpg)
 
 例如：学吉他曲
-学习乐理
-右手单音练习
-左右和弦练习
-双手技巧练习
-曲目A段B段练习
-完成所有小目标后再串联起整首曲子
+学习步骤分解：
+- 学习曲子的乐理
+- 右手单音练习
+- 左右和弦练习
+- 双手技巧练习
+- 曲目A段B段练习
+- 完成所有小目标后再串联起整首曲子
 
 完成小目标奖励：
-发B站
-玩动物森友会
-让手指休息一天
+- 发B站
+- 玩动物森友会
+- 让手指休息一天
 
 ### 4.Share:
 

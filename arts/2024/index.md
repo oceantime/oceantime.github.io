@@ -5,8 +5,9 @@
 ---
 
 
-[ARTS-week-06](./arts/2024/ARTS-week-08)  
-[ARTS-week-06](./arts/2024/ARTS-week-07)  
+[ARTS-week-09](./arts/2024/ARTS-week-08)  
+[ARTS-week-08](./arts/2024/ARTS-week-08)  
+[ARTS-week-07](./arts/2024/ARTS-week-07)  
 [ARTS-week-06](./arts/2024/ARTS-week-06)  
 [ARTS-week-05](./arts/2024/ARTS-week-05)  
 [ARTS-week-04](./arts/2024/ARTS-week-04)  
